@@ -22,8 +22,7 @@ $ npm start
 
 ### Usar github
 Lo primero es comprobar que esté actualizado
-- Hacemos un fetch
-Luego subimos nuestros cambios
-- Hacemos un commit
+- Hacemos un fetch para comprobar que está actualizado el proyecto con respecto a lo que ha hecho el resto
+- Hacemos un commit para subir nuestros cambios
 - Seleccionamos los archivos que queremos subir y seleccionamos la casilla de push automaticamente a origin/master y ponemos un comentario con el cambio que hemos hecho
 - TENGO CONECTADO EL REPOSITORIO A HEROKU ASI QUE AUTOMATICAMENTE SE APLICARAN LOS CAMBIOS EN EL SERVIDOR
