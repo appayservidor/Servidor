@@ -17,12 +17,13 @@ $ npm install
  ```sh
 $ npm start
 ```
-Se ejecutará en localhost:5000
-Está instalado el plugin 'nodemon' así que cuando hagais algún cambio se reiniciará solo y si actualizais la pagina se aplicarán los cambios automáticamente
+- Se ejecutará en localhost:5000
+- Está instalado el plugin 'nodemon' así que cuando hagais algún cambio se reiniciará solo y si actualizais la pagina se aplicarán los cambios automáticamente
 
 ### Usar github
 Lo primero es comprobar que esté actualizado
 - Hacemos un fetch
 Luego subimos nuestros cambios
--Hacemos un commit
--Seleccionamos los archivos que queremos subir y seleccionamos la casilla de push automaticamente a origin/master y ponemos un comentario con el cambio que hemos hecho
+- Hacemos un commit
+- Seleccionamos los archivos que queremos subir y seleccionamos la casilla de push automaticamente a origin/master y ponemos un comentario con el cambio que hemos hecho
+- TENGO CONECTADO EL REPOSITORIO A HEROKU ASI QUE AUTOMATICAMENTE SE APLICARAN LOS CAMBIOS EN EL SERVIDOR
