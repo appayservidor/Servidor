@@ -54,7 +54,7 @@ app.use('/municipios',municipios);
 app.use('/facturas',facturas);
 
 app.get('/', function(req, res) {
-    res.send("APPAY SERVIDOR");
+    res.send("APPAY SERVIDOR FUNCIONANDO");
 });
 
 var port = process.env.PORT || 5000;
