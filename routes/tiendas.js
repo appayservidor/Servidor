@@ -513,7 +513,6 @@ router.get('/coordenadas',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {
-			"Errores":1,
 			"Tiendas":""
 		};
 
