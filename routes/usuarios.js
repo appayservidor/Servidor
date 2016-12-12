@@ -51,7 +51,6 @@ router.post('/',comprobacionjwt,function(req,res){
 		var Contra = connection.escape(req.body.contra);
 		var Rol = connection.escape(req.body.rol);
 		var data = {
-			"Errores":1,
 			"Usuarios":""
 		};
 		var consulta = "INSERT INTO usuarios (";
