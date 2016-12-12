@@ -242,7 +242,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Rol;
 			i++;
 		}
-		consulta+=",'1','0')";
+		consulta+=",'0','0')";
 		console.log(consulta);
 
 		connection.query(consulta,function(err, rows, fields){
