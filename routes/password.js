@@ -61,6 +61,7 @@ router.post('/',function(req,res){
 	});
 });
 
+/*
 
 //Este get se llamara desde el cliente para ver si el token es correcto
 router.get('/',function(req,res){
@@ -69,8 +70,9 @@ router.get('/',function(req,res){
 
 //deberiamos hacer un metodo solo para este para la contraseña
 router.put('/')function(req,res){
-    
+
 }
+*/
 
 
 
