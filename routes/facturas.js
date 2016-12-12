@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
+var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 //Get facturas(muestra todas las facturas)
-router.get('/',function(req,res){
+router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
    		var data = {
@@ -49,7 +50,7 @@ router.get('/',function(req,res){
 });
 
 //Funcion GET de facturas (Muestra las facturas de un usuario)
-router.get('/usuario',function(req,res){
+router.get('/usuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
    		var data = {
@@ -73,7 +74,7 @@ router.get('/usuario',function(req,res){
 });
 
 //Funcion que genera el POST de Facturas
-router.post('/',function(req,res){
+router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
  		var Id_tienda = connection.escape(req.body.id_tienda);
@@ -160,7 +161,7 @@ router.post('/',function(req,res){
 });
 
 //Funcion que genera el PUT (Update) de Facturas
-router.put('/',function(req,res){
+router.put('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
  		var ID =connection.escape(req.body.id_factura);  
@@ -220,7 +221,7 @@ router.put('/',function(req,res){
 });
 
 //Funcion que genera el POST de Lineas de Factura
-router.post('/lineafactura',function(req,res){
+router.post('/lineafactura',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
  		var Id_factura = connection.escape(req.body.id_factura);  
@@ -346,7 +347,7 @@ router.post('/lineafactura',function(req,res){
 });
 
 //UPDATE LINEA DE FACTURA
-router.put('/lineafactura',function(req,res){
+router.put('/lineafactura',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var ID = connection.escape(req.body.id_linea_factura);

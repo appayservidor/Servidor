@@ -19,6 +19,8 @@ var provincias=require('./routes/provincias');
 var comunidades=require('./routes/comunidades');
 var municipios=require('./routes/municipios');
 var facturas=require('./routes/facturas');
+var password=require('./routes/password');
+
 //CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
 var whitelist = [
     'http://localhost:3000',
@@ -32,6 +34,7 @@ var corsOptions = {
     credentials: true
 };
 app.use(cors(corsOptions));
+
 //PASSPORT
 app.use(session({ secret: 'emiliomola' }));
 app.use(passport.initialize());
@@ -52,6 +55,7 @@ app.use('/provincias',provincias);
 app.use('/comunidades',comunidades);
 app.use('/municipios',municipios);
 app.use('/facturas',facturas);
+app.use('/password',password);
 
 app.get('/', function(req, res) {
     res.send("APPAY SERVIDOR FUNCIONANDO");

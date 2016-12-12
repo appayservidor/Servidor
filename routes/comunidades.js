@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
+var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
-router.get('/',function(req,res){
+router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         var data = {
             "Errores":1,

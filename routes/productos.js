@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
+var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
-
-router.get('/',function(req,res){
+router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var data = {
@@ -38,7 +38,7 @@ router.get('/',function(req,res){
 
 
 //Funcion que genera el POST de Productos
-router.post('/',function(req,res){
+router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var Codigo = connection.escape(req.body.codigo);
@@ -190,7 +190,7 @@ router.post('/',function(req,res){
 
 
 //Funcion que genera el PUT (Update) de Productos
-router.put('/',function(req,res){
+router.put('/',comprobacionjwt,function(req,res){
 	console.log("VA GUAY");
 	db.getConnection(function(err, connection) {
 		if (err) throw err;

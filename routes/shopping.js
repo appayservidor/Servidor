@@ -1,15 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var stripe = require("stripe")("sk_test_UUI3byJJ3VYLpTvFOEz3Rt1E");
+var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 
-
-router.get('/',function(req,res){
+router.get('/',comprobacionjwt,function(req,res){
     res.send("SHOOPING GET CORRECTO");
 });
 
 
-router.post('/',function(req,res){
+router.post('/',comprobacionjwt,function(req,res){
      console.log("ENTRA EN EL POST");
     var card_id= req.body.id;
     console.log("COSTUMER ES " + card_id);

@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
-
+var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 //GET de tiendas
-router.get('/',function(req,res){
+router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {
@@ -33,7 +33,7 @@ router.get('/',function(req,res){
 });
 
 //post de tiendas
-router.post('/',function(req,res){
+router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
     if (err) throw err;
 		var Nombre = connection.escape(req.body.nombre);
@@ -239,7 +239,7 @@ router.post('/',function(req,res){
 
 
 //put de tiendas
-router.put('/',function(req,res){
+router.put('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
     	var ID = connection.escape(req.body.id_tienda);
@@ -369,7 +369,7 @@ router.put('/',function(req,res){
 
 
 //Genera el GET de gransuperficie
-router.get('/gransuperficie',function(req,res){
+router.get('/gransuperficie',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
  		var data = {
@@ -402,7 +402,7 @@ router.get('/gransuperficie',function(req,res){
 
 
 //POST de gransuperficie
-router.post('/gransuperficie',function(req,res){
+router.post('/gransuperficie',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var Nombre = connection.escape(req.body.nombre);
@@ -463,7 +463,7 @@ router.post('/gransuperficie',function(req,res){
 });
 
 //PUT de gransuperficie
-router.put('/gransuperficie',function(req,res){
+router.put('/gransuperficie',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
     	var ID = connection.escape(req.body.id);
@@ -509,7 +509,7 @@ router.put('/gransuperficie',function(req,res){
 
 
 //Devuelve la visualizacion de las coordenadas
-router.get('/coordenadas',function(req,res){
+router.get('/coordenadas',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {

@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
+var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 //DEVUELVE USUARIOS, o todos o id='n'
-router.get('/',function(req,res){
+router.get('/',comprobacionjwt,function(req,res){
 	var data = {
 		"Usuarios":""
 	};
@@ -16,7 +19,7 @@ router.get('/',function(req,res){
 		}else{ //Si no muestra todos los usuarios
 			var consulta = "SELECT u.Id_usuario, u.DNI, u.Nombre, u.Email, u.Direccion, c.Comunidad, p.Provincia, m.Municipio, u.CP, u.Telefono, u.Foto, t.Nombre_rol, u.Estado, u.Eliminado FROM usuarios u JOIN municipios m ON m.Id = u.Municipio JOIN comunidades c ON c.Id = u.Comunidad JOIN provincias p ON p.Id = u.Provincia JOIN tipo_usuario t ON u.Rol = t.Id_tipo_usuario";
 		}
-		
+
 		connection.query(consulta,function(err, rows, fields){
 			if(rows.length != 0){
 				data["Usuarios"] = rows;
@@ -32,7 +35,7 @@ router.get('/',function(req,res){
 });
 
 //Funcion que genera el POST de Usuarios
-router.post('/',function(req,res){
+router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var DNI = connection.escape(req.body.dni);
@@ -259,7 +262,7 @@ router.post('/',function(req,res){
 
 
 //Funcion que genera el PUT (Update) de Usuarios
-router.put('/',function(req,res){
+router.put('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;	
 		var ID = connection.escape(req.body.id);
@@ -406,6 +409,54 @@ router.put('/',function(req,res){
 				}
 				res.json(data);
 			});
+	connection.release();
+	});
+});
+
+
+//Funcion recuperar contraseña
+router.post('/recuperarpass',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		var Email = connection.escape(req.body.email);
+		var data = {
+			"Usuarios":""
+		};
+		var consulta = "SELECT Email FROM usuarios WHERE Email="+Email;
+		connection.query(consulta,function(err, rows, fields){
+			if(rows != 0){
+				data["Usuarios"] = "El usuario existe";
+				var smtpTransport = nodemailer.createTransport("SMTP",{
+						service: "gmail",
+						auth: {
+						user: "appayoficial@gmail.com",
+						pass: "multimedia"
+						}
+					});
+					var mailOptions = {
+					from: "<appayoficial@gmail.com>", // sender address
+						to: "blablablabla@gmail.com", // Cambiar el correo por el que solicita el cambio de la contraseña
+						subject: "This is the subject", // Subject line
+						html: "Este es un email enviado en node js" // html body
+					}				    
+					smtpTransport.sendMail(mailOptions, function(error, response){
+						/*if(error){
+						console.log(error);
+						}else{
+						}*/
+					});
+				res.status(200);					
+			}else{
+				data["Usuarios"] = "El usuario no existe";
+				res.status(204);
+			}
+
+			if(err){
+				res.status(400).json({ usuarios: err });
+				console.log(err);
+			}
+			
+			res.json(data);
+		});
 	connection.release();
 	});
 });
