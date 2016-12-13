@@ -226,7 +226,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
         if (err) throw err;
  		var Id_factura = connection.escape(req.body.id_factura);  
 		var Cantidad = connection.escape(req.body.cantidad);
-		var Id_producto = connection.escape(req.body.id_producto);
+		var Id_producto_tienda = connection.escape(req.body.id_producto_tienda);
 		var Id_oferta_usuario = connection.escape(req.body.id_oferta_usuario);
 		var Id_oferta_producto = connection.escape(req.body.id_oferta_producto);
 		var Total_linea = connection.escape(req.body.total_linea);
@@ -249,7 +249,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
             consulta  += "Cantidad";
             i++;
         }
-        if(Id_producto != 'NULL'){
+        if(Id_producto_tienda != 'NULL'){
             if (i==1) {
                 consulta  += ", ";
                 i--;	
@@ -298,12 +298,12 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
             consulta  += Cantidad;
             i++;
         }
-        if(Id_producto != 'NULL'){
+        if(Id_producto_tienda != 'NULL'){
             if (i==1) {
                 consulta  += ", ";
                 i--;	
             }
-            consulta  += Id_producto;
+            consulta  += Id_producto_tienda;
             i++;
         }
         if(Id_oferta_usuario != 'NULL'){
@@ -353,7 +353,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 		var ID = connection.escape(req.body.id_linea_factura);
 		var Id_factura = connection.escape(req.body.id_factura);  
 		var Cantidad = connection.escape(req.body.cantidad);
-		var Id_producto = connection.escape(req.body.id_producto);
+		var Id_producto_tienda = connection.escape(req.body.id_producto_tienda);
 		var Id_oferta_usuario = connection.escape(req.body.id_oferta_usuario);
 		var Id_oferta_producto = connection.escape(req.body.id_oferta_producto);
 		var Total_linea = connection.escape(req.body.total_linea);
@@ -376,12 +376,12 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 				consulta  += "Cantidad="+Cantidad;
 				i++;
 			}
-			if(Id_producto != 'NULL'){
+			if(Id_producto_tienda != 'NULL'){
 				if (i==1) {
 					consulta  += ", ";
 					i--;	
 				}
-				consulta  += "Id_producto_tienda="+Id_producto;
+				consulta  += "Id_producto_tienda="+Id_producto_tienda;
 				i++;
 			}
 			if(Id_oferta_usuario != 'NULL'){
