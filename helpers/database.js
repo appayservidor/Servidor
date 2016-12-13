@@ -3,7 +3,9 @@ var db=null;
 
 module.exports = function () {
     if(!db) {
-            db = mysql.createPool({
+
+        /*
+        db = mysql.createPool({
                  host     : 'us-cdbr-iron-east-04.cleardb.net',
                  user     : 'b3f3fb41577c3b',
                  password : '8d4e1afd',
@@ -11,6 +13,17 @@ module.exports = function () {
                  connectionLimit: 10,
                  supportBigNumbers: true
         });
+        */
+        
+         db = mysql.createPool({
+                 host     : 'localhost',
+                 user     : 'root',
+                 password : '',
+                 database : 'appay_buena',
+                 connectionLimit: 10,
+                 supportBigNumbers: true,
+                 multipleStatements: true
+        });   
     }
     return db;
 };

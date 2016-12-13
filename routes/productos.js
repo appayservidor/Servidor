@@ -13,7 +13,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		console.log(id);
 		var codigo = connection.escape(req.query.codigo); //Variable que recoje el codigo de barras de los productos de la URI productos?codigo={num}
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT producto.Id_producto, producto.Codigo, producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion, producto.Stock, producto.URL_video, producto.Estado  FROM producto, tienda, producto_tienda WHERE producto.Id_producto = producto_tienda.Id_producto AND             producto_tienda.Id_tienda = tienda.Id_tienda AND tienda.Id_tienda="+id;
+			var consulta="SELECT producto.Id_producto, producto_tienda.Id_producto_tienda, producto.Codigo, producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion, producto.Stock, producto.URL_video, producto.Estado  FROM producto, tienda, producto_tienda WHERE producto.Id_producto = producto_tienda.Id_producto AND producto_tienda.Id_tienda = tienda.Id_tienda AND tienda.Id_tienda="+id;
 		}else if(codigo !='NULL'){ //Si en la URI existe se crea la consulta de busqueda por codigo de barras
 			var consulta="SELECT * FROM producto WHERE codigo="+codigo;
 		}else{ //Si no muestra todos los productos
@@ -171,7 +171,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			}else{
 				var Id_producto = rows.insertId; //Cojemos el id del producto para insertarlo en la tienda
 				//Tengo que insertar en producto_tienda el producto para asociarla a una tienda
-				var consulta2="INSERT INTO producto_tienda (Id_producto_tienda, Id_tienda, Id_producto) VALUES("+Id_producto+","+Id_tienda+","+Id_producto+")";
+				var consulta2="INSERT INTO producto_tienda (Id_tienda, Id_producto) VALUES("+Id_tienda+","+Id_producto+")";
 				connection.query(consulta2,function(err, rows, fields){
 					if(err){
 						res.status(400).json({ error: err });
