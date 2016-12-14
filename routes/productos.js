@@ -6,8 +6,6 @@ var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 //Funcion que genera el get de productos
 router.get('/',comprobacionjwt,function(req,res){	
-	console.log("TIMES ES");
-	console.log(process.env.TIMES);
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var data = {

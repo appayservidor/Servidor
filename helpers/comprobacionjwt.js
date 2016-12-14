@@ -1,5 +1,5 @@
 var jwt =require("jsonwebtoken");
-var mySecretKey="pepitogrillo";
+var mySecretKey=process.env.JWT_SECRETKEY;
 
 module.exports = function(req, res, next) {
         console.log('Entra en el middleware');

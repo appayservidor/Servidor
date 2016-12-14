@@ -3,7 +3,7 @@ var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 var jwt =require("jsonwebtoken");
-var mySecretKey="pepitogrillo";
+var mySecretKey=process.env.JWT_SECRETKEY;
 
 //Metodo login 
 router.post("/", function(req,res,next){

@@ -8,7 +8,7 @@ var jwt =require("jsonwebtoken");
 var nodemailer = require('nodemailer');
 const nodemailerDkim = require('nodemailer-dkim');
 
-var mySecretKey="newpassword";
+var mySecretKey=process.env.JWT_SECRETKEY;
 
 
 //Peticion de cambio de contraseña. Se llamará cuando alguien no recuerde su contraseña
@@ -25,13 +25,15 @@ router.post('/',function(req,res){
 			if(rows != 0){ // Si que lo ha encontrado
                 console.log("Usuario encontrado");
                 var token = jwt.sign(req.body.email,mySecretKey);//firmamos el token
+                
                 var smtpTransport = nodemailer.createTransport("SMTP",{
                     service: "gmail",
                     auth: {
-                        user: "appayoficial@gmail.com",
-                        pass: "multimedia"
+                        user: process.env.GMAIL_USER,
+                        pass: process.env.GMAIL_PASS
                     }
                 });
+
                 var mailOptions = {
                     from: "<appayoficial@gmail.com>", // sender address
                     to: req.body.email, //
