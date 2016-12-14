@@ -4,7 +4,7 @@ var db=null;
 module.exports = function () {
     if(!db) {
 
-        
+        /*
         db = mysql.createPool({
                  host     : 'us-cdbr-iron-east-04.cleardb.net',
                  user     : 'b3f3fb41577c3b',
@@ -13,8 +13,8 @@ module.exports = function () {
                  connectionLimit: 10,
                  supportBigNumbers: true
         });
+        */
         
-        /*
          db = mysql.createPool({
                  host     : 'localhost',
                  user     : 'root',
@@ -24,7 +24,7 @@ module.exports = function () {
                  supportBigNumbers: true,
                  multipleStatements: true
         });   
-        */
+        
     }
     return db;
 };

@@ -3,9 +3,11 @@ var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
-router.get('/',comprobacionjwt,function(req,res){
 
-	
+//Funcion que genera el get de productos
+router.get('/',comprobacionjwt,function(req,res){	
+	console.log("TIMES ES");
+	console.log(process.env.TIMES);
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var data = {
@@ -36,8 +38,6 @@ router.get('/',comprobacionjwt,function(req,res){
 	connection.release();
 	});
 });
-
-
 
 //Funcion que genera el POST de Productos
 router.post('/',comprobacionjwt,function(req,res){

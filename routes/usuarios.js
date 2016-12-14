@@ -413,9 +413,9 @@ router.put('/',comprobacionjwt,function(req,res){
 });
 
 
-	//Se añade un usuario a una tienda, cuando pase por el codigo QR
-	router.post('/usuarioTienda',function(req,res){
-		db.getConnection(function(err, connection) {
+//Se añade un usuario a una tienda, cuando pase por el codigo QR
+router.post('/usuarioTienda',function(req,res){
+	db.getConnection(function(err, connection) {
 		if (err) throw err;	
 		var Id_usuario = connection.escape(req.body.id_usuario);
 		var Id_tienda = connection.escape(req.body.id_tienda);
