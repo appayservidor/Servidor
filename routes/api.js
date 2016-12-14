@@ -46,6 +46,8 @@ router.get('/tiendas', function(request, response) {
         });
         connection.release();
     });   
+
+
 });
 
 

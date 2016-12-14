@@ -24,7 +24,7 @@ router.post('/',function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(rows != 0){ // Si que lo ha encontrado
                 console.log("Usuario encontrado");
-                var token = jwt.sign(req.body.email,mySecretKey);//firmamos el token
+                var token = jwt.sign(req.body.email,mySecretKey,{expiresIn: '24h'});//firmamos el token , que caduca en 24 horas
                 
                 var smtpTransport = nodemailer.createTransport("SMTP",{
                     service: "gmail",
@@ -61,24 +61,53 @@ router.post('/',function(req,res){
 	});
 });
 
-/*
+
+
+
 //Este get se llamara desde el cliente para ver si el token es correcto
 router.get('/',function(req,res){
+    var token = req.body.token;
+    jwt.verify(token, mySecretKey, function(error, decoded) //verificamos que el token es correcto
+    {
+        if(error)
+        {
+            console.log(error);
+            res.status(401).json(error); //error, acceso no autorizado
+        }
+        else
+        {
+            console.log("Token correcto");
+            res.status(200).json(token); //en este momento guardaremos id_token en sesion
+        }
+    });       
+});
 
-}
-*/
 
 
+// PUT de cambiar contraseña (COMPROBAR)
+router.put('/',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		if (err) throw err;	
+		var Contra = connection.escape(req.body.contra);
+		var data = {
+			"Usuarios":""
+		};
 
-
-
-/*
-//deberiamos hacer un metodo solo para este para la contraseña
-router.put('/')function(req,res){
-
-}
-*/
-
+        var consulta = "UPDATE usuarios SET Contra="+Contra+" Where Email="+req.objeto_token;
+			
+        console.log(consulta);
+        connection.query(consulta,function(err, rows, fields){
+            if(err){
+                res.status(400).json({ error: err });
+            }else{
+                data["Usuarios"] = "Actualizado correctamente!";
+                res.status(200);
+            }
+            res.json(data);
+        });
+	connection.release();
+	});
+});
 
 
 module.exports = router; 
