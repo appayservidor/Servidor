@@ -41,7 +41,6 @@ module.exports = function(req, res, next) {
         }
  */
 
-
     console.log('comprobacionJWT desactivada');
     next();
     
