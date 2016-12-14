@@ -19,7 +19,8 @@ var provincias=require('./routes/provincias');
 var comunidades=require('./routes/comunidades');
 var municipios=require('./routes/municipios');
 var facturas=require('./routes/facturas');
-var password=require('./routes/password');
+var resetpassword=require('./routes/resetpassword');
+var confirmaremail=require('./routes/confirmaremail');
 var ofertas=require('./routes/ofertas');
 
 //CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
@@ -56,8 +57,10 @@ app.use('/provincias',provincias);
 app.use('/comunidades',comunidades);
 app.use('/municipios',municipios);
 app.use('/facturas',facturas);
-app.use('/password',password);
+app.use('/resetpassword',resetpassword);
 app.use('/ofertas',ofertas);
+app.use('/confirmaremail',confirmaremail);
+
 //Esto es para enviar
 app.get('/', function(req, res) {
     res.send("APPAY SERVIDOR FUNCIONANDO1");
