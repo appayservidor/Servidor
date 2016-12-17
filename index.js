@@ -21,6 +21,7 @@ var municipios=require('./routes/municipios');
 var facturas=require('./routes/facturas');
 var password=require('./routes/password');
 var ofertas=require('./routes/ofertas');
+var estadisticas=require('./routes/Estadisticas');
 
 //CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
 var whitelist = [
@@ -58,6 +59,7 @@ app.use('/municipios',municipios);
 app.use('/facturas',facturas);
 app.use('/password',password);
 app.use('/ofertas',ofertas);
+app.use('/estadisticas',estadisticas);
 //Esto es para enviar
 app.get('/', function(req, res) {
     res.send("APPAY SERVIDOR FUNCIONANDO1");
