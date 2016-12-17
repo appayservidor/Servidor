@@ -28,7 +28,7 @@ router.get('/usuariosTienda',comprobacionjwt,function(req,res){
     connection.release();
 	});
 });
-
+//Esta funcion devuelve el numero de registros los ultimos X dias, meses o años segun el parametro que se le pase por parametro
 router.get('/Registros',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		var data = {
@@ -39,11 +39,18 @@ router.get('/Registros',comprobacionjwt,function(req,res){
 		var dia = connection.escape(req.query.dia); //Variable que recoje el id de la tienda de la que quieres saber los usuarios de la URI estadisticas?id={num}
 		var mes = connection.escape(req.query.mes); //Variable que recoje el id de la tienda de la que quieres saber los usuarios de la URI estadisticas?id={num}
 		var anyos = connection.escape(req.query.anyos); //Variable que recoje el id de la tienda de la que quieres saber los usuarios de la URI estadisticas?id={num}
+		var inter= null;
+		if(dia!="NULL"){
+			inter=dia
+		}
+		if(mes!="NULL"){
 
-		"SELECT COUNT(*) Usuarios FROM usuarios u JOIN usuarios_tienda ut ON u.Id_usuario = ut.Id_usuario WHERE DATE_SUB(CURDATE(),INTERVAL 30 DAY) <= u.fecha and Id_tienda="+id;
-		
+		}
+		if(anyos!="NULL"){
+
+		}
 		if(id != "NULL"){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT COUNT(*) Usuarios FROM usuarios u JOIN usuarios_tienda ut ON u.Id_usuario = ut.Id_usuario WHERE DATE_SUB(CURDATE(),INTERVAL 30 DAY) <= u.fecha and Id_tienda="+id;
+			var consulta="SELECT COUNT(*) Usuarios FROM usuarios u JOIN usuarios_tienda ut ON u.Id_usuario = ut.Id_usuario WHERE DATE_SUB(CURDATE(),INTERVAL "+30+") <= u.fecha and Id_tienda="+id;
 		}else{ //Si no muestra todos los municipios
 			var consulta = "SELECT COUNT(*) Usuarios FROM usuarios_tienda";
 		}

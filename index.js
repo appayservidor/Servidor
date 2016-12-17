@@ -19,7 +19,8 @@ var provincias=require('./routes/provincias');
 var comunidades=require('./routes/comunidades');
 var municipios=require('./routes/municipios');
 var facturas=require('./routes/facturas');
-var password=require('./routes/password');
+var resetpassword=require('./routes/resetpassword');
+var confirmaremail=require('./routes/confirmaremail');
 var ofertas=require('./routes/ofertas');
 var estadisticas=require('./routes/Estadisticas');
 
@@ -57,9 +58,14 @@ app.use('/provincias',provincias);
 app.use('/comunidades',comunidades);
 app.use('/municipios',municipios);
 app.use('/facturas',facturas);
-app.use('/password',password);
+app.use('/resetpassword',resetpassword);
 app.use('/ofertas',ofertas);
+<<<<<<< HEAD
 app.use('/estadisticas',estadisticas);
+=======
+app.use('/confirmaremail',confirmaremail);
+
+>>>>>>> 17c811bdf910f6a59caacee63fef295102d92c63
 //Esto es para enviar
 app.get('/', function(req, res) {
     res.send("APPAY SERVIDOR FUNCIONANDO1");
