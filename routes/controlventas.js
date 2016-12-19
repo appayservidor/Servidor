@@ -11,9 +11,10 @@ router.get('/',comprobacionjwt,function(req,res){
 			"Factura":"",
 			"Lineas":""
 		};
-		var cod = connection.escape(req.query.Cod); //Variable que recoje el codigo del producto 
-		var can = connection.escape(req.query.Can); //Variable que recoje la cantidad de productos de un mismo codigo 
-		var consulta="SELECT l.Cantidad, p.Codigo FROM factura f JOIN linea_factura l ON l.Id_factura = f.Id_factura JOIN producto_tienda pt ON pt.Id_producto_tienda = l.Id_producto_tienda JOIN producto p ON p.Id_producto = pt.Id_producto JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE DATE_SUB(CURDATE(),INTERVAL 30 MINUTE ) <= Fecha_factura AND f.Pagada==1 AND l.cantidad = "+can+" AND Codigo = "+cod;
+		var Id = connection.escape(req.query.id); //Variable que recoje el codigo del producto 
+		var Cod = connection.escape(req.query.cod); //Variable que recoje el codigo del producto 
+		var Can = connection.escape(req.query.can); //Variable que recoje la cantidad de productos de un mismo codigo 
+		var consulta="SELECT l.Cantidad, p.Codigo FROM factura f JOIN linea_factura l ON l.Id_factura = f.Id_factura JOIN producto_tienda pt ON pt.Id_producto_tienda = l.Id_producto_tienda JOIN producto p ON p.Id_producto = pt.Id_producto JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE SUBTIME(NOW(),'0:30:1.000000' ) <= f.Fecha_factura AND f.Pagada=1 AND l.cantidad >= "+Can+" AND p.Codigo = "+Cod+" AND f.Id_tienda="+Id;
 		console.log(consulta);
 		//Consulta multiple
 		connection.query(consulta, function(err, rows, fields){
@@ -21,7 +22,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				data["Factura"] = rows;
 				res.status(200);
 			}else{
-				data["Factura"] = "Articulo con codigo:"+cod+" no pagado!!";
+				data["Factura"] = "Articulo con codigo:"+Cod+" no pagado!!";
 				res.status(404);
 			}
 			res.json(data);
