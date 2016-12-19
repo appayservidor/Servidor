@@ -68,8 +68,6 @@ router.get('/Registros',comprobacionjwt,function(req,res){
     connection.release();
 	});
 });
-module.exports = router;
-
 //Esta funcion devuelve el numero de usuarios que han realizado una compra en un establecimiento
 router.get('/usuariosFacturaTienda',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
@@ -161,3 +159,4 @@ router.get('/usuariosTienda',comprobacionjwt,function(req,res){
     connection.release();
 	});
 });
+module.exports = router;
