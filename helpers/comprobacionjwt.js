@@ -39,7 +39,8 @@ module.exports = function(req, res, next) {
         else{
              res.status(401).json("No header auth");
         }
- */
+        */
+ 
 
     console.log('comprobacionJWT desactivada');
     next();

@@ -16,7 +16,7 @@ passport.deserializeUser(function(user, done)
 
 
 passport.use(new LocalStrategy( function(name, password, done){
-    console.log("POR QUE NO ENTRAS HIJO DE PUTA");
+    console.log("POR QUE NO ENTRAS");
         console.log('username : ' + username);
 		console.log('password : ' + password);
         return done(null, user);
