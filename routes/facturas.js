@@ -15,7 +15,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la factura de la URI factura?id={num}
 		console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id y se muestran todos los detalles de la factura
-			var infoTienda = "SELECT f.Id_factura, f.Id_tienda, t.NIF, f.Fecha_factura, f.Total_factura, f.Pagada FROM factura f JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE f.Id_tienda ="+id;
+			var infoTienda = "SELECT f.Id_factura, f.Id_tienda, t.NIF, f.Fecha_factura, f.Total_factura, f.Pagada FROM factura f JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE f.Id_factura ="+id;
 			var consulta="SELECT l.Cantidad, p.Codigo, p.Nombre, p.Precio, l.Id_oferta_usuario, l.Id_oferta_producto, l.Total_linea FROM factura f JOIN linea_factura l ON l.Id_factura = f.Id_factura JOIN producto_tienda pt ON pt.Id_producto_tienda = l.Id_producto_tienda JOIN producto p ON p.Id_producto = pt.Id_producto JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE f.Id_factura="+id+";";
 			console.log(infoTienda);
 			console.log(consulta);
