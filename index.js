@@ -31,6 +31,7 @@ var controlventas=require('./routes/controlventas');
 var whitelist = [
     'http://localhost:3000',
     'http://localhost:4200',
+    'https://appay.es',
 ]; 
 var corsOptions = {
     origin: function(origin, callback){
