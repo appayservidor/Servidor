@@ -32,6 +32,8 @@ var whitelist = [
     'http://localhost:3000',
     'http://localhost:4200',
     'https://appay.es',
+    'https://appay-aefd5.firebaseapp.com',
+    'https://admin.appay.es',
 ]; 
 var corsOptions = {
     origin: function(origin, callback){
