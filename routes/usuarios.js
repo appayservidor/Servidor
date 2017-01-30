@@ -256,7 +256,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			}else{
 				data["Usuarios"] = "Datos insertados correctamente!";
 				enviarContrasenya(req.body.email);
-				console.log("Todo ok?");
+				console.log("Todo ok?");                                                                                                                                                                                                                                                                                                                                                                                                                                                           
 				res.status(200);
 			}
 			res.json(data);
