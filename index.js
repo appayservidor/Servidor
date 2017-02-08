@@ -31,6 +31,7 @@ var controlventas=require('./routes/controlventas');
 var whitelist = [
     'http://localhost:3000',
     'http://localhost:4200',
+    'http://localhost:8100',
     'https://appay.es',
     'https://appay-aefd5.firebaseapp.com',
     'https://admin.appay.es',
