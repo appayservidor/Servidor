@@ -14,9 +14,9 @@ router.get('/',comprobacionjwt,function(req,res){
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
         console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id WHERE Id_Tienda="+id;
+			var consulta="SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id WHERE Id_Tienda="+id;
 		}else{ //Si no muestra todas las tiendas
-			var consulta = "SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id";
+			var consulta = "SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id";
 		}
 		
 		connection.query(consulta,function(err, rows, fields){
@@ -47,6 +47,9 @@ router.post('/',comprobacionjwt,function(req,res){
 		var NIF = connection.escape(req.body.nif);
 		var Estado = connection.escape(req.body.estado);
 		var Eliminado = connection.escape(req.body.eliminado);
+		var Foto = connection.escape(req.body.foto);
+		var Descripcion = connection.escape(req.body.descripcion);
+		var Horario = connection.escape(req.body.horario);
 		var data = {
 			"Tiendas":""
 		};
@@ -136,6 +139,30 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += "Eliminado";
 			i++;
 		}
+		if(Foto != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Foto";
+			i++;
+		}
+		if(Descripcion != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Descripcion";
+			i++;
+		}
+		if(Horario != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Horario";
+			i++;
+		}
 		consulta+=") VALUES (";
 		var i=0;
 		if(Nombre != 'NULL'){
@@ -220,6 +247,30 @@ router.post('/',comprobacionjwt,function(req,res){
 				i--;	
 			}
 			consulta  += Eliminado;
+			i++;
+		}
+		if(Foto != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Foto;
+			i++;
+		}
+		if(Descripcion != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Descripcion;
+			i++;
+		}
+		if(Horario != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Horario;
 			i++;
 		}
 		consulta+=")"
@@ -349,7 +400,30 @@ router.put('/',comprobacionjwt,function(req,res){
 					consulta  += "Eliminado="+Eliminado;
 					i++;
 				}
-				
+				if(Foto != 'NULL'){
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Foto="+Foto;
+					i++;
+				}
+				if(Descripcion != 'NULL'){
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Descripcion="+Descripcion;
+					i++;
+				}
+				if(Horario != 'NULL'){
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Horario="+Horario;
+					i++;
+				}
 				consulta = consulta + " WHERE Id_Tienda="+ID;
 			}
 			console.log(consulta);
