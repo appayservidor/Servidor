@@ -482,6 +482,34 @@ router.post('/usuarioTienda',function(req,res){
 	connection.release();
 	});
 });
+
+//Se asigna una tienda a un usuario de tipo administrador
+router.post('/usuarioAdminTienda',function(req,res){
+	db.getConnection(function(err, connection) {
+		if (err) throw err;	
+		var Id_usuario = connection.escape(req.body.id_usuario);
+		var Id_tienda = connection.escape(req.body.id_tienda);
+		var data = {
+			"Usuarios":""
+		};
+		var consulta = "INSERT INTO usuario_admin_tienda (Id_tienda, Id_usuario) VALUES("+Id_tienda+","+Id_usuario+")";
+			connection.query(consulta,function(err, rows, fields){
+				if(rows != 0){
+					data["Usuarios"] = "Administrador vinculado a la tienda";
+					res.status(200);					
+				}else{
+					data["Usuarios"] = "El usuario no existe o la tienda no existe";
+					res.status(204);
+				}
+				if(err){
+					res.status(400).json({ usuarios: err });
+					console.log(err);
+				}
+				res.json(data);
+			});
+	connection.release();
+	});
+});
   
 
 module.exports = router;
