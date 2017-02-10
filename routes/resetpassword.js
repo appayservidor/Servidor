@@ -21,7 +21,7 @@ router.post('/',function(req,res){
         if (err) throw err;
 		var Email = connection.escape(req.body.email);
         console.log(Email);
-		var consulta = "SELECT Email FROM usuarios WHERE Email="+Email;
+		var consulta = "SELECT Email, Nombre FROM usuarios WHERE Email="+Email;
 		connection.query(consulta,function(err, rows, fields){
 			if(rows != 0){ // Si que lo ha encontrado
                 console.log("Usuario encontrado");
@@ -37,7 +37,7 @@ router.post('/',function(req,res){
                         pass: process.env.GMAIL_PASS
                     }
                 });
-                var htmlcorreo=emailhtml(token); 
+                var htmlcorreo=emailhtml(token, rows[0].Nombre); 
                   
                 var mailOptions = {
                     from: "<appayoficial@gmail.com>", // sender address
