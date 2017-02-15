@@ -20,6 +20,8 @@ router.post('/',function(req,res){
         var Texto = connection.escape(req.body.texto);
         var Correo = connection.escape(req.body.correo);
         var Nombre = connection.escape(req.body.nombre);
+        console.log(process.env.GMAIL_USER);
+        console.log( process.env.GMAIL_PASS);
         var smtpTransport = nodemailer.createTransport("SMTP",{
             service: "gmail",
             auth: {
