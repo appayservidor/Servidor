@@ -492,7 +492,7 @@ router.post('/usuarioAdminTienda',function(req,res){
 		var data = {
 			"Usuarios":""
 		};
-		var consulta = "INSERT INTO usuario_admin_tienda (Id_tienda, Id_usuario) VALUES("+Id_tienda+","+Id_usuario+")";
+		var consulta = "INSERT INTO usuario_admin_tienda (id_tienda, id_usuario) VALUES("+Id_tienda+","+Id_usuario+")";
 			connection.query(consulta,function(err, rows, fields){
 				if(rows != 0){
 					data["Usuarios"] = "Administrador vinculado a la tienda";
@@ -510,6 +510,26 @@ router.post('/usuarioAdminTienda',function(req,res){
 	connection.release();
 	});
 });
-  
+//DEVUELVE USUARIOS, o todos o id='n'
+router.get('/adminTienda',comprobacionjwt,function(req,res){
+	var data = {
+		"Usuarios":""
+	};
+	db.getConnection(function(err, connection) {
+		if (err) throw err;
+		var consulta = "SELECT u.Id_usuario, u.DNI, u.Nombre, u.Email, u.Direccion, c.Comunidad, p.Provincia, m.Municipio, u.CP, u.Telefono, u.Foto, t.Nombre_rol, u.Estado, u.Eliminado, u.Fecha  FROM usuario_admin_tienda TA JOIN usuarios u ON u.Id_usuario = TA.id_usuario JOIN municipios m ON m.Id = u.Municipio JOIN comunidades c ON c.Id = u.Comunidad JOIN provincias p ON p.Id = u.Provincia JOIN tipo_usuario t ON u.Rol = t.Id_tipo_usuario;";
+		connection.query(consulta,function(err, rows, fields){
+			if(rows.length != 0){
+				data["Usuarios"] = rows;
+				res.status(200);
+				
+			}else{
+				data["Usuarios"] = 'No hay usuarios';
+			}
+			res.json(data);
+		});
+		connection.release();
+	});
+});
 
 module.exports = router;

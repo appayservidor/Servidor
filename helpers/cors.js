@@ -2,6 +2,8 @@
 var whitelist = [
 'http://localhost:3000',
 'http://localhost:4200',
+'http://localhost:5000'
+
 ]; 
 var corsOptions = {
     origin: function(origin, callback){
