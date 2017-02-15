@@ -33,7 +33,7 @@ router.post('/',function(req,res){
         var mailOptions = {
             from: "<appayoficial@gmail.com>", // sender address
             to: email, //
-            subject: "Confirmar registro Appay", // Subject line
+            subject: "Contacto nuevo", // Subject line
             html: htmlcorreo
             
         }		
