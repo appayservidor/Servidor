@@ -16,7 +16,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
 			var consulta="SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id WHERE Id_Tienda="+id;
 		}else{ //Si no muestra todas las tiendas
-			var consulta = "SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id";
+			var consulta = "SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario, t.Facebook, t.Twitter FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id";
 		}
 		
 		connection.query(consulta,function(err, rows, fields){
@@ -50,6 +50,8 @@ router.post('/',comprobacionjwt,function(req,res){
 		var Foto = connection.escape(req.body.foto);
 		var Descripcion = connection.escape(req.body.descripcion);
 		var Horario = connection.escape(req.body.horario);
+		var Facebook = connection.escape(req.body.facebook);
+		var Twitter = connection.escape(req.body.twitter);
 		var data = {
 			"Tiendas":""
 		};
@@ -163,6 +165,22 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += "Horario";
 			i++;
 		}
+		if(Facebook != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Facebook";
+			i++;
+		}
+		if(Twitter != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Twitter";
+			i++;
+		}
 		consulta+=") VALUES (";
 		var i=0;
 		if(Nombre != 'NULL'){
@@ -271,6 +289,22 @@ router.post('/',comprobacionjwt,function(req,res){
 				i--;	
 			}
 			consulta  += Horario;
+			i++;
+		}
+		if(Facebook != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Facebook;
+			i++;
+		}
+		if(Twitter != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Twitter;
 			i++;
 		}
 		consulta+=")"
@@ -422,6 +456,22 @@ router.put('/',comprobacionjwt,function(req,res){
 						i--;	
 					}
 					consulta  += "Horario="+Horario;
+					i++;
+				}
+				if(Facebook != 'NULL'){
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Facebook="+Facebook;
+					i++;
+				}
+				if(Twitter != 'NULL'){
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Twitter="+Twitter;
 					i++;
 				}
 				consulta = consulta + " WHERE Id_Tienda="+ID;

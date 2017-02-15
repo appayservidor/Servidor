@@ -25,7 +25,7 @@ var ofertas=require('./routes/ofertas');
 var estadisticas=require('./routes/Estadisticas');
 var apiBackup=require('./routes/apiBackup');
 var controlventas=require('./routes/controlventas');
-
+var contacto=require('./routes/contacto');
 
 //CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
 var whitelist = [
@@ -71,6 +71,7 @@ app.use('/estadisticas',estadisticas);
 app.use('/confirmaremail',confirmaremail);
 app.use('/store',apiBackup);
 app.use('/controlventas',controlventas);
+app.use('/contacto',contacto);
 //Esto es para enviar
 app.get('/', function(req, res) {
     res.send("APPAY SERVIDOR FUNCIONANDO1");
