@@ -17,11 +17,9 @@ router.post('/',function(req,res){
     db.getConnection(function(err, connection) {
         if (err) throw err;
         var email="pablolope93@gmail.com"; //PARA HACER LAS PRUEBAS
-        var Texto = connection.escape(req.body.texto);
-        var Correo = connection.escape(req.body.correo);
-        var Nombre = connection.escape(req.body.nombre);
-        console.log(process.env.GMAIL_USER);
-        console.log( process.env.GMAIL_PASS);
+        var Texto = req.body.texto;
+        var Correo = req.body.correo;
+        var Nombre = req.body.nombre;
         var smtpTransport = nodemailer.createTransport("SMTP",{
             service: "gmail",
             auth: {
