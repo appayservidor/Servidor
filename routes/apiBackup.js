@@ -85,8 +85,6 @@ router.get('/products', function(request, response) {
                                         }
                                       });
                                     }
-                                   
-        
                                 }
                                 callback(null, productos);
 
