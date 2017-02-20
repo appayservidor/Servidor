@@ -82,9 +82,9 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					console.log(Nombretienda.replace("'", ""));
-					console.log(NombretiendA);
-					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace("'", "")+"%'";
+					console.log(Nombretienda.replaceAll("'", ""));
+					console.log(Nombretienda);
+					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
 					i++;
 				}
 			}
@@ -163,7 +163,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace("'", "")+"%'";
+					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
 					i++;
 				}
 			}
