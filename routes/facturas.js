@@ -77,12 +77,12 @@ router.get('/',comprobacionjwt,function(req,res){
 					consulta  += "f.Fecha_factura<"+FechaIni;
 					i++;
 				}
-				if(Nombre != 'NULL'){
+				if(NombreTienda != 'NULL'){
 					if (i==1) {
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "t.Nombre LIKE '%"+Nombre+"%'";
+					consulta  += "t.Nombre LIKE '%"+NombreTienda+"%'";
 					i++;
 				}
 			}
