@@ -86,6 +86,7 @@ router.get('/',comprobacionjwt,function(req,res){
 					i++;
 				}
 			}
+			console.log(consulta);
 			var data = {
 				"Facturas":""
 			};
