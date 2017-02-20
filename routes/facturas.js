@@ -82,7 +82,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "t.Nombre LIKE '%"+Nombretienda+"%'";
+					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace("'", "")+"%'";
 					i++;
 				}
 			}
@@ -161,7 +161,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "t.Nombre LIKE '%"+Nombretienda+"%'";
+					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace("'", "")+"%'";
 					i++;
 				}
 			}
