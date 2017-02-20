@@ -74,7 +74,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Fecha_factura<"+FechaIni;
+					consulta  += "f.Fecha_factura<"+FechaFin;
 					i++;
 				}
 				if(Nombretienda != 'NULL'){
@@ -153,7 +153,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Fecha_factura<"+FechaIni;
+					consulta  += "f.Fecha_factura<"+FechaFin;
 					i++;
 				}
 				if(Nombretienda != 'NULL'){
