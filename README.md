@@ -15,11 +15,7 @@ $ npm install
 ```
 - Para el npm install hay que tener instalado nodejs con npm: https://nodejs.org/es/
 - Ahora ejecutamos
-```sh
-$ npm start
-```
-- Se ejecutará en localhost:5000
-- Está instalado el plugin 'nodemon' así que cuando hagais algún cambio se reiniciará solo y si actualizais la pagina se aplicarán los cambios automáticamente
+heroku local web ( DE ESTA FORMA CARGAMOS EL .ENV. PARA ELLO HAY QUE DESCARGARSE EL CLI DE HEROKU)
 
 ### Usar github
 Lo primero es comprobar que esté actualizado
