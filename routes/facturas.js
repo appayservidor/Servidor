@@ -50,7 +50,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Total_factura<"+MaxTotal;
+					consulta  += "f.Total_factura<="+MaxTotal;
 					i++;
 				}
 				if(MinTotal != 'NULL'){
@@ -58,7 +58,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Total_factura>"+MinTotal;
+					consulta  += "f.Total_factura>="+MinTotal;
 					i++;
 				}
 				if(FechaIni != 'NULL'){
@@ -66,7 +66,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Fecha_factura>"+FechaIni;
+					consulta  += "f.Fecha_factura>="+FechaIni;
 					i++;
 				}
 				if(FechaFin != 'NULL'){
@@ -74,7 +74,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Fecha_factura<"+FechaFin;
+					consulta  += "f.Fecha_factura<="+FechaFin;
 					i++;
 				}
 				if(Nombretienda != 'NULL'){
@@ -129,7 +129,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Total_factura<"+MaxTotal;
+					consulta  += "f.Total_factura<="+MaxTotal;
 					i++;
 				}
 				if(MinTotal != 'NULL'){
@@ -137,7 +137,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Total_factura>"+MinTotal;
+					consulta  += "f.Total_factura>="+MinTotal;
 					i++;
 				}
 				if(FechaIni != 'NULL'){
@@ -145,7 +145,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Fecha_factura>"+FechaIni;
+					consulta  += "f.Fecha_factura>="+FechaIni;
 					i++;
 				}
 				if(FechaFin != 'NULL'){
@@ -153,7 +153,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "f.Fecha_factura<"+FechaFin;
+					consulta  += "f.Fecha_factura<="+FechaFin;
 					i++;
 				}
 				if(Nombretienda != 'NULL'){
