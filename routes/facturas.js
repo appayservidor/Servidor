@@ -82,8 +82,6 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					console.log(Nombretienda.replaceAll("'", ""));
-					console.log(Nombretienda);
 					consulta  += "t.Nombre LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
 					i++;
 				}
