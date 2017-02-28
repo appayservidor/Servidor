@@ -22,11 +22,10 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(rows.length != 0){
 				data["Tiendas"] = rows;
-				res.status(200);
+				res.status(200).json(data);
 			}else{
 				res.status(204).json("No hay tiendas");
 			}
-			res.json(data);
 		});
 	connection.release();
 	});
