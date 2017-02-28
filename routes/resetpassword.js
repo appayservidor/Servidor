@@ -15,7 +15,7 @@ var mySecretKey=process.env.JWT_SECRETKEY;
 //Peticion de cambio de contraseña. Se llamará cuando alguien no recuerde su contraseña
 router.post('/',function(req,res){
     var encontrado=false; 
-    req.body.email="emiliomaestre94@gmail.com"; //PARA HACER LAS PRUEBAS
+    //req.body.email="emiliomaestre94@gmail.com"; //PARA HACER LAS PRUEBAS
     
     db.getConnection(function(err, connection) {
         if (err) throw err;
@@ -33,7 +33,7 @@ router.post('/',function(req,res){
                 var smtpTransport = nodemailer.createTransport("SMTP",{
                     service: "gmail",
                     auth: {
-                        user: process.env.GMAIL_USER,
+                        user: process.env.GMAIL_USER, 
                         pass: process.env.GMAIL_PASS
                     }
                 });
@@ -93,11 +93,14 @@ router.put('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;	
 		var Contra = connection.escape(req.body.contra);
+        //var email=req.objeto_token;
+        var email=connection.escape(req.objeto_token.data);
+        console.log(email);
 		var data = {
 			"Usuarios":""
 		};
 
-        var consulta = "UPDATE usuarios SET Contra="+Contra+" Where Email="+req.objeto_token;
+        var consulta = "UPDATE usuarios SET Contra=md5("+Contra+") Where Email="+email;
 			
         console.log(consulta);
         connection.query(consulta,function(err, rows, fields){
@@ -105,13 +108,13 @@ router.put('/',comprobacionjwt,function(req,res){
                 res.status(400).json({ error: err });
             }else{
                 data["Usuarios"] = "Actualizado correctamente!";
-                res.status(200);
+                res.status(200).json(data["Usuarios"]);
             }
-            res.json(data);
+           // res.json(data);
         });
 	connection.release();
 	});
 });
 
-
+ 
 module.exports = router; 

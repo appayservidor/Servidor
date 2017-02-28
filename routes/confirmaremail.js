@@ -15,7 +15,7 @@ var mySecretKey=process.env.JWT_SECRETKEY;
 //Peticion de cambio de contraseña. Se llamará cuando alguien no recuerde su contraseña
 router.post('/',function(req,res){
     var encontrado=false; 
-    req.body.email="emiliomaestre94@gmail.com"; //PARA HACER LAS PRUEBAS
+    //req.body.email="emiliomaestre94@gmail.com"; //PARA HACER LAS PRUEBAS
     
     db.getConnection(function(err, connection) {
         if (err) throw err;
