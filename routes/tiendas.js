@@ -24,7 +24,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				data["Tiendas"] = rows;
 				res.status(200);
 			}else{
-				data["Tiendas"] = 'No hay tiendas';
+				res.status(204).json("No hay tiendas");
 			}
 			res.json(data);
 		});
