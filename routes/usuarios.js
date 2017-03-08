@@ -22,7 +22,6 @@ router.get('/',comprobacionjwt,function(req,res){
 		}else{ //Si no muestra todos los usuarios
 			var consulta = "SELECT u.Id_usuario, u.DNI, u.Nombre, u.Email, u.Direccion, c.Comunidad, p.Provincia, m.Municipio, u.CP, u.Telefono, u.Foto, t.Nombre_rol, u.Estado, u.Eliminado, u.Fecha  FROM usuarios u JOIN municipios m ON m.Id = u.Municipio JOIN comunidades c ON c.Id = u.Comunidad JOIN provincias p ON p.Id = u.Provincia JOIN tipo_usuario t ON u.Rol = t.Id_tipo_usuario";
 		}
-
 		connection.query(consulta,function(err, rows, fields){
 			if(rows.length != 0){
 				data["Usuarios"] = rows;
@@ -517,6 +516,7 @@ router.get('/adminTienda',comprobacionjwt,function(req,res){
 	};
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
+		var id = connection.escape(req.query.id);
 		var consulta = "SELECT u.Id_usuario, u.DNI, u.Nombre, u.Email, u.Direccion, c.Comunidad, p.Provincia, m.Municipio, u.CP, u.Telefono, u.Foto, t.Nombre_rol, u.Estado, u.Eliminado, u.Fecha  FROM usuario_admin_tienda TA JOIN usuarios u ON u.Id_usuario = TA.id_usuario JOIN municipios m ON m.Id = u.Municipio JOIN comunidades c ON c.Id = u.Comunidad JOIN provincias p ON p.Id = u.Provincia JOIN tipo_usuario t ON u.Rol = t.Id_tipo_usuario;";
 		connection.query(consulta,function(err, rows, fields){
 			if(rows.length != 0){
