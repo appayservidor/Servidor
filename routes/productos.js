@@ -10,183 +10,159 @@ router.get('/',comprobacionjwt,function(req,res){
 		var data = {
 			"Productos":""
 		};
-		var id = connection.escape(req.query.id); //Variable que recoje el id de los productos de la URI productos?id={num}
-		console.log(id);
-		var codigo = connection.escape(req.query.codigo); //Variable que recoje el codigo de barras de los productos de la URI productos?codigo={num}
-		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT producto.Id_producto, producto_tienda.Id_producto_tienda, producto.Codigo, producto.Nombre, producto.Precio, producto.Imagen, producto.Descripcion, producto.Stock, producto.URL_video, producto.Estado  FROM producto, tienda, producto_tienda WHERE producto.Id_producto = producto_tienda.Id_producto AND producto_tienda.Id_tienda = tienda.Id_tienda AND tienda.Id_tienda="+id;
-		}else if(codigo !='NULL'){ //Si en la URI existe se crea la consulta de busqueda por codigo de barras
-			var consulta="SELECT * FROM producto WHERE codigo="+codigo;
-		}else{ //Si no muestra todos los productos
-			var consulta = "SELECT * FROM producto";
-		}
-		
-		connection.query(consulta,function(err, rows, fields){
-			if(rows.length != 0){
-				data["Productos"] = rows;
-				res.json(data);
-				res.status(200);
-				
-			}else{
-				data["Productos"] = 'No hay productos';
-				res.json(data);
+		var Id = connection.escape(req.query.id); //Variable que recoje el id de los productos de la URI productos?Id={num}
+		var Idtienda = connection.escape(req.query.idtienda); //Variable que recoje el id de los productos de la URI productos?Id={num}
+		var Codigo = connection.escape(req.query.codigo); //Variable que recoje el codigo de barras de los productos de la URI productos?codigo={num}
+		var Nombre = connection.escape(req.query.nombre); //Variable que recoje el nombre de los productos de la URI productos?nombre={String}
+		var Preciomin = connection.escape(req.query.preciomin); //Variable que recoje el precio minimo de los productos de la URI productos?precio={num}
+		var Preciomax = connection.escape(req.query.preciomacx); //Variable que recoje el precio maximo de los productos de la URI productos?precio={num}
+		var Stock = connection.escape(req.query.stock); //Variable que recoje el codigo de barras de los productos de la URI productos?stock={num}
+		var Descripcion = connection.escape(req.query.decripcion); //Variable que recoje el codigo de barras de los productos de la URI productos?decripcion={num}
+		var Estado = connection.escape(req.query.estado); //Variable que recoje el codigo de barras de los productos de la URI productos?estado={num}
+		var Eliminado = connection.escape(req.query.eliminado); //Variable que recoje el codigo de barras de los productos de la URI productos?eliminado={num}
+		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuarios en la URI usuarios?ordenombre={0 ó 1}
+		var OrdePrecio = connection.escape(req.query.ordeprecio);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeprecio={0 ó 1}
+		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var consulta="SELECT * FROM producto, tienda, producto_tienda WHERE Id_producto=Id_producto_producto_tienda AND Id_tienda=Id_tienda_producto_tienda";
+		if(Id != 'NULL' || Idtienda != 'NULL' || Codigo != 'NULL' || Nombre != 'NULL' || Preciomax != 'NULL' || Preciomin != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id tienda
+			var i=1;
+			if(Nombre != 'NULL'){
+				console.log("Nombre:"+Nombre);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Nombre_producto LIKE '%"+Nombre.replace(/'/g, "")+"%'";
+				i++;
 			}
-		});
-	connection.release();
-	});
-});
-
-//Funcion que genera el POST de Productos
-router.post('/',comprobacionjwt,function(req,res){
-	db.getConnection(function(err, connection) {
-		if (err) throw err;
-		var Codigo = connection.escape(req.body.codigo);
-		var Nombre = connection.escape(req.body.nombre);
-		var Precio = connection.escape(req.body.precio);
-		var Imagen = connection.escape(req.body.imagen);
-		var Descripcion = connection.escape(req.body.descripcion);
-		var Stock = connection.escape(req.body.stock);
-		var URL_video = connection.escape(req.body.url_video);
-		var Id_tienda = connection.escape(req.body.id_tienda);
-		var data = {
-			"Productos":""
-		};
-		var consulta = "INSERT INTO producto (";
-		var i=0;
-		if(Nombre != 'NULL'){
-			consulta  += "Nombre";
-			i++;
-		}
-		if(Codigo != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Id != 'NULL'){
+				console.log("Id_producto:"+Id);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Id_producto="+Id;
+				i++;
 			}
-			consulta  += "Codigo";
-			i++;
-		}
-		if(Precio != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Codigo != 'NULL'){
+				console.log("Codigo:"+CodigoId);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Codigo_producto="+Codigo;
+				i++;
 			}
-			consulta  += "Precio";
-			i++;
-		}
-		if(Imagen != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Idtienda != 'NULL'){
+				console.log("Id_tienda:"+Idtienda);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Id_tienda="+Idtienda;
+				i++;
 			}
-			consulta  += "Imagen";
-			i++;
-		}
-		if(Descripcion != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Preciomin != 'NULL'){
+				console.log("Precio minimo:"+Preciomin);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Precio_producto>="+Preciomin;
+				i++;
 			}
-			consulta  += "Descripcion";
-			i++;
-		}
-		if(Stock != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Preciomax != 'NULL'){
+				console.log("Precio maximo:"+Preciomax);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Precio_producto<="+Preciomax;
+				i++;
 			}
-			consulta  += "Stock";
-			i++;
-		}
-		if(URL_video != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Estado != 'NULL'){
+				console.log("Estado:"+Estado);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Estado_producto="+estado;
+				i++;
 			}
-			consulta  += "URL_video";
-			i++;
-		}
-		
-		consulta+=", Estado, Eliminado) VALUES (";
-		var i=0;
-		if(Nombre != 'NULL'){
-			consulta  += Nombre;
-			i++;
-		}
-		if(Codigo != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Eliminado != 'NULL'){
+				console.log("Eliminado:"+Eliminado);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Eliminado_producto="+Eliminado;
+				i++;
 			}
-			consulta  += Codigo;
-			i++;
-		}
-		if(Precio != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(Descripcion != 'NULL'){
+				console.log("Direccion:"+Direccion);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Descripcion_producto LIKE '%"+Descripcion.replace(/'/g, "")+"%'";
+				i++;
 			}
-			consulta  += Precio;
-			i++;
 		}
-		if(Imagen != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+		if(OrdeNombre != 'NULL' || OrdePrecio != 'NULL'){
+			var orden =0;
+			consulta  += " ORDER BY ";
+			if(OrdePrecio != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdePrecio=="'1'") {
+					consulta  += "Precio_producto ASC";
+				}
+				if (OrdePrecio=="'0'") {
+					consulta  += "Precio_producto DESC";	
+				}
 			}
-			consulta  += Imagen;
-			i++;
-		}
-		if(Descripcion != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
+			if(OrdeNombre != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeNombre=="'1'") {
+					consulta  += "  Nombre_producto ASC";
+				}
+				if (OrdeNombre=="'0'") {
+					consulta  += "  Nombre_producto DESC";	
+				}
 			}
-			consulta  += Descripcion;
-			i++;
 		}
-		
-		if(Stock != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
-			}
-			consulta  += Stock;
-			i++;
+		if(Pagina!='NULL'){
+			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
+			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT 10 OFFSET "+pags;
 		}
-		if(URL_video != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
-			}
-			consulta  += URL_video;
-			i++;
-		}
-	
-		consulta+=", '1', '0')";
+		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				res.status(400).json({ error: err });
 				console.log(err);
 			}else{
-				var Id_producto = rows.insertId; //Cojemos el id del producto para insertarlo en la tienda
-				//Tengo que insertar en producto_tienda el producto para asociarla a una tienda
-				var consulta2="INSERT INTO producto_tienda (Id_tienda, Id_producto) VALUES("+Id_tienda+","+Id_producto+")";
-				connection.query(consulta2,function(err, rows, fields){
-					if(err){
-						res.status(400).json({ error: err });
-						console.log(err);
-					}else{
-						data["Productos"] = "Datos insertados correctamente!";
-						res.status(200);
-					}
+				if(rows.length != 0){
+					data["Productos"] = rows;
 					res.json(data);
-				});
+					res.status(200);	
+				}else{
+					data["Productos"] = 'No hay productos';
+					res.status(204);
+					res.json(data);
+				}
 			}
 		});
 	connection.release();
 	});
 });
-
 
 //Funcion que genera el PUT (Update) de Productos
 router.put('/',comprobacionjwt,function(req,res){
@@ -207,45 +183,39 @@ router.put('/',comprobacionjwt,function(req,res){
 		var data = {
 			"Productos":""
 		};
-			if(ID == "''"){
-				ID = "null.null.null"
-			}
 			var consulta = "UPDATE producto SET ";
 			if(ID != 'NULL'){
 				if(Codigo != 'NULL'){
-					consulta = consulta + "Codigo="+Codigo;
+					consulta = consulta + "Codigo_producto="+Codigo;
 				}
 				if(Nombre != 'NULL'){
-					consulta = consulta + " Nombre="+Nombre;
+					consulta = consulta + " Nombre_producto="+Nombre;
 				}
 				if(Precio != 'NULL'){
-					consulta = consulta + " Precio="+Precio;
+					consulta = consulta + " Precio_producto="+Precio;
 				}
 				if(Imagen != 'NULL'){
-					consulta = consulta + " Imagen="+Imagen;
+					consulta = consulta + " Imagen_producto="+Imagen;
 				}
 				if(Descripcion != 'NULL'){
-					consulta = consulta + " Descripcion="+Descripcion;
+					consulta = consulta + " Descripcion_producto="+Descripcion;
 				}
 				if(Stock != 'NULL'){
-					consulta = consulta + " Stock="+Stock;
+					consulta = consulta + " Stock_producto="+Stock;
 				}
 				if(URL_video != 'NULL'){
-					consulta = consulta + " URL_video="+URL_video;
+					consulta = consulta + " URL_video_producto="+URL_video;
 				}
 				if(Estado != 'NULL'){
-					consulta = consulta + " Estado="+Estado;
+					consulta = consulta + " Estado_producto="+Estado;
 				}
 				if(Eliminado != 'NULL'){
-					consulta = consulta + " Eliminado="+Eliminado;
+					consulta = consulta + " Eliminado_producto="+Eliminado;
 				}
 				
 				consulta = consulta + " WHERE Id_producto="+ID;
 				console.log(consulta);
-				
-				
 			}
-
 			connection.query(consulta,function(err, rows, fields){
 					if(err){
 						res.status(400).json({ error: err });
@@ -256,7 +226,6 @@ router.put('/',comprobacionjwt,function(req,res){
 					}
 					res.json(data);
 				});
-			
 	connection.release();
 	});		
 });

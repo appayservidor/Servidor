@@ -15,9 +15,9 @@ var api=(require('./routes/api'));
 var acceso=(require('./routes/acceso'));  
 var shopping=require('./routes/shopping');
 var loginjwt=require('./routes/loginjwt');
-var provincias=require('./routes/provincias');
-var comunidades=require('./routes/comunidades');
-var municipios=require('./routes/municipios');
+var provincia=require('./routes/provincia');
+var comunidad=require('./routes/comunidad');
+var localidad=require('./routes/localidad');
 var facturas=require('./routes/facturas');
 var resetpassword=require('./routes/resetpassword');
 var confirmaremail=require('./routes/confirmaremail');
@@ -32,6 +32,8 @@ var whitelist = [
     'http://localhost:3000',
     'http://localhost:4200',
     'http://localhost:8100',
+    'http://localhost:5000',
+    'http://localhost:8888',
     'https://appay.es',
     'https://appay-aefd5.firebaseapp.com',
     'https://admin.appay.es',
@@ -61,9 +63,9 @@ app.use('/api',api);
 app.use('/acceso',acceso);
 app.use('/shopping',shopping);
 app.use('/loginjwt',loginjwt);
-app.use('/provincias',provincias);
-app.use('/comunidades',comunidades);
-app.use('/municipios',municipios);
+app.use('/provincia',provincia);
+app.use('/comunidad',comunidad);
+app.use('/localidad',localidad);
 app.use('/facturas',facturas);
 app.use('/resetpassword',resetpassword);
 app.use('/ofertas',ofertas);

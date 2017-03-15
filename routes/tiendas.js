@@ -10,15 +10,250 @@ router.get('/',comprobacionjwt,function(req,res){
 		var data = {
 			"Tiendas":""
 		};
-
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
+		var Nombre = connection.escape(req.query.nombre);
+		var Direccion = connection.escape(req.query.direccion);
+		var Provincia = connection.escape(req.query.provincia);
+		var Localidad = connection.escape(req.query.localidad);
+		var Comunidad = connection.escape(req.query.comunidad);
+		var Longitud = connection.escape(req.query.longitud);
+		var Latitud = connection.escape(req.query.latitud);
+		var Id_Gran_Superficie = connection.escape(req.query.id_gran_superficie);
+		var CIF = connection.escape(req.query.cif);
+		var CP = connection.escape(req.query.cp);
+		var Estado = connection.escape(req.query.estado);
+		var Copia = connection.escape(req.query.copia);
+		var Eliminado = connection.escape(req.query.eliminado);
+		var Foto = connection.escape(req.query.foto);
+		var Telefono = connection.escape(req.query.telefono);
+		var Descripcion = connection.escape(req.query.descripcion);
+		var Horario = connection.escape(req.query.horario);
+		var Facebook = connection.escape(req.query.facebook);
+		var Twitter = connection.escape(req.query.twitter);
+		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuarios en la URI usuarios?ordenombre={0 ó 1}
+		var OrdeCP = connection.escape(req.query.ordeCP);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordefecha={0 ó 1}
+		var OrdeId = connection.escape(req.query.ordeid);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordefechanac={0 ó 1}
+		var OrdeCom = connection.escape(req.query.ordecom); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordecom={0 ó 1}
+		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeprov={0 ó 1}
+		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeloc={0 ó 1}
+		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
         console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id WHERE Id_Tienda="+id;
+			var consulta="SELECT * FROM tienda WHERE Id_Tienda="+id;
 		}else{ //Si no muestra todas las tiendas
-			var consulta = "SELECT t.Id_Tienda, t.NIF, t.Nombre, t.Direccion, m.Municipio, p.Provincia, c.Comunidad, t.Latitud, t.Longitud, t.Id_gran_superficie, t.Estado, t.Eliminado, t.Foto, t.Descripcion, t.Horario, t.Facebook, t.Twitter FROM tienda t  JOIN municipios m ON t.Municipio=m.Id JOIN comunidades c ON t.Comunidad=c.Id JOIN provincias p ON t.Provincia=p.Id";
+			var consulta = "SELECT * FROM tienda";
+			console.log("Entro para mostrar los datos de todos los tiendas");
+			var i=0;
+			if(Nombre != 'NULL' || CIF != 'NULL' || Latitud != 'NULL' || Longitud != 'NULL' || CP != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Id_Gran_Superficie != 'NULL' ){
+				console.log("Con el parametro:");
+				consulta +=" WHERE ";
+				if(Nombre != 'NULL'){
+					console.log("Nombre:"+Nombre);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Nombre_tienda LIKE '%"+Nombre.replace(/'/g, "")+"%'";
+					i++;
+				}
+				if(CIF != 'NULL'){
+					console.log("CIF:"+CIF);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "CIF_tienda="+CIF;
+					i++;
+				}
+				if(Latitud != 'NULL'){
+					console.log("Latitud:"+Latitud);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Latitud_tienda="+Latitud;
+					i++;
+				}
+				if(Longitud != 'NULL'){
+					console.log("Longitud:"+Longitud);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Longitud_tienda="+Longitud;
+					i++;
+				}
+				if(Estado != 'NULL'){
+					console.log("Estado:"+Estado);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Estado_tienda="+estado;
+					i++;
+				}
+				if(Eliminado != 'NULL'){
+					console.log("Eliminado:"+Eliminado);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Eliminado_tienda="+Eliminado;
+					i++;
+				}
+				if(Direccion != 'NULL'){
+					console.log("Direccion:"+Direccion);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Direccion_tienda LIKE '%"+Direccion.replace(/'/g, "")+"%'";
+					i++;
+				}
+				if(Comunidad != 'NULL'){
+					console.log("Comunidad:"+Comunidad);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Comunidad_tienda="+Comunidad;
+					i++;
+				}
+				if(Provincia != 'NULL'){
+					console.log("Provincia:"+Provincia);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Provincia_tienda="+Comunidad;
+					i++;
+				}
+				if(Localidad != 'NULL'){
+					console.log("Localidad:"+Localidad);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Localidad_tienda="+Comunidad;
+					i++;
+				}
+				if(Telefono != 'NULL'){
+					console.log("Telefono:"+Telefono);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Telefono_tienda="+Telefono;
+					i++;
+				}
+				if(CP != 'NULL'){
+					console.log("CP:"+CP);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "CP_tienda="+CP;
+					i++;
+				}
+				if(Id_Gran_Superficie != 'NULL'){
+					console.log("Id_Gran_Superficie:"+Id_Gran_Superficie);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Id_Gran_Superficie_tienda="+Id_Gran_Superficie;
+					i++;
+				}
+			}
 		}
-		
+		if(OrdeId != 'NULL' || OrdeCP != 'NULL' || OrdeNombre != 'NULL' || OrdeCom != 'NULL' || OrdeProv != 'NULL' || OrdeLoc != 'NULL'){
+			var orden =0;
+			consulta  += " ORDER BY ";
+			if(OrdeCP != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeCP=="'1'") {
+					consulta  += "CP_tienda ASC";
+				}
+				if (OrdeCP=="'0'") {
+					consulta  += "CP_tienda DESC";	
+				}
+			}
+			if(OrdeId != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeId=="'1'") {
+					consulta  += "Id_Gran_Superficie_tienda ASC";
+				}
+				if (OrdeId=="'0'") {
+					consulta  += "Id_Gran_Superficie_tienda DESC";	
+				}
+			}
+			if(OrdeCom != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeCom=="'1'") {
+					consulta  += "Comunidad_tienda ASC";
+				}
+				if (OrdeCom=="'0'") {
+					consulta  += "Comunidad_tienda DESC";	
+				}
+			}
+			if(OrdeProv != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeProv=="'1'") {
+					consulta  += "Provincia_tienda ASC";
+				}
+				if (OrdeProv=="'0'") {
+					consulta  += "Provincia_tienda DESC";	
+				}
+			}
+			if(OrdeLoc != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeLoc=="'1'") {
+					consulta  += "Localidad_tienda ASC";
+				}
+				if (OrdeLoc=="'0'") {
+					consulta  += "Localidad_tienda DESC";	
+				}
+			}
+			if(OrdeNombre != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeNombre=="'1'") {
+					consulta  += "  Nombre_tienda ASC";
+				}
+				if (OrdeNombre=="'0'") {
+					consulta  += "  Nombre_tienda DESC";	
+				}
+			}
+		}
+		if(Pagina!='NULL'){
+			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
+			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT 10 OFFSET "+pags;
+		}
+		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(rows.length != 0){
 				data["Tiendas"] = rows;
@@ -40,13 +275,14 @@ router.post('/',comprobacionjwt,function(req,res){
 		var Provincia = connection.escape(req.body.provincia);
 		var Localidad = connection.escape(req.body.localidad);
 		var Comunidad = connection.escape(req.body.comunidad);
+		var CP = connection.escape(req.body.cp);
 		var Longitud = connection.escape(req.body.longitud);
 		var Latitud = connection.escape(req.body.latitud);
 		var ID_granSuperficie = connection.escape(req.body.gransuperficie);
-		var NIF = connection.escape(req.body.nif);
-		var Estado = connection.escape(req.body.estado);
-		var Eliminado = connection.escape(req.body.eliminado);
+		var CIF = connection.escape(req.body.cif);
+		var Telefono = connection.escape(req.body.telefono);
 		var Foto = connection.escape(req.body.foto);
+		var Logo = connection.escape(req.body.logo);
 		var Descripcion = connection.escape(req.body.descripcion);
 		var Horario = connection.escape(req.body.horario);
 		var Facebook = connection.escape(req.body.facebook);
@@ -57,7 +293,11 @@ router.post('/',comprobacionjwt,function(req,res){
 		var consulta = "INSERT INTO tienda (";
 		var i=0;
 		if(Nombre != 'NULL'){
-			consulta  += "Nombre";
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Nombre_tienda";
 			i++;
 		}
 		if(Direccion != 'NULL'){
@@ -65,7 +305,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Direccion";
+			consulta  += "Direccion_tienda";
 			i++;
 		}
 		if(Provincia != 'NULL'){
@@ -73,7 +313,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Provincia";
+			consulta  += "Provincia_tienda";
 			i++;
 		}
 		if(Localidad != 'NULL'){
@@ -81,7 +321,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Municipio";
+			consulta  += "Localidad_tienda";
 			i++;
 		}
 		if(Comunidad != 'NULL'){
@@ -89,7 +329,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Comunidad";
+			consulta  += "Comunidad_tienda";
 			i++;
 		}
 		if(Longitud != 'NULL'){
@@ -97,7 +337,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Longitud";
+			consulta  += "Longitud_tienda";
 			i++;
 		}
 		if(Latitud != 'NULL'){
@@ -105,7 +345,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += " , ";
 				i--;	
 			}
-			consulta  += "Latitud";
+			consulta  += "Latitud_tienda";
 			i++;
 		}
 		if(ID_granSuperficie != 'NULL'){
@@ -113,31 +353,15 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "id_gran_superficie";
+			consulta  += "id_gran_superficie_tienda";
 			i++;
 		}
-		if(NIF != 'NULL'){
+		if(CIF != 'NULL'){
 			if (i==1) {
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "NIF";
-			i++;
-		}
-		if(Estado != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
-			}
-			consulta  += "Estado";
-			i++;
-		}
-		if(Eliminado != 'NULL'){
-			if (i==1) {
-				consulta  += ", ";
-				i--;	
-			}
-			consulta  += "Eliminado";
+			consulta  += "CIF_tienda";
 			i++;
 		}
 		if(Foto != 'NULL'){
@@ -145,7 +369,15 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Foto";
+			consulta  += "Foto_tienda";
+			i++;
+		}
+		if(Logo != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Logo_tienda";
 			i++;
 		}
 		if(Descripcion != 'NULL'){
@@ -153,7 +385,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Descripcion";
+			consulta  += "Descripcion_tienda";
 			i++;
 		}
 		if(Horario != 'NULL'){
@@ -161,7 +393,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Horario";
+			consulta  += "Horario_tienda";
 			i++;
 		}
 		if(Facebook != 'NULL'){
@@ -169,7 +401,7 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Facebook";
+			consulta  += "Facebook_tienda";
 			i++;
 		}
 		if(Twitter != 'NULL'){
@@ -177,10 +409,10 @@ router.post('/',comprobacionjwt,function(req,res){
 				consulta  += ", ";
 				i--;	
 			}
-			consulta  += "Twitter";
+			consulta  += "Twitter_tienda";
 			i++;
 		}
-		consulta+=") VALUES (";
+		consulta=consulta+", Estado_tienda , Eliminado_tienda) VALUES (";
 		var i=0;
 		if(Nombre != 'NULL'){
 			consulta  += Nombre;
@@ -242,28 +474,12 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += ID_granSuperficie;
 			i++;
 		}
-		if(NIF != 'NULL'){
+		if(CIF != 'NULL'){
 			if (i==1) {
 				consulta  += " , ";
 				i--;	
 			}
-			consulta  += NIF;
-			i++;
-		}
-		if(Estado != 'NULL'){
-			if (i==1) {
-				consulta  += " , ";
-				i--;	
-			}
-			consulta  += Estado;
-			i++;
-		}
-		if(Eliminado != 'NULL'){
-			if (i==1) {
-				consulta  += " , ";
-				i--;	
-			}
-			consulta  += Eliminado;
+			consulta  += CIF;
 			i++;
 		}
 		if(Foto != 'NULL'){
@@ -272,6 +488,14 @@ router.post('/',comprobacionjwt,function(req,res){
 				i--;	
 			}
 			consulta  += Foto;
+			i++;
+		}
+		if(Logo != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Logo;
 			i++;
 		}
 		if(Descripcion != 'NULL'){
@@ -306,7 +530,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Twitter;
 			i++;
 		}
-		consulta+=")"
+		consulta+=",'0','0')";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				res.status(400).json({ error: err });
@@ -334,23 +558,26 @@ router.put('/',comprobacionjwt,function(req,res){
 		var Comunidad = connection.escape(req.body.comunidad);
 		var Longitud = connection.escape(req.body.longitud);
 		var Latitud = connection.escape(req.body.latitud);
-		var ID_granSuperficie = connection.escape(req.body.gransuperficie);
-		var NIF = connection.escape(req.body.nif);
+		var Id_Gran_Superficie = connection.escape(req.body.id_gran_superficie);
+		var CIF = connection.escape(req.body.cif);
+		var CP = connection.escape(req.body.cp);
 		var Estado = connection.escape(req.body.estado);
+		var Copia = connection.escape(req.body.copia);
 		var Eliminado = connection.escape(req.body.eliminado);
+		var Foto = connection.escape(req.body.foto);
+		var Telefono = connection.escape(req.body.telefono);
+		var Descripcion = connection.escape(req.body.descripcion);
+		var Horario = connection.escape(req.body.horario);
+		var Facebook = connection.escape(req.body.facebook);
+		var Twitter = connection.escape(req.body.twitter);
 		var data = {
 			"Tiendas":""
 		};
 		var consulta = "UPDATE tienda SET ";
 		var i = 0;
-
-			if(ID == "''"){
-				ID = "null.null.null"
-			}
-			
 			if(ID != 'NULL'){
 				if(Nombre != 'NULL'){
-					consulta  += "Nombre="+Nombre;
+					consulta  += "Nombre_tienda="+Nombre;
 					i++;
 				}
 				if(Direccion != 'NULL'){
@@ -358,7 +585,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Direccion="+Direccion;
+					consulta  += "Direccion_tienda="+Direccion;
 					i++;
 				}
 				if(Provincia != 'NULL'){
@@ -366,7 +593,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Provincia="+Provincia;
+					consulta  += "Provincia_tienda="+Provincia;
 					i++;
 				}
 				if(Localidad != 'NULL'){
@@ -374,7 +601,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Municipio="+Localidad;
+					consulta  += "Localidad_tienda="+Localidad;
 					i++;
 				}
 				if(Comunidad != 'NULL'){
@@ -382,7 +609,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Comunidad="+Comunidad;
+					consulta  += "Comunidad_tienda="+Comunidad;
 					i++;
 				}
 				if(Longitud != 'NULL'){
@@ -390,7 +617,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Longitud="+Longitud;
+					consulta  += "Longitud_tienda="+Longitud;
 					i++;
 				}
 				if(Latitud != 'NULL'){
@@ -398,7 +625,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Latitud="+Latitud;
+					consulta  += "Latitud_tienda="+Latitud;
 					i++;
 				}
 				if(ID_granSuperficie != 'NULL'){
@@ -406,7 +633,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "id_gran_superficie="+ID_granSuperficie;
+					consulta  += "id_gran_superficie_tienda="+ID_granSuperficie;
 					i++;
 				}
 				if(NIF != 'NULL'){
@@ -414,7 +641,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "NIF="+NIF;
+					consulta  += "CIF_tienda="+NIF;
 					i++;
 				}
 				if(Estado != 'NULL'){
@@ -422,7 +649,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Estado="+Estado;
+					consulta  += "Estado_tienda="+Estado;
 					i++;
 				}
 				if(Eliminado != 'NULL'){
@@ -430,7 +657,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Eliminado="+Eliminado;
+					consulta  += "Eliminado_tienda="+Eliminado;
 					i++;
 				}
 				if(Foto != 'NULL'){
@@ -438,7 +665,15 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Foto="+Foto;
+					consulta  += "Foto_tienda="+Foto;
+					i++;
+				}
+				if(Logo != 'NULL'){
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Logo_tienda="+Logo;
 					i++;
 				}
 				if(Descripcion != 'NULL'){
@@ -446,7 +681,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Descripcion="+Descripcion;
+					consulta  += "Descripcion_tienda="+Descripcion;
 					i++;
 				}
 				if(Horario != 'NULL'){
@@ -454,7 +689,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Horario="+Horario;
+					consulta  += "Horario_tienda="+Horario;
 					i++;
 				}
 				if(Facebook != 'NULL'){
@@ -462,7 +697,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Facebook="+Facebook;
+					consulta  += "Facebook_tienda="+Facebook;
 					i++;
 				}
 				if(Twitter != 'NULL'){
@@ -470,7 +705,7 @@ router.put('/',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Twitter="+Twitter;
+					consulta  += "Twitter_tienda="+Twitter;
 					i++;
 				}
 				consulta = consulta + " WHERE Id_Tienda="+ID;
@@ -538,7 +773,7 @@ router.post('/gransuperficie',comprobacionjwt,function(req,res){
 			var consulta = "INSERT INTO gran_superficie (";
 				var i=0;
 				if(Nombre != 'NULL'){
-					consulta  += "Nombre";
+					consulta  += "Nombre_gran_superficie";
 					i++;
 				}
 				if(Imagen != 'NULL'){
@@ -546,7 +781,7 @@ router.post('/gransuperficie',comprobacionjwt,function(req,res){
 						consulta  += ", ";
 						i--;	
 					}
-					consulta  += "Imagen";
+					consulta  += "Imagen_gran_superficie";
 					i++;
 				}
 
@@ -600,7 +835,7 @@ router.put('/gransuperficie',comprobacionjwt,function(req,res){
 			if(ID != 'NULL'){
 				var i = 0;
 				if(Nombre != 'NULL'){
-					consulta  += "Nombre="+Nombre;
+					consulta  += "Nombre_gran_superficie="+Nombre;
 					i++;
 				}
 				if(Imagen != 'NULL'){
@@ -608,7 +843,7 @@ router.put('/gransuperficie',comprobacionjwt,function(req,res){
 						consulta  += " , ";
 						i--;	
 					}
-					consulta  += "Imagen="+Imagen;
+					consulta  += "Imagen_gran_superficie="+Imagen;
 					i++;
 				}
 				
@@ -638,7 +873,6 @@ router.get('/coordenadas',comprobacionjwt,function(req,res){
 		var data = {
 			"Tiendas":""
 		};
-
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
         console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
@@ -646,13 +880,12 @@ router.get('/coordenadas',comprobacionjwt,function(req,res){
 		}else{ //Si no muestra todas las tiendas
 			var consulta = "SELECT Latitud, Longitud FROM tienda";
 		}
-		
 		connection.query(consulta,function(err, rows, fields){
 			if(rows.length != 0){
 				data["Tiendas"] = rows;
 				res.status(200);	
 			}else{
-				data["Tiendas"] = 'No hay grandes superficies';
+				data["Tiendas"] = 'No hay tiendas';
 			}
 			res.json(data);	
 		});

@@ -14,13 +14,12 @@ router.post("/", function(req,res,next){
         console.log("username es "+username);
         console.log("password es "+password);
         //llamamos a la base de datos para ver si el usuario es correcto o no 
-    
-        var consulta="SELECT * from usuarios where Email="+username+" and Contra=md5("+password+")";
+        var consulta="SELECT * from usuario where Email_usuario="+username+" and Contra_usuario=md5("+password+")";
         
         connection.query(consulta, function(err, rows, fields) {
             if(rows!=null && rows.length != 0){ //si es correcto
                 var user=rows[0];
-                var token= jwt.sign({//firmamos el token , que caduca en 7 dias
+                var token= jwsign({//firmamos el token , que caduca en 7 dias
                     data: user
                 }, mySecretKey, { expiresIn: '168h' });
                 return res.status(200).json(token);  //lo enviamos
@@ -40,13 +39,13 @@ router.post("/admin", function(req,res,next){
         console.log("username es "+username);
         console.log("password es "+password);
         //llamamos a la base de datos para ver si el usuario es correcto o no 
-        var consulta="SELECT u.Nombre, u.Id_usuario, u.Foto, t.Id_Tienda, t.Nombre, t.Logo from usuarios u JOIN usuario_admin_tienda uat ON uat.id_usuario=u.Id_usuario JOIN tienda t ON t.Id_Tienda=uat.id_tienda where u.Email="+username+" and uat.id_usuario=u.Id_usuario and u.Contra=md5("+password+")";//Esto tienes que controlarlo con el md5
+        var consulta="SELECT Nombre_usuario, Id_usuario, Foto_usuario, Id_Tienda, Nombre_tienda, Logo_tienda from usuario, tienda, usuario_admin_tienda WHERE Email_usuario="+username+" AND Id_usuario_usuario_admin_tienda=Id_usuario AND Id_tienda_usuario_admin_tienda=Id_tienda AND Contra_usuario=md5("+password+")";//Esto tienes que controlarlo con el md5
         console.log(consulta);
         connection.query(consulta, function(err, rows, fields) {
             if(rows!=null && rows.length != 0){ //si es correcto
                 var user=rows[0];
                 console.log(user);
-                var token= jwt.sign({//firmamos el token , que caduca en 7 dias
+                var token= jwsign({//firmamos el token , que caduca en 7 dias
                     data: user
                 }, mySecretKey, { expiresIn: '168h' });
 

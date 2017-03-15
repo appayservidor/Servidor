@@ -21,7 +21,7 @@ router.post('/',function(req,res){
         if (err) throw err;
 		var Email = connection.escape(req.body.email);
         console.log(Email);
-		var consulta = "SELECT Email, Nombre FROM usuarios WHERE Email="+Email;
+		var consulta = "SELECT Email_usuario, Nombre_usuario FROM usuario WHERE Email_usuario="+Email;
 		connection.query(consulta,function(err, rows, fields){
 			if(rows != 0){ // Si que lo ha encontrado
                 console.log("Usuario encontrado");
@@ -97,18 +97,18 @@ router.put('/',comprobacionjwt,function(req,res){
         var email=connection.escape(req.objeto_token.data);
         console.log(email);
 		var data = {
-			"Usuarios":""
+			"Usuario":""
 		};
 
-        var consulta = "UPDATE usuarios SET Contra=md5("+Contra+") Where Email="+email;
+        var consulta = "UPDATE usuario SET Contra_usuario=md5("+Contra+") Where Email_usuario="+email;
 			
         console.log(consulta);
         connection.query(consulta,function(err, rows, fields){
             if(err){
                 res.status(400).json({ error: err });
             }else{
-                data["Usuarios"] = "Actualizado correctamente!";
-                res.status(200).json(data["Usuarios"]);
+                data["Usuario"] = "Actualizado correctamente!";
+                res.status(200).json(data["Usuario"]);
             }
            // res.json(data);
         });

@@ -11,7 +11,6 @@ router.get('/',comprobacionjwt,function(req,res){
 			"Factura":"",
 			"Lineas":""
 		};
-		
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la factura de la URI factura?id={num}
 		var Nombretienda = connection.escape(req.query.nombretienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
 		var MinTotal = connection.escape(req.query.mintotal); //Variable que recoje el  minimo del total de la factura de la URI factura?total={num}
@@ -26,7 +25,6 @@ router.get('/',comprobacionjwt,function(req,res){
 		console.log(OrdeNombre+"fsdfs");
 		console.log(OrdeFecha);
 		console.log(OrdeTotal);
-	
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id y se muestran todos los detalles de la factura
 			var infoTienda = "SELECT f.Id_factura, f.Id_tienda, t.Nombre, t.NIF, f.Fecha_factura, f.Total_factura, f.Pagada FROM factura f JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE f.Id_factura ="+id;
 			var consulta="SELECT l.Cantidad, p.Codigo, p.Nombre, p.Precio, l.Id_oferta_usuario, l.Id_oferta_producto, l.Total_linea FROM factura f JOIN linea_factura l ON l.Id_factura = f.Id_factura JOIN producto_tienda pt ON pt.Id_producto_tienda = l.Id_producto_tienda JOIN producto p ON p.Id_producto = pt.Id_producto JOIN tienda t ON t.Id_tienda = f.Id_tienda WHERE f.Id_factura="+id+";";
@@ -134,8 +132,9 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 			}
 			if(Pagina!='NULL'){
-				var pags=parseInt(Pagina)*10;
-				consulta += " LIMIT 10 OFF SET "+pags;
+				var pags=parseInt(Pagina.replace(/'/g, ""))*10;
+				console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
+				consulta += " LIMIT 10 OFFSET "+pags;
 			}
 			console.log(consulta);
 			var data = {
@@ -240,10 +239,10 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 					}
 					orden=orden+1;
 					if (OrdeTotal=="'1'") {
-						consulta  += "f.Fecha_factura ASC";
+						consulta  += "f.Total_factura ASC";
 					}
 					if (OrdeTotal=="'0'") {
-						consulta  += "f.Fecha_factura DESC";	
+						consulta  += "f.Total_factura DESC";	
 					}
 				}
 				if(OrdeNombre != 'NULL'){
@@ -253,10 +252,10 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 					}
 					orden=orden+1;
 					if (OrdeNombre=="'1'") {
-						consulta  += "  f.Fecha_factura ASC";
+						consulta  += "  f.Nombre_factura ASC";
 					}
 					if (OrdeNombre=="'0'") {
-						consulta  += "  f.Fecha_factura DESC";	
+						consulta  += "  f.Nombre_factura DESC";	
 					}
 				}
 			}
