@@ -30,12 +30,12 @@ router.get('/',comprobacionjwt,function(req,res){
 		var Horario = connection.escape(req.query.horario);
 		var Facebook = connection.escape(req.query.facebook);
 		var Twitter = connection.escape(req.query.twitter);
-		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuarios en la URI usuarios?ordenombre={0 ó 1}
-		var OrdeCP = connection.escape(req.query.ordeCP);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordefecha={0 ó 1}
-		var OrdeId = connection.escape(req.query.ordeid);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordefechanac={0 ó 1}
-		var OrdeCom = connection.escape(req.query.ordecom); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordecom={0 ó 1}
-		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeprov={0 ó 1}
-		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeloc={0 ó 1}
+		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuario en la URI usuario?ordenombre={0 ó 1}
+		var OrdeCP = connection.escape(req.query.ordeCP);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordefecha={0 ó 1}
+		var OrdeId = connection.escape(req.query.ordeid);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordefechanac={0 ó 1}
+		var OrdeCom = connection.escape(req.query.ordecom); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordecom={0 ó 1}
+		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprov={0 ó 1}
+		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeloc={0 ó 1}
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
         console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id

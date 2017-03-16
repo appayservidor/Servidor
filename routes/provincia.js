@@ -59,16 +59,16 @@ router.get('/',comprobacionjwt,function(req,res){
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-                res.status(400).json({ error: err });
+                return res.status(400).json({ error: err });
             }else{
                 if(rows.length != 0){
-				data["Errores"] = 0;
-				data["Provincia"] = rows;
-				res.status(200).json(data["Usuario"]);	
-			}else{
-				data["Provincia"] = 'No hay provincias';
-                res.status(205).json(data["Usuario"]);
-			}
+                    data["Errores"] = 0;
+                    data["Provincia"] = rows;
+                    return res.status(200).json(data);	
+			    }else{
+                    data["Provincia"] = 'No hay provincias';
+                    return res.status(205).json(data);
+			    }
             }
 		});
     connection.release();

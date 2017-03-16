@@ -54,7 +54,7 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 	});
 });
 
-//POST de ofertas de usuarios
+//POST de ofertas de usuario
 router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;

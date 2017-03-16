@@ -95,13 +95,13 @@ router.get('/',comprobacionjwt,function(req,res){
 	});
 });
 
-//Funcion que genera el POST de Usuarios
+//Funcion que genera el POST de localidad
 router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
-		var Nombre_comunidad = connection.escape(req.body.nombre_comunidad); //Variable que recoje el id de la comunidad de la URI municipios?id={num}
-		var Nombre_provincia = connection.escape(req.body.nombre_provincia); //Variable que recoje el id de la comunidad de la URI municipios?id={num}
-		var Nombre_localidad = connection.escape(req.body.nombre_localidad); //Variable que recoje el id de la comunidad de la URI municipios?id={num}
+		var Nombre_comunidad = connection.escape(req.body.nombre_comunidad); //Variable que recoje el nombre de la comunidad de la URI municipios?nombre_comunidad={string}
+		var Nombre_provincia = connection.escape(req.body.nombre_provincia); //Variable que recoje el nombre de la provincia de la URI municipios?nombre_provincia={string}
+		var Nombre_localidad = connection.escape(req.body.nombre_localidad); //Variable que recoje el nombre de la localidad de la URI municipios?nombre_localidad={string}
 		console.log(req.body.nombre_comunidad);
         var data = {
 			"Comunidad":"",

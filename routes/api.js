@@ -3,14 +3,14 @@ var router = express.Router();
 var db = require('../helpers/database');
 var db = db();
 
-//CANTIDAD DE USUARIOS POR LOCALIZACION
-//IDEA, MEDIA DE EDAD DE LOS USUARIOS
-router.get('/usuarios', function(request, response) {
+//CANTIDAD DE usuario POR LOCALIZACION
+//IDEA, MEDIA DE EDAD DE LOS usuario
+router.get('/usuario', function(request, response) {
    var query;
-   if(request.query.localidad)  query='SELECT count(*) from usuarios where localidad = '+ request.query.localidad;
-   else if (request.query.comunidad) query='SELECT count(*) from usuarios where comunidad = '+ request.query.comunidad;
-   else if (request.query.provincia) query='SELECT count(*) from usuarios where provincia = '+ request.query.provincia;
-   else     query='SELECT count(*) from usuarios';
+   if(requesquery.localidad)  query='SELECT COUNT(*) FROM usuario WHERE localidad_usuario = '+ requesquery.localidad;
+   else if (requesquery.comunidad) query='SELECT COUNT(*) FROM usuario WHERE comunidad_usuario = '+ requesquery.comunidad;
+   else if (requesquery.provincia) query='SELECT COUNT(*) FROM usuario WHERE provincia_usuario = '+ requesquery.provincia;
+   else     query='SELECT COUNT(*) FROM usuario';
 
     console.log(query);
     db.getConnection(function(err, connection) {
@@ -30,10 +30,10 @@ router.get('/usuarios', function(request, response) {
 //TIENDAS POR LOCALIZACION 
 router.get('/tiendas', function(request, response) {
    var query;
-   if(request.query.localidad)  query='SELECT * from tienda where localidad = '+ request.query.localidad;
-   else if (request.query.comunidad) query='SELECT * from tienda where comunidad = '+ request.query.comunidad;
-   else if (request.query.provincia) query='SELECT * from tienda where provincia = '+ request.query.provincia;
-   else     query='SELECT * from tienda';
+   if(requesquery.localidad)  query='SELECT * FROM tienda WHERE localidad_tienda = '+ requesquery.localidad;
+   else if (requesquery.comunidad) query='SELECT * FROM tienda WHERE comunidad_tienda = '+ requesquery.comunidad;
+   else if (requesquery.provincia) query='SELECT * FROM tienda WHERE provincia_tienda = '+ requesquery.provincia;
+   else     query='SELECT * FROM tienda';
     console.log(query);
     db.getConnection(function(err, connection) {
         if (err) throw err;
@@ -54,10 +54,10 @@ router.get('/tiendas', function(request, response) {
 //PRODUCTOS POR LOCALIZACION
 router.get('/productos', function(request, response) {
    var query;
-   if(request.query.localidad)  query='select count(p.id_producto_tienda) from producto_tienda p, tienda t where p.id_tienda= t.id_tienda && t.localidad = '+ request.query.localidad;
-   else if (request.query.comunidad) query='select count(p.id_producto_tienda) from producto_tienda p, tienda t where p.id_tienda= t.id_tienda && t.comunidad = '+ request.query.comunidad;
-   else if (request.query.provincia) query='select count(p.id_producto_tienda) from producto_tienda p, tienda t where p.id_tienda= t.id_tienda && t.provincia = '+ request.query.provincia;
-   else     query='select count(*) from producto_tienda;';
+   if(requesquery.localidad)  query='SELECT COUNT(id_producto_tienda) FROM producto_tienda, tienda WHERE id_tienda= id_tienda_producto_tienda AND localidad_tienda = '+ requesquery.localidad;
+   else if (requesquery.comunidad) query='SELECT COUNT(id_producto_tienda) FROM producto_tienda, tienda WHERE id_tienda= id_tienda AND comunidad_tienda = '+ requesquery.comunidad;
+   else if (requesquery.provincia) query='SELECT COUNT(id_producto_tienda) FROM producto_tienda, tienda WHERE id_tienda= id_tienda AND provincia_tienda = '+ requesquery.provincia;
+   else     query='SELECT COUNT(*) FROM producto_tienda;';
     console.log(query);
     db.getConnection(function(err, connection) {
         if (err) throw err;
@@ -78,8 +78,8 @@ router.get('/productos', function(request, response) {
     //num de facturas 
 router.get('/facturacion', function(request, response) {
    var query;
-   if(request.query.mes) query='SELECT count(*) FROM factura WHERE MONTH(fecha_factura) = '+ request.query.mes;
-   else query='select count(*) from factura;';
+   if(requesquery.mes) query='SELECT COUNT(*) FROM factura WHERE MONTH(fecha_factura) = '+ requesquery.mes;
+   else query='SELECT COUNT(*) FROM factura;';
     console.log(query);
     db.getConnection(function(err, connection) {
         if (err) throw err;
@@ -97,9 +97,9 @@ router.get('/facturacion', function(request, response) {
 
 
     //cantidad de dinero facturado
-router.get('/facturacion/:total', function(request, response) {
+router.get('/facturacion/total', function(request, response) {
    var query;
-   if(request.query.mes) query='  SELECT sum(total_factura) FROM factura WHERE MONTH(fecha_factura) ='+ request.query.mes;
+   if(requesquery.mes) query='  SELECT sum(total_factura) FROM factura WHERE MONTH(fecha_factura) ='+ requesquery.mes;
    else query='SELECT sum(total_factura) FROM factura';
     console.log(query);
     db.getConnection(function(err, connection) {
@@ -114,6 +114,4 @@ router.get('/facturacion/:total', function(request, response) {
         connection.release();
     });      
 });
-
-
 module.exports = router;

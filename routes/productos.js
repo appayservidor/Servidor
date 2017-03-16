@@ -20,8 +20,8 @@ router.get('/',comprobacionjwt,function(req,res){
 		var Descripcion = connection.escape(req.query.decripcion); //Variable que recoje el codigo de barras de los productos de la URI productos?decripcion={num}
 		var Estado = connection.escape(req.query.estado); //Variable que recoje el codigo de barras de los productos de la URI productos?estado={num}
 		var Eliminado = connection.escape(req.query.eliminado); //Variable que recoje el codigo de barras de los productos de la URI productos?eliminado={num}
-		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuarios en la URI usuarios?ordenombre={0 ó 1}
-		var OrdePrecio = connection.escape(req.query.ordeprecio);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeprecio={0 ó 1}
+		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuario en la URI usuario?ordenombre={0 ó 1}
+		var OrdePrecio = connection.escape(req.query.ordeprecio);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprecio={0 ó 1}
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		var consulta="SELECT * FROM producto, tienda, producto_tienda WHERE Id_producto=Id_producto_producto_tienda AND Id_tienda=Id_tienda_producto_tienda";
 		if(Id != 'NULL' || Idtienda != 'NULL' || Codigo != 'NULL' || Nombre != 'NULL' || Preciomax != 'NULL' || Preciomin != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id tienda
@@ -146,17 +146,15 @@ router.get('/',comprobacionjwt,function(req,res){
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-				res.status(400).json({ error: err });
 				console.log(err);
+				return res.status(400).json({ error: err });
 			}else{
 				if(rows.length != 0){
 					data["Productos"] = rows;
-					res.json(data);
-					res.status(200);	
+					return res.status(200).json(data);;	
 				}else{
 					data["Productos"] = 'No hay productos';
-					res.status(204);
-					res.json(data);
+					return res.status(204).json(data);
 				}
 			}
 		});
@@ -218,13 +216,12 @@ router.put('/',comprobacionjwt,function(req,res){
 			}
 			connection.query(consulta,function(err, rows, fields){
 					if(err){
-						res.status(400).json({ error: err });
 						console.log(err);
+						return res.status(400).json({ error: err });
 					}else{
 						data["Productos"] = "Actualizado correctamente!";
-						res.status(200);
+						return res.status(200).json(data);
 					}
-					res.json(data);
 				});
 	connection.release();
 	});		

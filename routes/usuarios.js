@@ -8,11 +8,11 @@ var comprobacionjwt= require ('../helpers/comprobacionjwt');
 var emailhtml= require ('../emails/htmlconfirmaremail');
 var mySecretKey=process.env.JWT_SECRETKEY;
 
-/*DEVUELVE USUARIOS si no le pasas parametro te los devuelve todos si le pasas id te devuelve los datos de ese usuario,
+/*DEVUELVE usuario si no le pasas parametro te los devuelve todos si le pasas id te devuelve los datos de ese usuario,
  y si le pasas otros parametros te devuelve todos los que tengan ese parametro filtrado*/
 router.get('/',comprobacionjwt,function(req,res){
 	var data = {
-		"Usuarios":""
+		"usuario":""
 	};
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
@@ -34,19 +34,19 @@ router.get('/',comprobacionjwt,function(req,res){
 		var Eliminado = connection.escape(req.query.eliminado);
 		var Telefono = connection.escape(req.query.telefono);
 		var Rol = connection.escape(req.query.rol);
-		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuarios en la URI usuarios?ordenombre={0 ó 1}
-		var OrdeFecha = connection.escape(req.query.ordefecha);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordefecha={0 ó 1}
-		var OrdeFechaNac = connection.escape(req.query.ordefechanac);//Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordefechanac={0 ó 1}
-		var OrdeCom = connection.escape(req.query.ordecom); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordecom={0 ó 1}
-		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeprov={0 ó 1}
-		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuarios?ordeloc={0 ó 1}
+		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuario en la URI usuario?ordenombre={0 ó 1}
+		var OrdeFecha = connection.escape(req.query.ordefecha);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordefecha={0 ó 1}
+		var OrdeFechaNac = connection.escape(req.query.ordefechanac);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordefechanac={0 ó 1}
+		var OrdeCom = connection.escape(req.query.ordecom); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordecom={0 ó 1}
+		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprov={0 ó 1}
+		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeloc={0 ó 1}
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		if(Id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
 			console.log("Entro para mostrar los datos de un usuario concreto");
-			var consulta="SELECT * FROM usuarios u JOIN tipo_usuario t ON u.Rol = t.Id_tipo_usuario WHERE Id_usuario="+Id;
-		}else{ //Si no muestra todos los usuarios
-			console.log("Entro para mostrar los datos de todos los usuarios");
-			var consulta="SELECT * FROM usuarios u JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario"
+			var consulta="SELECT * FROM usuario u JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario WHERE Id_usuario="+Id;
+		}else{ //Si no muestra todos los usuario
+			console.log("Entro para mostrar los datos de todos los usuario");
+			var consulta="SELECT * FROM usuario u JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario"
 			var i=0;
 			if(Nombre != 'NULL' || DNI != 'NULL' || Sexo != 'NULL' || Email != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Direccion != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Fechanac_min != 'NULL' || Fechanac_max != 'NULL' || Fecha_min != 'NULL' || Fecha_max != 'NULL' || CP != 'NULL' || Telefono != 'NULL' || Rol != 'NULL' ){
 				console.log("Con el parametro:");
@@ -298,26 +298,25 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				res.status(400).json({ error: err });
+				return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows.length != 0){
-					console.log("Devuelvo los usuarios");
-					data["Usuarios"] = rows;
-					res.status(200);
+					console.log("Devuelvo los usuario");
+					data["usuario"] = rows;
+					return res.status(200).json(data);
 				}else{
-					res.status(204).json({ error: err });
-					console.log("No hay usuarios...");
-					data["Usuarios"] = 'No hay usuarios';
+					data["usuario"] = 'No hay usuario';
+					console.log("No hay usuario...");
+					return res.status(204).json(data);	
 				}
 			}
-			res.json(data);
 		});
 		connection.release();
 	});
 });
 
-//Funcion que genera el POST de Usuarios
+//Funcion que genera el POST de usuario
 router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
@@ -336,9 +335,9 @@ router.post('/',comprobacionjwt,function(req,res){
 		var Contra = connection.escape(req.body.contra);
 		var Rol = connection.escape(req.body.rol);
 		var data = {
-			"Usuarios":""
+			"usuario":""
 		};
-		var consulta = "INSERT INTO usuarios (";
+		var consulta = "INSERT INTO usuario (";
 		var i=0;
 		if(DNI != 'NULL'){
 			consulta  += "DNI_usuario";
@@ -547,15 +546,14 @@ router.post('/',comprobacionjwt,function(req,res){
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-				res.status(400).json({ error: err });
 				console.log(err);
+				return res.status(400).json({ error: err });
 			}else{
-				data["Usuarios"] = "Datos insertados correctamente!";
+				data["usuario"] = "Datos insertados correctamente!";
 				enviarContrasenya(req.body.email);
 				console.log("Todo ok?");                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-				res.status(200);
+				return res.status(200).jsaon(data);
 			}
-			res.json(data);
 		});
 	connection.release();
 	});
@@ -592,7 +590,7 @@ function enviarContrasenya(email){
 	});
 }
 
-//Funcion que genera el PUT (Update) de Usuarios
+//Funcion que genera el PUT (Update) de usuario
 router.put('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;	
@@ -614,12 +612,12 @@ router.put('/',comprobacionjwt,function(req,res){
 		var Estado = connection.escape(req.body.estado);
 		var Eliminado = connection.escape(req.body.eliminado);
 		var data = {
-			"Usuarios":""
+			"usuario":""
 		};
 			/*if(ID == "''"){
 				ID = "null.null.null"
 			}*/
-			var consulta = "UPDATE usuarios SET ";
+			var consulta = "UPDATE usuario SET ";
 			if(ID != 'NULL'){
 				var i=0;
 				if(DNI != 'NULL'){
@@ -751,12 +749,11 @@ router.put('/',comprobacionjwt,function(req,res){
 			console.log(consulta);
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
-					res.status(400).json({ error: err });
+					return res.status(400).json({ error: err });
 				}else{
-					data["Usuarios"] = "Actualizado correctamente!";
-					res.status(200);
+					data["usuario"] = "Actualizado correctamente!";
+					return res.status(200).json(data);
 				}
-				res.json(data);
 			});
 	connection.release();
 	});
@@ -769,23 +766,23 @@ router.post('/usuarioTienda',function(req,res){
 		var Id_usuario = connection.escape(req.body.id_usuario);
 		var Id_tienda = connection.escape(req.body.id_tienda);
 		var data = {
-			"Usuarios":""
+			"usuario":""
 		};
-		var consulta = "INSERT INTO usuarios_tienda (Id_tienda_usuarios_tienda, Id_usuario_usuarios_tienda) VALUES("+Id_tienda+","+Id_usuario+")";
-			connection.query(consulta,function(err, rows, fields){
+		var consulta = "INSERT INTO usuario_tienda (Id_tienda_usuario_tienda, Id_usuario_usuario_tienda) VALUES("+Id_tienda+","+Id_usuario+")";
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				return res.status(400).json({ usuario: err });
+				console.log(err);
+			}else{
 				if(rows != 0){
-					data["Usuarios"] = "Usuario vinculado a la tienda";
-					res.status(200);					
+					data["usuario"] = "Usuario vinculado a la tienda";
+					return res.status(200).json(data);					
 				}else{
-					data["Usuarios"] = "El usuario no existe o la tienda no existe";
-					res.status(204);
+					data["usuario"] = "El usuario no existe o la tienda no existe";
+					return res.status(204).json(data);
 				}
-				if(err){
-					res.status(400).json({ usuarios: err });
-					console.log(err);
-				}
-				res.json(data);
-			});
+			}
+		});
 	connection.release();
 	});
 });
@@ -797,44 +794,48 @@ router.post('/usuarioAdminTienda',function(req,res){
 		var Id_usuario = connection.escape(req.body.id_usuario);
 		var Id_tienda = connection.escape(req.body.id_tienda);
 		var data = {
-			"Usuarios":""
+			"usuario":""
 		};
 		var consulta = "INSERT INTO usuario_admin_tienda (id_tienda_usuario_admin_tienda, id_usuario_usuario_admin_tienda) VALUES("+Id_tienda+","+Id_usuario+")";
 			connection.query(consulta,function(err, rows, fields){
-				if(rows != 0){
-					data["Usuarios"] = "Administrador vinculado a la tienda";
-					res.status(200);					
-				}else{
-					data["Usuarios"] = "El usuario no existe o la tienda no existe";
-					res.status(204);
-				}
 				if(err){
-					res.status(400).json({ usuarios: err });
+					return res.status(400).json({ usuario: err });
 					console.log(err);
+				}else{
+					if(rows != 0){
+						data["usuario"] = "Administrador vinculado a la tienda";
+						return res.status(200).json(data);					
+					}else{
+						data["usuario"] = "El usuario no existe o la tienda no existe";
+						return res.status(204).json(data);
+					}
 				}
-				res.json(data);
 			});
 	connection.release();
 	});
 });
-//DEVUELVE USUARIOS, o todos o id='n'
+//DEVUELVE usuario, o todos o id='n'
 router.get('/adminTienda',comprobacionjwt,function(req,res){
 	var data = {
-		"Usuarios":""
+		"usuario":""
 	};
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var id = connection.escape(req.query.id);
-		var consulta = "SELECT u.Id_usuario, u.DNI_usuario, u.Nombre_usuario, u.Email_usuario, u.Direccion_usuario, u.Comunidad_usuario, u.Provincia_usuario, u.Localidad_usuario, u.CP_usuario, u.Telefono_usuario, u.Foto_usuario, t.Nombre_rol, u.Estado_usuario, u.Eliminado_usuario, u.Fecha_usuario  FROM usuario_admin_tienda TA JOIN usuarios u ON u.Id_usuario = TA.id_usuario_usuario_admin_tienda JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario;";
+		var consulta = "SELECT u.Id_usuario, u.DNI_usuario, u.Nombre_usuario, u.Email_usuario, u.Direccion_usuario, u.Comunidad_usuario, u.Provincia_usuario, u.Localidad_usuario, u.CP_usuario, u.Telefono_usuario, u.Foto_usuario, t.Nombre_rol, u.Estado_usuario, u.Eliminado_usuario, u.Fecha_usuario  FROM usuario_admin_tienda TA JOIN usuario u ON u.Id_usuario = TA.id_usuario_usuario_admin_tienda JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario;";
 		connection.query(consulta,function(err, rows, fields){
-			if(rows.length != 0){
-				data["Usuarios"] = rows;
-				res.status(200);
-				
+			if(err){
+				return res.status(400).json({ usuario: err });
+				console.log(err);
 			}else{
-				data["Usuarios"] = 'No hay usuarios';
+				if(rows != 0){
+					data["usuario"] = rows;
+					return res.status(200).json(data);					
+				}else{
+					data["usuario"] = "El usuario no existen usuarios";
+					return res.status(204).json(data);
+				}
 			}
-			res.json(data);
 		});
 		connection.release();
 	});
