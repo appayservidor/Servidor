@@ -23,9 +23,12 @@ router.post('/',function(req,res){
         console.log(Email);
 		var consulta = "SELECT Email FROM usuario WHERE Email="+Email;
 		connection.query(consulta,function(err, rows, fields){
-			if(rows != 0){ // Si que lo ha encontrado
+            if(err){
+                console.log(err); 
+                return res.status(400).json({ error: err });
+            }else{
+                if(rows != 0){ // Si que lo ha encontrado
                 console.log("Usuario encontrado");
-                
                 var token= jwt.sign({//firmamos el token , que caduca en 24 horas
                     data: req.body.email
                     }, mySecretKey, { expiresIn: '24h' });
@@ -49,17 +52,17 @@ router.post('/',function(req,res){
                 smtpTransport.sendMail(mailOptions, function(error, response){
                     if(error){
                         console.log(error);
-                        res.status(300).json(error);
+                        return res.status(400).json(error);
                     }else{
                         console.log("Correo enviado");
-                        res.status(200).json("Todo bien todo correcto");
+                        return res.status(200).json("Todo bien todo correcto");
                     }
                 });
-
 			}else{
                 console.log("Usuario no encontrado"); 
-                 res.status(204).json("El usuario no existe");   
+                 return res.status(204).json("El usuario no existe");   
 			}
+            }
 		});
 	connection.release();
 	});
@@ -73,15 +76,13 @@ router.get('/',function(req,res){
     var token = req.body.token;
     jwt.verify(token, mySecretKey, function(error, decoded) //verificamos que el token es correcto
     {
-        if(error)
-        {
+        if(error){
             console.log(error);
-            res.status(401).json(error); //error, acceso no autorizado
+            return res.status(401).json(error); //error, acceso no autorizado
         }
-        else
-        {
+        else{
             console.log("Token correcto");
-            res.status(200).json(token); //en este momento guardaremos id_token en sesion
+            return res.status(200).json(token); //en este momento guardaremos id_token en sesion
         }
     });       
 });
@@ -95,17 +96,15 @@ router.put('/',comprobacionjwt,function(req,res){
 		var data = {
 			"usuario":""
 		};
-        var consulta = "UPDATE usuario SET Estado=1 Where Email="+req.objeto_token;
-			
+        var consulta = "UPDATE usuario SET Estado_usuario=1 Where Email_usuario="+req.objeto_token;
         console.log(consulta);
         connection.query(consulta,function(err, rows, fields){
             if(err){
-                res.status(400).json({ error: err });
+                return res.status(400).json({ error: err });
             }else{
                 data["usuario"] = "Actualizado correctamente!";
-                res.status(200);
+                return res.status(200).json(data);
             }
-            res.json(data);
         });
 	connection.release();
 	});

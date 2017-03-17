@@ -150,9 +150,11 @@ router.get('/',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				if(rows.length != 0){
+					console.log("Devuelvo los productos");
 					data["Productos"] = rows;
 					return res.status(200).json(data);;	
 				}else{
+					console.log("no hay productos");
 					data["Productos"] = 'No hay productos';
 					return res.status(204).json(data);
 				}

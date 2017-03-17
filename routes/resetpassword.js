@@ -49,16 +49,16 @@ router.post('/',function(req,res){
                 smtpTransport.sendMail(mailOptions, function(error, response){
                     if(error){
                         console.log(error);
-                        res.status(300).json(error);
+                        return res.status(300).json(error);
                     }else{
                         console.log("Correo enviado");
-                        res.status(200).json("Todo bien todo correcto");
+                        return res.status(200).json("Todo bien todo correcto");
                     }
                 });
 
 			}else{
                 console.log("Usuario no encontrado"); 
-                 res.status(204).json("El usuario no existe");   
+                return res.status(204).json("El usuario no existe");   
 			}
 		});
 	connection.release();
@@ -76,12 +76,12 @@ router.get('/',function(req,res){
         if(error)
         {
             console.log(error);
-            res.status(401).json(error); //error, acceso no autorizado
+            return res.status(401).json(error); //error, acceso no autorizado
         }
         else
         {
             console.log("Token correcto");
-            res.status(200).json(token); //en este momento guardaremos id_token en sesion
+            return res.status(200).json(token); //en este momento guardaremos id_token en sesion
         }
     });       
 });
@@ -105,10 +105,10 @@ router.put('/',comprobacionjwt,function(req,res){
         console.log(consulta);
         connection.query(consulta,function(err, rows, fields){
             if(err){
-                res.status(400).json({ error: err });
+                return res.status(400).json({ error: err });
             }else{
                 data["Usuario"] = "Actualizado correctamente!";
-                res.status(200).json(data["Usuario"]);
+                return res.status(200).json(data["Usuario"]);
             }
            // res.json(data);
         });

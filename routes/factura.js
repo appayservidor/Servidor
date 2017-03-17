@@ -22,8 +22,8 @@ router.get('/',comprobacionjwt,function(req,res){
 		var OrdeTotal = connection.escape(req.query.ordetotal); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordetotal=true
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id y se muestran todos los detalles de la factura
-			var infoTienda = "SELECT Id_factura, Id_tienda, Nombre_tienda, CIF_tienda, Fecha_factura, Total_factura, Pagada FROM factura, tienda WHERE Id_tienda = Id_tienda_factura AND Id_factura ="+id;
-			var consulta="SELECT * FROM linea_factura, factura WHERE Id_factura_linea_factura="+id+";";
+			var infoTienda = "SELECT * FROM factura, tienda WHERE Id_tienda = Id_tienda_factura AND Id_factura ="+id;
+			var consulta="SELECT * FROM linea_factura WHERE Id_factura_linea_factura="+id+";";
 			console.log(infoTienda);
 			console.log(consulta);
 			//Consulta multiple
@@ -183,7 +183,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 		var OrdeTotal = connection.escape(req.query.ordetotal); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordetotal=true
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 
-		 	var consulta="SELECT Id_factura, Id_tienda, Fecha_factura, Total_factura, Pagada FROM factura, factura_usuario, usuario_tienda WHERE Id_factura = Id_factura_factura_usuario AND Id_usuario_tienda_factura_ = uId_usuario_tienda JOIN usuario u ON uId_usuario = u.Id_usuario WHERE u.Id_usuario = "+id;
+		 	var consulta="SELECT * FROM factura, factura_usuario, usuario_tienda WHERE Id_factura = Id_factura_factura_usuario AND Id_usuario_usuario_factura = "+id;
 			var i=1;
 			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL'){
 				if(MaxTotal != 'NULL'){
@@ -223,7 +223,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "Nombre LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
+					consulta  += "Nombre_tienda LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
 					i++;
 				}
 			}
@@ -263,10 +263,10 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 					}
 					orden=orden+1;
 					if (OrdeNombre=="'1'") {
-						consulta  += "  Nombre_factura ASC";
+						consulta  += "  Nombre_tienda ASC";
 					}
 					if (OrdeNombre=="'0'") {
-						consulta  += "  Nombre_factura DESC";	
+						consulta  += "  Nombre_tienda DESC";	
 					}
 				}
 			}
@@ -457,7 +457,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
         var consulta = "INSERT INTO linea_factura (";
         var i=0;
         if(Id_factura != 'NULL'){
-                consulta  += "Id_factura";
+                consulta  += "Id_factura_linea_factura";
                 i++;
         }
         if(Cantidad != 'NULL'){
@@ -465,7 +465,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
                 consulta  += ", ";
                 i--;	
             }
-            consulta  += "Cantidad";
+            consulta  += "Cantidad_linea_factura";
             i++;
         }
         if(Id_producto_tienda != 'NULL'){
@@ -474,7 +474,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
                 i--;	
             }
             
-            consulta  += "Id_producto_tienda";
+            consulta  += "Id_producto_tienda_linea_factura";
             i++;
         }
         if(Id_oferta_usuario != 'NULL'){
@@ -482,7 +482,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
                 consulta  += ", ";
                 i--;	
             }
-            consulta  += "Id_oferta_usuario";
+            consulta  += "Id_oferta_usuario_linea_factura";
             i++;
         }
         if(Id_oferta_producto != 'NULL'){
@@ -490,7 +490,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
                 consulta  += ", ";
                 i--;	
             }
-            consulta  += "Id_oferta_producto";
+            consulta  += "Id_oferta_producto_linea_factura";
             i++;
         }
         if(Total_linea != 'NULL'){
@@ -498,7 +498,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
                 consulta  += ", ";
                 i--;	
             }
-            consulta  += "Total_linea";
+            consulta  += "Total_linea_factura";
             i++;
         }
 
@@ -553,13 +553,12 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
         console.log(consulta);
             connection.query(consulta,function(err, rows, fields){
                     if(err){
-                        res.status(400).json({ error: err });
-                        console.log(err);
+						console.log(err);
+                        return res.status(400).json({ error: err });
                     }else{
                         data["Facturas"] = "Datos insertados correctamente!";
-                        res.status(200);
+                        return res.status(200).json(data);
                     }
-                    res.json(data);
 		});  		
     connection.release();
 	});
@@ -584,7 +583,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 			var consulta = "UPDATE linea_factura SET ";
 			var i=0;
 			if(Id_factura != 'NULL'){
-				consulta  += "Id_factura="+Id_factura;
+				consulta  += "Id_factura_linea_factura="+Id_factura;
 				i++;
 			}
 			if(Cantidad != 'NULL'){
@@ -592,7 +591,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 					consulta  += ", ";
 					i--;	
 				}
-				consulta  += "Cantidad="+Cantidad;
+				consulta  += "Cantidad_linea_factura="+Cantidad;
 				i++;
 			}
 			if(Id_producto_tienda != 'NULL'){
@@ -600,7 +599,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 					consulta  += ", ";
 					i--;	
 				}
-				consulta  += "Id_producto_tienda="+Id_producto_tienda;
+				consulta  += "Id_producto_tienda_linea_factura="+Id_producto_tienda;
 				i++;
 			}
 			if(Id_oferta_usuario != 'NULL'){
@@ -608,7 +607,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 					consulta  += ", ";
 					i--;	
 				}
-				consulta  += "Id_oferta_usuario="+Id_oferta_usuario;
+				consulta  += "Id_oferta_usuario_linea_factura="+Id_oferta_usuario;
 				i++;
 			}
 			if(Id_oferta_producto != 'NULL'){
@@ -616,7 +615,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 					consulta  += ", ";
 					i--;	
 				}
-				consulta  += "Id_oferta_producto="+Id_oferta_producto;
+				consulta  += "Id_oferta_producto_linea_factura="+Id_oferta_producto;
 				i++;
 			}
 			if(Total_linea != 'NULL'){
@@ -624,7 +623,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 					consulta  += ", ";
 					i--;	
 				}
-				consulta  += "Total_linea="+Total_linea;
+				consulta  += "Total_linea_factura="+Total_linea;
 				i++;
 			}
 			consulta = consulta + " WHERE Id_linea_factura="+ID;
@@ -633,13 +632,12 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 
 		connection.query(consulta,function(err, rows, fields){
 						if(err){
-							res.status(400).json({ error: err });
 							console.log(err);
+							return res.status(400).json({ error: err });
 						}else{
 							data["Facturas"] = "Datos actualizados correctamente!";
-							res.status(200);
+							return res.status(200).json(data);
 						}
-						res.json(data);
 				});   		
     connection.release();
 	});
