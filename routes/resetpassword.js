@@ -23,43 +23,47 @@ router.post('/',function(req,res){
         console.log(Email);
 		var consulta = "SELECT Email_usuario, Nombre_usuario FROM usuario WHERE Email_usuario="+Email;
 		connection.query(consulta,function(err, rows, fields){
-			if(rows != 0){ // Si que lo ha encontrado
-                console.log("Usuario encontrado");
-   
-                var token= jwt.sign({//firmamos el token , que caduca en 24 horas
-                    data: req.body.email
-                    }, mySecretKey, { expiresIn: '24h' });
+			if(err){
+                console.log(err); 
+                return res.status(400).json({ error: err });
+            }else{
+                if(rows != 0){ // Si que lo ha encontrado
+                    console.log("Usuario encontrado");
+    
+                    var token= jwt.sign({//firmamos el token , que caduca en 24 horas
+                        data: req.body.email
+                        }, mySecretKey, { expiresIn: '24h' });
 
-                var smtpTransport = nodemailer.createTransport("SMTP",{
-                    service: "gmail",
-                    auth: {
-                        user: process.env.GMAIL_USER, 
-                        pass: process.env.GMAIL_PASS
-                    }
-                });
-                var htmlcorreo=emailhtml(token, rows[0].Nombre); 
-                  
-                var mailOptions = {
-                    from: "<appayoficial@gmail.com>", // sender address
-                    to: req.body.email, //
-                    subject: "Restablecer contraseña Appay", // Subject line
-                    html: htmlcorreo
+                    var smtpTransport = nodemailer.createTransport("SMTP",{
+                        service: "gmail",
+                        auth: {
+                            user: process.env.GMAIL_USER, 
+                            pass: process.env.GMAIL_PASS
+                        }
+                    });
+                    var htmlcorreo=emailhtml(token, rows[0].Nombre); 
                     
-                }		
-                smtpTransport.sendMail(mailOptions, function(error, response){
-                    if(error){
-                        console.log(error);
-                        return res.status(300).json(error);
-                    }else{
-                        console.log("Correo enviado");
-                        return res.status(200).json("Todo bien todo correcto");
-                    }
-                });
-
-			}else{
-                console.log("Usuario no encontrado"); 
-                return res.status(204).json("El usuario no existe");   
-			}
+                    var mailOptions = {
+                        from: "<appayoficial@gmail.com>", // sender address
+                        to: req.body.email, //
+                        subject: "Restablecer contraseña Appay", // Subject line
+                        html: htmlcorreo
+                        
+                    }		
+                    smtpTransport.sendMail(mailOptions, function(error, response){
+                        if(error){
+                            console.log(error);
+                            return res.status(400).json(error);
+                        }else{
+                            console.log("Correo enviado");
+                            return res.status(200).json("Todo bien todo correcto");
+                        }
+                    });
+                }else{
+                    console.log("Usuario no encontrado"); 
+                    return res.status(204).json("El usuario no existe");   
+                }
+            }
 		});
 	connection.release();
 	});
