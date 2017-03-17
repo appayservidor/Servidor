@@ -41,7 +41,7 @@ router.post('/',function(req,res){
                             pass: process.env.GMAIL_PASS
                         }
                     });
-                    var htmlcorreo=emailhtml(token, rows[0].Nombre); 
+                    var htmlcorreo=emailhtml(token, rows[0].Nombre_usuario); 
                     
                     var mailOptions = {
                         from: "<appayoficial@gmail.com>", // sender address
