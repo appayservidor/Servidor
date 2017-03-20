@@ -12,12 +12,11 @@ router.get('/',comprobacionjwt,function(req,res){
 			"Lineas":""
 		};
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la factura de la URI factura?id={num}
-		var Nombretienda = connection.escape(req.query.nombretienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
+		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
 		var MinTotal = connection.escape(req.query.mintotal); //Variable que recoje el  minimo del total de la factura de la URI factura?total={num}
 		var MaxTotal = connection.escape(req.query.maxtotal); //Variable que recoje el maximo del total de la factura de la URI factura?total={num}
 		var FechaIni = connection.escape(req.query.fechaini); //Variable que recoje el inicio del periodo de la factura que se quiere mostrar de la URI factura?total={num}
 		var FechaFin = connection.escape(req.query.fechafin); //Variable que recoje el fin del periodo de la factura que se quiere mostrar de la URI factura?total={num}
-		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordenombre=true
 		var OrdeFecha = connection.escape(req.query.ordefecha);//Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordefecha=true
 		var OrdeTotal = connection.escape(req.query.ordetotal); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordetotal=true
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
@@ -47,9 +46,10 @@ router.get('/',comprobacionjwt,function(req,res){
 			});
 
 		}else{ //Si no muestra todas las facturas
-			var consulta = "SELECT * FROM factura, tienda WHERE Id_tienda_factura = Id_tienda";
+			var consulta = "SELECT * FROM factura";
 			var i=0;
-			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL'){
+			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Id_tienda != 'NULL'){
+				consulta += " WHERE ";
 				if(MaxTotal != 'NULL'){
 					if (i==1) { 
 						consulta  += " AND ";
@@ -82,16 +82,16 @@ router.get('/',comprobacionjwt,function(req,res){
 					consulta  += "Fecha_factura<="+FechaFin;
 					i++;
 				}
-				if(Nombretienda != 'NULL'){
+				if(Id_tienda != 'NULL'){
 					if (i==1) {
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "Nombre_tienda LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
+					consulta  += "Id_tienda_factura ="+Id_tienda;
 					i++;
 				}
 			}
-			if(OrdeFecha != 'NULL' || OrdeTotal != 'NULL' || OrdeNombre != 'NULL'){
+			if(OrdeFecha != 'NULL' || OrdeTotal != 'NULL'){
 				var orden =0;
 				consulta  += " ORDER BY ";
 				if(OrdeFecha != 'NULL'){
@@ -118,19 +118,6 @@ router.get('/',comprobacionjwt,function(req,res){
 					}
 					if (OrdeTotal=="'0'") {
 						consulta  += "Fecha_factura DESC";	
-					}
-				}
-				if(OrdeNombre != 'NULL'){
-					if(orden!=0){
-						consulta  += " , ";
-						orden=orden-1;
-					}
-					orden=orden+1;
-					if (OrdeNombre=="'1'") {
-						consulta  += "  Fecha_factura ASC";
-					}
-					if (OrdeNombre=="'0'") {
-						consulta  += "  Fecha_factura DESC";	
 					}
 				}
 			}
