@@ -45,7 +45,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				i++;
 			}
 			if(Codigo != 'NULL'){
-				console.log("Codigo:"+CodigoId);
+				console.log("Codigo:"+Codigo);
 				if (i==1) {
 					consulta  += " AND ";
 					i--;	
