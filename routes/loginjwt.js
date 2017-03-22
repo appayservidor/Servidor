@@ -24,7 +24,7 @@ router.post("/", function(req,res,next){
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];
                     console.log(user);
-                    var token= jwsign({//firmamos el token , que caduca en 7 dias
+                    var token= jwt.sign({//firmamos el token , que caduca en 7 dias
                         data: user
                     }, mySecretKey, { expiresIn: '168h' });
 
