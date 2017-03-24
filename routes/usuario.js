@@ -308,7 +308,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				}else{
 					data["usuario"] = 'No hay usuario';
 					console.log("No hay usuario...");
-					return res.status(204).json(data);	
+					return res.status(206).json(data);	
 				}
 			}
 		});
@@ -840,5 +840,108 @@ router.get('/adminTienda',comprobacionjwt,function(req,res){
 		connection.release();
 	});
 });
+
+
+//Metodo login para admin
+router.post("/admin", function(req,res,next){
+    db.getConnection(function(err, connection) {    
+        if (err) throw err;
+        var username =connection.escape(req.body.username);
+        var password =connection.escape(req.body.password);
+        console.log("username es "+username);
+        console.log("password es "+password);
+        //llamamos a la base de datos para ver si el usuario es correcto o no 
+        var consulta="SELECT Nombre_usuario, Id_usuario, Foto_usuario, Id_tienda, Nombre_tienda, Logo_tienda from usuario, tienda, usuario_admin_tienda WHERE Email_usuario="+username+" AND Id_usuario_usuario_admin_tienda=Id_usuario AND Id_tienda_usuario_admin_tienda=Id_tienda AND Contra_usuario=md5("+password+")";//Esto tienes que controlarlo con el md5
+        console.log(consulta);
+        connection.query(consulta, function(err, rows, fields) {
+            if(err){
+                console.log(err); 
+                return res.status(400).json({ error: err });
+            }else{
+                if(rows!=null && rows.length != 0){ //si es correcto
+                    var user=rows[0];
+                    console.log(user);
+                    var token= jwt.sign({//firmamos el token , que caduca en 7 dias
+                        data: user
+                    }, mySecretKey, { expiresIn: '168h' });
+
+                    return res.status(200).json(token);  //lo enviamos
+                }else{
+                    return res.status(401).json("El usuario no existe");
+                }
+            }
+        });
+    connection.release();
+    });
+}); 
+
+
+
+//Metodo que comprueba si una contraseña es correcta o no
+router.post("/checkPassword", function(req,res,next){
+    db.getConnection(function(err, connection) {    
+        if (err) throw err;
+        var id =connection.escape(req.body.id);
+        var password =connection.escape(req.body.password);
+		console.log("entra en updatePassword");
+		console.log(id);
+		console.log(password);
+        //llamamos a la base de datos para ver si el usuario es correcto o no 
+        var consulta="SELECT Contra_usuario from usuario WHERE Id_usuario="+id+" AND Contra_usuario=md5("+password+")";//Esto tienes que controlarlo con el md5
+        console.log(consulta);
+        connection.query(consulta, function(err, rows, fields) {
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Query OK");
+				if(rows.length != 0){
+					console.log("Devuelvo los usuario");
+					data = rows;
+					return res.status(200).json(data);
+				}else{
+					console.log("contraseña no correcta");
+					return res.status(206).json("La contraseña no es la correcta");	
+				}
+			}
+        });
+    connection.release();
+    });
+}); 
+
+//Metodo login para admin
+router.post("/updateToken", function(req,res,next){
+    db.getConnection(function(err, connection) {    
+        if (err) throw err;
+        var username =connection.escape(req.body.username);
+        var password =connection.escape(req.body.password);
+        console.log("username es "+username);
+        console.log("password es "+password);
+        //llamamos a la base de datos para ver si el usuario es correcto o no 
+        var consulta="SELECT Nombre_usuario, Id_usuario, Foto_usuario, Id_tienda, Nombre_tienda, Logo_tienda from usuario, tienda, usuario_admin_tienda WHERE Email_usuario="+username+" AND Id_usuario_usuario_admin_tienda=Id_usuario AND Id_tienda_usuario_admin_tienda=Id_tienda AND Contra_usuario="+password;//Esto tienes que controlarlo con el md5
+        console.log(consulta);
+        connection.query(consulta, function(err, rows, fields) {
+            if(err){
+                console.log(err); 
+                return res.status(400).json({ error: err });
+            }else{
+                if(rows!=null && rows.length != 0){ //si es correcto
+                    var user=rows[0];
+                    console.log(user);
+                    var token= jwt.sign({//firmamos el token , que caduca en 7 dias
+                        data: user
+                    }, mySecretKey, { expiresIn: '168h' });
+
+                    return res.status(200).json(token);  //lo enviamos
+                }else{
+                    return res.status(401).json("El usuario no existe");
+                }
+            }
+        });
+    connection.release();
+    });
+}); 
+
+
 
 module.exports = router;
