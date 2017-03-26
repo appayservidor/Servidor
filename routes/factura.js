@@ -169,10 +169,11 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 		var OrdeFecha = connection.escape(req.query.ordefecha);//Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordefecha=true
 		var OrdeTotal = connection.escape(req.query.ordetotal); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordetotal=true
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
 
-		 	var consulta="SELECT * FROM factura, factura_usuario, usuario_tienda WHERE Id_factura = Id_factura_factura_usuario AND Id_usuario_usuario_factura = "+id;
+		 	var consulta="SELECT * FROM factura, factura_usuario, usuario_tienda WHERE Id_factura = Id_factura_factura_usuario AND Id_usuario_usuario_tienda = "+id;
 			var i=1;
-			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL'){
+			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL' || Id_tienda != 'NULL' ){
 				if(MaxTotal != 'NULL'){
 					if (i==1) {
 						consulta  += " AND ";
@@ -213,6 +214,15 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 					consulta  += "Nombre_tienda LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
 					i++;
 				}
+				if(Id_tienda != 'NULL'){
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Id_tienda_usuario_tienda="+Id_tienda;
+					i++;
+				}
+				
 			}
 			if(OrdeFecha != 'NULL' || OrdeTotal != 'NULL' || OrdeNombre != 'NULL'){
 				var orden =0;
