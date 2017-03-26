@@ -159,7 +159,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
    		var data = {
 			"Factura":"",
 		};
-	 	var id = connection.escape(req.query.id);
+	 	var Id = connection.escape(req.query.id);
 		var Nombretienda = connection.escape(req.query.nombretienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
 		var MinTotal = connection.escape(req.query.mintotal); //Variable que recoje el  minimo del total de la factura de la URI factura?total={num}
 		var MaxTotal = connection.escape(req.query.maxtotal); //Variable que recoje el maximo del total de la factura de la URI factura?total={num}
@@ -171,7 +171,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
 
-		 	var consulta="SELECT * FROM factura, factura_usuario, usuario_tienda WHERE Id_factura = Id_factura_factura_usuario AND Id_usuario_usuario_tienda = "+id;
+		 	var consulta="SELECT * FROM factura JOIN factura_usuario ON Id_factura = Id_factura_factura_usuario JOIN usuario_tienda ON Id_usuario_tienda = Id_usuario_tienda_factura_usuario JOIN usuario ON Id_usuario_usuario_tienda = Id_usuario JOIN tienda ON Id_tienda_usuario_tienda = Id_tienda WHERE Id_usuario = "+Id;
 			var i=1;
 			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL' || Id_tienda != 'NULL' ){
 				if(MaxTotal != 'NULL'){
@@ -219,7 +219,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "Id_tienda_usuario_tienda="+Id_tienda;
+					consulta  += "Id_tienda="+Id_tienda;
 					i++;
 				}
 				
@@ -272,6 +272,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 				console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
 				consulta += " LIMIT 10 OFFSET "+pags;
 			}
+			console.log(consulta);
 		 	connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
@@ -281,6 +282,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 					data["Factura"] = rows;
 					return res.status(200).json(data);
 				}else{
+					console.log('No hay facturas');
 					data["Factura"] = 'No hay facturas';
 					return res.status(204).json(data);
 				}
