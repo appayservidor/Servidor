@@ -3,6 +3,10 @@ var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 //Esta funcion devuelve el numero de usuario por tienda o totales
+
+
+
+/* //NO BORRO ESTA MIERDA POR SI PABLO SE PICA, PABLO COMEME LOS 00
 router.get('/usuarioTienda',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		var data = {
@@ -10,7 +14,7 @@ router.get('/usuarioTienda',comprobacionjwt,function(req,res){
 		};
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la que quieres saber los usuario de la URI estadisticas?id={num}
 		if(id != "NULL"){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT COUNT(*) usuario FROM usuario_tienda WHERE Id_tienda="+id;
+			var consulta="SELECT COUNT(*) usuario FROM usuario_tienda WHERE Id_tienda_usuario_tienda="+id;
 		}else{ //Si no muestra todos los municipios
 			var consulta = "SELECT COUNT(*) usuario FROM usuario_tienda";
 		}
@@ -32,6 +36,60 @@ router.get('/usuarioTienda',comprobacionjwt,function(req,res){
     connection.release();
 	});
 });
+*/
+router.get('/usuarioTienda',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la que quieres saber los usuario de la URI estadisticas?id={num}
+		var consulta="SELECT COUNT(*) usuario FROM usuario_tienda WHERE Id_tienda_usuario_tienda="+id;
+		console.log(consulta);
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				console.log(err);
+				res.status(400).json(err);
+			}else{
+				console.log(rows);
+				return res.status(200).json(rows);
+			}	
+		});
+    connection.release();
+	});
+}); 
+
+//Esta funcion devuelve el numero de usuario que han realizado una compra en un establecimiento
+router.get('/usuarioFacturaTienda',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		var data = {
+			"usuarioQueCompran":""
+		};
+		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la que quieres saber los usuario de la URI estadisticas?id={num}
+		if(id != "NULL"){ //Si en la URI existe se crea la consulta de busqueda por id
+			var consulta="SELECT DISTINCT COUNT(*) usuario FROM usuario u JOIN usuario_tienda ut ON u.Id_usuario = ut.Id_usuario_usuario_tienda JOIN factura_usuario fu ON ut.Id_usuario_tienda = fu.Id_usuario_tienda_factura_usuario WHERE fu.Id_tienda_factura_factura_usuario="+id;
+		}else{ //Si no muestra todos los municipios
+			var consulta = "SELECT DISTINCT COUNT(*) usuario FROM usuario u JOIN usuario_tienda ut ON u.Id_usuario = ut.Id_usuario_usuario_tienda JOIN factura_usuario fu ON ut.Id_usuario_tienda = fu.Id_usuario_tienda_factura_usuario";
+		}
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				console.log(err);
+				res.status(400).json(err);
+			}else{
+				if(rows.length != 0){
+					data["usuarioQueCompran"] = rows;
+					return res.status(200).json(data);
+					
+				}else{
+					data["usuarioQueCompran"] = 'No hay usuario';
+					return res.status(204).json(data);
+				}
+			}
+		});
+    connection.release();
+	});
+});
+
+
+/*
+
+
 //Esta funcion devuelve el numero de registros los ultimos X dias, meses o años segun el parametro que se le pase por parametro
 router.get('/Registros',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
@@ -176,4 +234,6 @@ router.get('/beneficiosTienda',comprobacionjwt,function(req,res){
     connection.release();
 	});
 });
+*/
+
 module.exports = router;
