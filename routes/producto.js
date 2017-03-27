@@ -156,7 +156,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				}else{
 					console.log("no hay productos");
 					data["Productos"] = 'No hay productos';
-					return res.status(204).json(data);
+					return res.status(206).json(data);
 				}
 			}
 		});
@@ -180,6 +180,7 @@ router.put('/',comprobacionjwt,function(req,res){
 		var Estado = connection.escape(req.body.estado);
 		var Eliminado = connection.escape(req.body.eliminado);
 		var Id_tienda = connection.escape(req.body.id_tienda);
+		var i=0;
 		var data = {
 			"Productos":""
 		};
