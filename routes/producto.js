@@ -186,33 +186,69 @@ router.put('/',comprobacionjwt,function(req,res){
 			var consulta = "UPDATE producto SET ";
 			if(ID != 'NULL'){
 				if(Codigo != 'NULL'){
-					consulta = consulta + "Codigo_producto="+Codigo;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Codigo_producto="+Codigo;
+					i++;
 				}
 				if(Nombre != 'NULL'){
-					consulta = consulta + " Nombre_producto="+Nombre;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Nombre_producto="+Nombre;
+					i++;
 				}
 				if(Precio != 'NULL'){
-					consulta = consulta + " Precio_producto="+Precio;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Precio_producto="+Precio;
+					i++;
 				}
 				if(Imagen != 'NULL'){
-					consulta = consulta + " Imagen_producto="+Imagen;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Imagen_producto="+Imagen;
+					i++;
 				}
 				if(Descripcion != 'NULL'){
-					consulta = consulta + " Descripcion_producto="+Descripcion;
-				}
-				if(Stock != 'NULL'){
-					consulta = consulta + " Stock_producto="+Stock;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Descripcion_producto="+Descripcion;
+					i++;
 				}
 				if(URL_video != 'NULL'){
-					consulta = consulta + " URL_video_producto="+URL_video;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "URL_video_producto="+URL_video;
+					i++;
 				}
 				if(Estado != 'NULL'){
-					consulta = consulta + " Estado_producto="+Estado;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Estado_producto="+Estado;
+					i++;
 				}
 				if(Eliminado != 'NULL'){
-					consulta = consulta + " Eliminado_producto="+Eliminado;
+					if (i==1) {
+						consulta  += " , ";
+						i--;	
+					}
+					consulta  += "Eliminado_producto="+Eliminado;
+					i++;
 				}
-				
 				consulta = consulta + " WHERE Id_producto="+ID;
 				console.log(consulta);
 			}
