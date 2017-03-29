@@ -354,7 +354,7 @@ router.get('/tienda',comprobacionjwt,function(req,res){
 			var consulta="SELECT * FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario WHERE Id_usuario="+Id;
 		}else{ //Si no muestra todos los usuario
 			console.log("Entro para mostrar los datos de todos los usuario");
-			var consulta="SELECT Id_usuario, Fecha_nac_usuario, Fecha_usuario FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda"
+			var consulta="SELECT * FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda"
 			var i=0;
 			if(Nombre != 'NULL' || DNI != 'NULL' || Sexo != 'NULL' || Email != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Direccion != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Fechanac_min != 'NULL' || Fechanac_max != 'NULL' || Fecha_min != 'NULL' || Fecha_max != 'NULL' || CP != 'NULL' || Telefono != 'NULL' || Rol != 'NULL'|| Id_tienda != 'NULL' ){
 				console.log("Con el parametro:");
