@@ -43,10 +43,10 @@ router.get('/',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		if(Id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
 			console.log("Entro para mostrar los datos de un usuario concreto");
-			var consulta="SELECT * FROM usuario u JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario WHERE Id_usuario="+Id;
+			var consulta="SELECT * FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario WHERE Id_usuario="+Id;
 		}else{ //Si no muestra todos los usuario
 			console.log("Entro para mostrar los datos de todos los usuario");
-			var consulta="SELECT * FROM usuario u JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario"
+			var consulta="SELECT * FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario"
 			var i=0;
 			if(Nombre != 'NULL' || DNI != 'NULL' || Sexo != 'NULL' || Email != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Direccion != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Fechanac_min != 'NULL' || Fechanac_max != 'NULL' || Fecha_min != 'NULL' || Fecha_max != 'NULL' || CP != 'NULL' || Telefono != 'NULL' || Rol != 'NULL' ){
 				console.log("Con el parametro:");
@@ -57,7 +57,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Nombre_usuario LIKE '%"+Nombre.replace(/'/g, "")+"%'";
+					consulta  += "Nombre_usuario LIKE '%"+Nombre.replace(/'/g, "")+"%'";
 					i++;
 				}
 				if(DNI != 'NULL'){
@@ -66,7 +66,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.DNI_usuario="+DNI;
+					consulta  += "DNI_usuario="+DNI;
 					i++;
 				}
 				if(Email != 'NULL'){
@@ -75,7 +75,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Email_usuario="+Email;
+					consulta  += "Email_usuario="+Email;
 					i++;
 				}
 				if(Sexo != 'NULL'){
@@ -84,7 +84,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Sexo_usuario="+Sexo;
+					consulta  += "Sexo_usuario="+Sexo;
 					i++;
 				}
 				if(Estado != 'NULL'){
@@ -93,7 +93,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Estado_usuario="+estado;
+					consulta  += "Estado_usuario="+estado;
 					i++;
 				}
 				if(Eliminado != 'NULL'){
@@ -102,7 +102,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Eliminado_usuario="+Eliminado;
+					consulta  += "Eliminado_usuario="+Eliminado;
 					i++;
 				}
 				if(Direccion != 'NULL'){
@@ -111,7 +111,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Direccion_usuario LIKE '%"+Direccion.replace(/'/g, "")+"%'";
+					consulta  += "Direccion_usuario LIKE '%"+Direccion.replace(/'/g, "")+"%'";
 					i++;
 				}
 				if(Comunidad != 'NULL'){
@@ -120,7 +120,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Comunidad_usuario="+Comunidad;
+					consulta  += "Comunidad_usuario="+Comunidad;
 					i++;
 				}
 				if(Provincia != 'NULL'){
@@ -129,7 +129,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Provincia_usuario="+Comunidad;
+					consulta  += "Provincia_usuario="+Comunidad;
 					i++;
 				}
 				if(Localidad != 'NULL'){
@@ -138,7 +138,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Localidad_usuario="+Comunidad;
+					consulta  += "Localidad_usuario="+Comunidad;
 					i++;
 				}
 				if(Telefono != 'NULL'){
@@ -147,7 +147,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Telefono_usuario<="+Telefono;
+					consulta  += "Telefono_usuario<="+Telefono;
 					i++;
 				}
 				if(CP != 'NULL'){
@@ -165,7 +165,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Fecha_nac_usuario<="+Fechanac_max;
+					consulta  += "Fecha_nac_usuario<="+Fechanac_max;
 					i++;
 				}
 				if(Fechanac_min != 'NULL'){
@@ -174,7 +174,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Fecha_nac_usuario>="+Fechanac_min;
+					consulta  += "Fecha_nac_usuario>="+Fechanac_min;
 					i++;
 				}
 				if(Fecha_max != 'NULL'){
@@ -183,7 +183,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Fecha_usuario<="+Fecha_max;
+					consulta  += "Fecha_usuario<="+Fecha_max;
 					i++;
 				}
 				if(Fecha_min != 'NULL'){
@@ -192,7 +192,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Fecha_usuario>="+Fecha_min;
+					consulta  += "Fecha_usuario>="+Fecha_min;
 					i++;
 				}
 				if(Rol != 'NULL'){
@@ -201,7 +201,7 @@ router.get('/',comprobacionjwt,function(req,res){
 						consulta  += " AND ";
 						i--;	
 					}
-					consulta  += "u.Rol_usuario="+Rol;
+					consulta  += "Rol_usuario="+Rol;
 					i++;
 				}
 			}
@@ -216,10 +216,10 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 				orden=orden+1;
 				if (OrdeFecha=="'1'") {
-					consulta  += "u.Fecha_usuario ASC";
+					consulta  += "Fecha_usuario ASC";
 				}
 				if (OrdeFecha=="'0'") {
-					consulta  += "u.Fecha_usuario DESC";	
+					consulta  += "Fecha_usuario DESC";	
 				}
 			}
 			if(OrdeFechaNac != 'NULL'){
@@ -229,10 +229,10 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 				orden=orden+1;
 				if (OrdeFechaNac=="'1'") {
-					consulta  += "u.Fecha_nac_usuario ASC";
+					consulta  += "Fecha_nac_usuario ASC";
 				}
 				if (OrdeFecha=="'0'") {
-					consulta  += "u.Fecha_nac_usuario DESC";	
+					consulta  += "Fecha_nac_usuario DESC";	
 				}
 			}
 			if(OrdeCom != 'NULL'){
@@ -242,10 +242,10 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 				orden=orden+1;
 				if (OrdeCom=="'1'") {
-					consulta  += "u.Comunidad_usuario ASC";
+					consulta  += "Comunidad_usuario ASC";
 				}
 				if (OrdeCom=="'0'") {
-					consulta  += "u.Comunidad_usuario DESC";	
+					consulta  += "Comunidad_usuario DESC";	
 				}
 			}
 			if(OrdeProv != 'NULL'){
@@ -255,10 +255,10 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 				orden=orden+1;
 				if (OrdeProv=="'1'") {
-					consulta  += "u.Provincia_usuario ASC";
+					consulta  += "Provincia_usuario ASC";
 				}
 				if (OrdeProv=="'0'") {
-					consulta  += "u.Provincia_usuario DESC";	
+					consulta  += "Provincia_usuario DESC";	
 				}
 			}
 			if(OrdeLoc != 'NULL'){
@@ -268,10 +268,10 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 				orden=orden+1;
 				if (OrdeLoc=="'1'") {
-					consulta  += "u.Localidad_usuario ASC";
+					consulta  += "Localidad_usuario ASC";
 				}
 				if (OrdeLoc=="'0'") {
-					consulta  += "u.Localidad_usuario DESC";	
+					consulta  += "Localidad_usuario DESC";	
 				}
 			}
 			if(OrdeNombre != 'NULL'){
@@ -281,10 +281,10 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 				orden=orden+1;
 				if (OrdeNombre=="'1'") {
-					consulta  += "  u.Nombre_usuario ASC";
+					consulta  += "  Nombre_usuario ASC";
 				}
 				if (OrdeNombre=="'0'") {
-					consulta  += "  u.Nombre_usuario DESC";	
+					consulta  += "  Nombre_usuario DESC";	
 				}
 			}
 		}
@@ -315,7 +315,323 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.release();
 	});
 });
-
+/*DEVUELVE usuario si no le pasas parametro te los devuelve todos si le pasas id te devuelve los datos de ese usuario,
+ y si le pasas otros parametros te devuelve todos los que tengan ese parametro filtrado*/
+router.get('/tienda',comprobacionjwt,function(req,res){
+	var data = {
+		"usuario":""
+	};
+	db.getConnection(function(err, connection) {
+		if (err) throw err;
+		var Id = connection.escape(req.query.id);
+		var DNI = connection.escape(req.query.dni);
+		var Nombre = connection.escape(req.query.nombre);
+		var Email = connection.escape(req.query.email);
+		var Sexo = connection.escape(req.query.sexo);
+		var Direccion = connection.escape(req.query.direccion);
+		var Comunidad = connection.escape(req.query.comunidad);//La comunidad la tienes que pasar con su nombre
+		var Provincia = connection.escape(req.query.provincia);//La provincia la tienes que pasar con su nombre
+		var Localidad = connection.escape(req.query.Localidad);//La localidad la tienes que pasar con su nombre
+		var Fechanac_min = connection.escape(req.query.fechanac_min);
+		var Fechanac_max = connection.escape(req.query.fechanac_max);
+		var Fecha_min = connection.escape(req.query.fecha_min);
+		var Fecha_max = connection.escape(req.query.fecha_max);
+		var CP = connection.escape(req.query.cp);
+		var Estado = connection.escape(req.query.estado);
+		var Eliminado = connection.escape(req.query.eliminado);
+		var Telefono = connection.escape(req.query.telefono);
+		var Rol = connection.escape(req.query.rol);
+		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuario en la URI usuario?ordenombre={0 ó 1}
+		var OrdeFecha = connection.escape(req.query.ordefecha);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordefecha={0 ó 1}
+		var OrdeFechaNac = connection.escape(req.query.ordefechanac);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordefechanac={0 ó 1}
+		var OrdeCom = connection.escape(req.query.ordecom); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordecom={0 ó 1}
+		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprov={0 ó 1}
+		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeloc={0 ó 1}
+		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		if(Id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
+			console.log("Entro para mostrar los datos de un usuario concreto");
+			var consulta="SELECT * FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario WHERE Id_usuario="+Id;
+		}else{ //Si no muestra todos los usuario
+			console.log("Entro para mostrar los datos de todos los usuario");
+			var consulta="SELECT Id_usuario, Fecha_nac_usuario, Fecha_usuario FROM usuario JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda"
+			var i=0;
+			if(Nombre != 'NULL' || DNI != 'NULL' || Sexo != 'NULL' || Email != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Direccion != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Fechanac_min != 'NULL' || Fechanac_max != 'NULL' || Fecha_min != 'NULL' || Fecha_max != 'NULL' || CP != 'NULL' || Telefono != 'NULL' || Rol != 'NULL'|| Id_tienda != 'NULL' ){
+				console.log("Con el parametro:");
+				consulta +=" WHERE ";
+				if(Nombre != 'NULL'){
+					console.log("Nombre:"+Nombre);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Nombre_usuario LIKE '%"+Nombre.replace(/'/g, "")+"%'";
+					i++;
+				}
+				if(DNI != 'NULL'){
+					console.log("DNI:"+DNI);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "DNI_usuario="+DNI;
+					i++;
+				}
+				if(Email != 'NULL'){
+					console.log("Email:"+Email);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Email_usuario="+Email;
+					i++;
+				}
+				if(Sexo != 'NULL'){
+					console.log("Sexo:"+Sexo);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Sexo_usuario="+Sexo;
+					i++;
+				}
+				if(Estado != 'NULL'){
+					console.log("Estado:"+Estado);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Estado_usuario="+estado;
+					i++;
+				}
+				if(Eliminado != 'NULL'){
+					console.log("Eliminado:"+Eliminado);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Eliminado_usuario="+Eliminado;
+					i++;
+				}
+				if(Direccion != 'NULL'){
+					console.log("Direccion:"+Direccion);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Direccion_usuario LIKE '%"+Direccion.replace(/'/g, "")+"%'";
+					i++;
+				}
+				if(Comunidad != 'NULL'){
+					console.log("Comunidad:"+Comunidad);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Comunidad_usuario="+Comunidad;
+					i++;
+				}
+				if(Provincia != 'NULL'){
+					console.log("Provincia:"+Provincia);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Provincia_usuario="+Comunidad;
+					i++;
+				}
+				if(Localidad != 'NULL'){
+					console.log("Localidad:"+Localidad);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Localidad_usuario="+Comunidad;
+					i++;
+				}
+				if(Telefono != 'NULL'){
+					console.log("Telefono:"+Telefono);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Telefono_usuario<="+Telefono;
+					i++;
+				}
+				if(CP != 'NULL'){
+					console.log("CP:"+CP);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "CP_usuario="+CP;
+					i++;
+				}
+				if(Fechanac_max != 'NULL'){
+					console.log("Fechanac_max:"+Fechanac_max);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Fecha_nac_usuario<="+Fechanac_max;
+					i++;
+				}
+				if(Fechanac_min != 'NULL'){
+					console.log("Fechanac_min:"+Fechanac_min);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Fecha_nac_usuario>="+Fechanac_min;
+					i++;
+				}
+				if(Fecha_max != 'NULL'){
+					console.log("Fecha_max:"+Fecha_max);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Fecha_usuario<="+Fecha_max;
+					i++;
+				}
+				if(Fecha_min != 'NULL'){
+					console.log("Fecha_min:"+Fecha_min);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Fecha_usuario>="+Fecha_min;
+					i++;
+				}
+				if(Rol != 'NULL'){
+					console.log("Rol:"+Rol);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Rol_usuario="+Rol;
+					i++;
+				}
+				if(Id_tienda != 'NULL'){
+					console.log("Id_tienda:"+Id_tienda);
+					if (i==1) {
+						consulta  += " AND ";
+						i--;	
+					}
+					consulta  += "Id_tienda="+Id_tienda;
+					i++;
+				}
+			}
+		}
+		if(OrdeFecha != 'NULL' || OrdeFechaNac != 'NULL' || OrdeNombre != 'NULL' || OrdeCom != 'NULL' || OrdeProv != 'NULL' || OrdeLoc != 'NULL'){
+			var orden =0;
+			consulta  += " ORDER BY ";
+			if(OrdeFecha != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeFecha=="'1'") {
+					consulta  += "Fecha_usuario ASC";
+				}
+				if (OrdeFecha=="'0'") {
+					consulta  += "Fecha_usuario DESC";	
+				}
+			}
+			if(OrdeFechaNac != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeFechaNac=="'1'") {
+					consulta  += "Fecha_nac_usuario ASC";
+				}
+				if (OrdeFecha=="'0'") {
+					consulta  += "Fecha_nac_usuario DESC";	
+				}
+			}
+			if(OrdeCom != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeCom=="'1'") {
+					consulta  += "Comunidad_usuario ASC";
+				}
+				if (OrdeCom=="'0'") {
+					consulta  += "Comunidad_usuario DESC";	
+				}
+			}
+			if(OrdeProv != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeProv=="'1'") {
+					consulta  += "Provincia_usuario ASC";
+				}
+				if (OrdeProv=="'0'") {
+					consulta  += "Provincia_usuario DESC";	
+				}
+			}
+			if(OrdeLoc != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeLoc=="'1'") {
+					consulta  += "Localidad_usuario ASC";
+				}
+				if (OrdeLoc=="'0'") {
+					consulta  += "Localidad_usuario DESC";	
+				}
+			}
+			if(OrdeNombre != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeNombre=="'1'") {
+					consulta  += "  Nombre_usuario ASC";
+				}
+				if (OrdeNombre=="'0'") {
+					consulta  += "  Nombre_usuario DESC";	
+				}
+			}
+		}
+		if(Pagina!='NULL'){
+			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
+			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT 10 OFFSET "+pags;
+		}
+		console.log("Esta es la consulta a la base de datos:");
+		console.log(consulta);
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Query OK");
+				if(rows.length != 0){
+					console.log("Devuelvo los usuario");
+					data["usuario"] = rows;
+					return res.status(200).json(data);
+				}else{
+					data["usuario"] = 'No hay usuario';
+					console.log("No hay usuario...");
+					return res.status(206).json(data);	
+				}
+			}
+		});
+		connection.release();
+	});
+});
 //Funcion que genera el POST de usuario
 router.post('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
@@ -822,7 +1138,7 @@ router.get('/adminTienda',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var id = connection.escape(req.query.id);
-		var consulta = "SELECT u.Id_usuario, u.DNI_usuario, u.Nombre_usuario, u.Email_usuario, u.Direccion_usuario, u.Comunidad_usuario, u.Provincia_usuario, u.Localidad_usuario, u.CP_usuario, u.Telefono_usuario, u.Foto_usuario, t.Nombre_rol, u.Estado_usuario, u.Eliminado_usuario, u.Fecha_usuario  FROM usuario_admin_tienda TA JOIN usuario u ON u.Id_usuario = TA.id_usuario_usuario_admin_tienda JOIN tipo_usuario t ON u.Rol_usuario = t.Id_tipo_usuario;";
+		var consulta = "SELECT Id_usuario, DNI_usuario, Nombre_usuario, Email_usuario, Direccion_usuario, Comunidad_usuario, Provincia_usuario, Localidad_usuario, CP_usuario, Telefono_usuario, Foto_usuario, Nombre_rol, Estado_usuario, Eliminado_usuario, Fecha_usuario  FROM usuario_admin_tienda TA JOIN usuario u ON Id_usuario = TA.id_usuario_usuario_admin_tienda JOIN tipo_usuario t ON Rol_usuario = Id_tipo_usuario;";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				return res.status(400).json({ usuario: err });

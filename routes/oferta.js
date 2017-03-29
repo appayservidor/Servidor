@@ -5,50 +5,77 @@ var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 
 
-//GENERA OFERTAS DE UN USUARIO
+//DEVUELVE OFERTAS DE UN USUARIO
 router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {
 			"Ofertas":""
 		};
-		var idUsuario = connection.escape(req.query.idUsuario); //Variable que recoje el id del usuario de la URI ofertas?idUsuario={num}
-		var idTienda = connection.escape(req.query.idTienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
-		var idProductoTienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
-		var aux=1;
-		var consulta="SELECT * FROM oferta_usuario WHERE ";
-		if(idUsuario != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			consulta+="Id_usuario="+idUsuario;
-			aux--;
-		}
-		if(idTienda != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			if(aux==0){
-				consulta+=" AND Id_tienda="+idTienda;
-			}else{
-				consulta+="Id_tienda="+idTienda;
-				aux--;
+		var Id_usuario = connection.escape(req.query.id_usuario); //Variable que recoje el id del usuario de la URI ofertas?idUsuario={num}
+		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
+		var Id_producto_tienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
+		var Id_oferta_usuario = connection.escape(req.query.id_oferta_usuario);
+		var Pagina = connection.escape(req.query.pagina);
+		var aux=0;
+		var consulta="SELECT Id_usuario, P_oferta_oferta_usuario, Id_producto_tienda, Id_tienda FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
+        if(Id_usuario != 'NULL' || Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_usuario != 'NULL'){
+			consulta+= " WHERE ";
+			if(Id_usuario != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_usuario = "+Id_usuario;
+				aux++;
+			}
+			if(Id_tienda != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_tienda = "+Id_tienda;
+				aux++;
+			}
+			if(Id_producto_tienda != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_producto_tienda = "+Id_producto_tienda;
+				aux++;
+			}
+			if(Id_oferta_usuario != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_oferta_usuario = "+Id_oferta_usuario;
+				aux++;
 			}
 		}
-		if(idProductoTienda != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			if(aux==0){
-				consulta+=" AND Id_producto_tienda="+idProductoTienda;
-			}else{
-				consulta+="Id_producto_tienda="+idProductoTienda;
-				aux--;
-			}
+		if(Pagina!='NULL'){
+			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
+			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT 10 OFFSET "+pags;
 		}
-        if(idUsuario=='NULL'  && idTienda=='NULL' && idProductoTienda == 'NULL') //Te saca todas
-            consulta="Select * from oferta_usuario"; 
-
-        console.log(consulta);
+		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
-			if(rows.length != 0){
-				data["Ofertas"] = rows;
-				res.status(200);
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
 			}else{
-				data["Ofertas"] = 'No hay ofertas';
+				console.log("Query OK");
+				if(rows.length != 0){
+					console.log("Devuelvo las ofertas del usuario");
+					data["Ofertas"] = rows;
+					return res.status(200).json(data);
+				}else{
+					data["Ofertas"] = 'No hay Ofertas';
+					console.log("No hay Ofertas...");
+					return res.status(204).json(data);	
+				}
 			}
-			res.json(data);
 		});
     connection.release();
 	});
@@ -67,7 +94,6 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 		var Estado = connection.escape(req.body.estado);
 		var Eliminado = connection.escape(req.body.eliminado);
 		var data = {
-			"Errores":1,
 			"Ofertas":""
 		};
 		var consulta = "INSERT INTO oferta_producto (";
