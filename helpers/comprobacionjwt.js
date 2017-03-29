@@ -4,7 +4,7 @@ var mySecretKey=process.env.JWT_SECRETKEY;
 module.exports = function(req, res, next) {
         console.log('Entra en el middleware');
 
-        /*console.log('ComprobacionJWT activada')
+        console.log('ComprobacionJWT activada')
         var token = null;
         if(req.headers.authorization!=null){
             var authorization = req.headers.authorization.split(" "); //esto es porque en la cabecera el authorization es: Bearer espacio y el token 
@@ -38,8 +38,9 @@ module.exports = function(req, res, next) {
         }
         else{
              res.status(401).json("No header auth");
-        }*/
-   
+        }
+   /*
     console.log('comprobacionJWT desactivada');
     next();
+   */
 };
