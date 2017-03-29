@@ -15,7 +15,7 @@ router.post("/", function(req,res,next){
         console.log("password es "+password);
         //llamamos a la base de datos para ver si el usuario es correcto o no 
         var consulta="SELECT * from usuario where Email_usuario="+username+" and Contra_usuario=md5("+password+")";
-        
+        console.log(consulta);
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
