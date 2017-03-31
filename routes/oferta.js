@@ -5,20 +5,101 @@ var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
 
 
+//DEVUELVE OFERTAS DE Producto
+router.get('/ofertasProducto',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+        if (err) throw err;
+		var data = {
+			"Ofertas":"",
+			"Registros":""
+		};
+		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
+		var Id_producto_tienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
+		var Id_oferta_producto = connection.escape(req.query.id_oferta_usuario);
+		var Pagina = connection.escape(req.query.pagina);
+		var Registros = connection.escape(req.query.registros);
+		var aux=0;
+		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_oferta_usuario";
+        if(Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_usuario != 'NULL'){
+			consulta+= " WHERE ";
+			if(Id_tienda != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_tienda_oferta_producto = "+Id_tienda;
+				aux++;
+			}
+			if(Id_producto_tienda != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_producto_tienda_oferta_producto = "+Id_producto_tienda;
+				aux++;
+			}
+			if(Id_oferta_producto != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_oferta_producto = "+Id_oferta_producto;
+				aux++;
+			}
+		}
+		var preconsulta = consulta+";";
+		console.log("Preconsulta:");
+		console.log(preconsulta);
+		if(Pagina!='NULL'){
+			if (Registros != 'NULL') {
+				var nregis =parseInt(Registros.replace(/'/g, ""));
+			}else{
+				var nregis = 10;
+			}
+			var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT "+nregis+" OFFSET "+pags;
+		}
+		console.log("Consulta:");
+		console.log(consulta);
+		connection.query(preconsulta+consulta,function(err, rows, fields){
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Query OK");
+				if(rows.length != 0){
+					console.log("Devuelvo las ofertas de producto");
+					data["Registros"]= rows[0].length;
+					data["Ofertas"] = rows[1];
+					return res.status(200).json(data);
+				}else{
+					data["Ofertas"] = 'No hay Ofertas';
+					console.log("No hay Ofertas...");
+					return res.status(204).json(data);	
+				}
+			}
+		});
+    connection.release();
+	});
+});
+
 //DEVUELVE OFERTAS DE UN USUARIO
 router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {
-			"Ofertas":""
+			"Ofertas":"",
+			"Registros":""
 		};
 		var Id_usuario = connection.escape(req.query.id_usuario); //Variable que recoje el id del usuario de la URI ofertas?idUsuario={num}
 		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
 		var Id_producto_tienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
 		var Id_oferta_usuario = connection.escape(req.query.id_oferta_usuario);
 		var Pagina = connection.escape(req.query.pagina);
+		var Registros = connection.escape(req.query.registros);
 		var aux=0;
-		var consulta="SELECT Id_usuario, P_oferta_oferta_usuario, Id_producto_tienda, Id_tienda FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
+		var consulta="SELECT * FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
         if(Id_usuario != 'NULL' || Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_usuario != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_usuario != 'NULL'){
@@ -54,13 +135,22 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 				aux++;
 			}
 		}
+		var preconsulta = consulta+";";
+		console.log("Preconsulta:");
+		console.log(preconsulta);
 		if(Pagina!='NULL'){
-			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
-			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
-			consulta += " LIMIT 10 OFFSET "+pags;
+			if (Registros != 'NULL') {
+				var nregis =parseInt(Registros.replace(/'/g, ""));
+			}else{
+				var nregis = 10;
+			}
+			var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT "+nregis+" OFFSET "+pags;
 		}
+		console.log("Consulta:");
 		console.log(consulta);
-		connection.query(consulta,function(err, rows, fields){
+		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
 				return res.status(400).json({ error: err });
@@ -68,7 +158,8 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 				console.log("Query OK");
 				if(rows.length != 0){
 					console.log("Devuelvo las ofertas del usuario");
-					data["Ofertas"] = rows;
+					data["Registros"]= rows[0].length;
+					data["Ofertas"] = rows[1];
 					return res.status(200).json(data);
 				}else{
 					data["Ofertas"] = 'No hay Ofertas';
@@ -245,6 +336,150 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 	});
 });
 
+//POST de ofertas de usuario
+router.post('/ofertaProducto',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+        if (err) throw err;
+ 		var FechaIni = connection.escape(req.body.fechaini);
+		var FechaFin = connection.escape(req.body.fechafin);
+		var P_oferta = connection.escape(req.body.p_oferta);
+		var Id_tienda = connection.escape(req.body.id_tienda);
+		var Id_producto_tienda = connection.escape(req.body.id_producto_tienda);
+		var Foto = connection.escape(req.body.foto);
+		var Descripcion = connection.escape(req.body.Descripcion);
+		var Estado = connection.escape(req.body.estado);
+		var Eliminado = connection.escape(req.body.eliminado);
+		var data = {
+			"Ofertas":""
+		};
+		var consulta = "INSERT INTO oferta_producto (";
+		var i=0;
+		if(FechaIni != 'NULL'){
+			consulta  += "Fecha_inicio_oferta_producto";
+			i++;
+		}
+		if(FechaFin != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Fecha_fin_oferta_producto";
+			i++;
+		}
+		if(P_oferta != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "P_oferta_oferta_producto";
+			i++;
+		}
+		if(Id_tienda != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Id_tienda_oferta_producto";
+			i++;
+		}
+		if(Id_producto_tienda != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Id_producto_tienda_oferta_producto";
+			i++;
+		}
+		if(Foto != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Foto_oferta_producto";
+			i++;
+		}
+		if(Descripcion != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += "Descripcion_oferta_producto";
+			i++;
+		}
+		consulta+=", Estado_oferta_producto , Eliminado_oferta_producto) VALUES (";
+		var i=0;
+		if(FechaIni != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += FechaIni;
+			i++;
+		}
+		if(FechaFin != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += FechaFin;
+			i++;
+		}
+		if(P_oferta != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += P_oferta;
+			i++;
+		}
+		if(Id_tienda != 'NULL'){
+			if (i==1) {
+				consulta  += " , ";
+				i--;	
+			}
+			consulta  += Id_tienda;
+			i++;
+		}
+		if(Id_producto_tienda != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += Id_producto_tienda;
+			i++;
+		}
+		if(Foto != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += Foto;
+			i++;
+		}
+		if(Descripcion != 'NULL'){
+			if (i==1) {
+				consulta  += ", ";
+				i--;	
+			}
+			consulta  += Descripcion;
+			i++;
+		}
+		consulta+=",'1','0')";
+		console.log(consulta);
+        connection.query(consulta,function(err, rows, fields){
+            if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Oferta insertada correctamente");
+				data["Ofertas"] = "Oferta insertada correctamente";
+				return res.status(200).json(data);  
+			}
+        });       
+    connection.release();
+	});
+});
+
 //Update de ofertas de usuario
 router.put('/ofertasUsuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
@@ -261,9 +496,6 @@ router.put('/ofertasUsuario',comprobacionjwt,function(req,res){
 		var data = {
 			"Ofertas":""
 		};	
-			if(ID == "''"){
-				ID = "null.null.null"
-			}
 			var consulta = "UPDATE oferta_usuario SET ";
 			if(ID != 'NULL'){
 				var i=0;

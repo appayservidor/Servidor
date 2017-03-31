@@ -9,7 +9,8 @@ router.get('/',comprobacionjwt,function(req,res){
         if (err) throw err;
    		var data = {
 			"Factura":"",
-			"Lineas":""
+			"Lineas":"",
+			"Registros":""
 		};
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la factura de la URI factura?id={num}
 		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
@@ -19,14 +20,31 @@ router.get('/',comprobacionjwt,function(req,res){
 		var FechaFin = connection.escape(req.query.fechafin); //Variable que recoje el fin del periodo de la factura que se quiere mostrar de la URI factura?total={num}
 		var OrdeFecha = connection.escape(req.query.ordefecha);//Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordefecha=true
 		var OrdeTotal = connection.escape(req.query.ordetotal); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordetotal=true
-		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de x en Y
+		var Registros = connection.escape(req.query.registros);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id y se muestran todos los detalles de la factura
 			var infoTienda = "SELECT * FROM factura, tienda WHERE Id_tienda = Id_tienda_factura AND Id_factura ="+id;
-			var consulta="SELECT * FROM linea_factura WHERE Id_factura_linea_factura="+id+";";
+			var consulta="SELECT * FROM linea_factura WHERE Id_factura_linea_factura="+id;
+			var preconsulta = consulta+";";
+			console.log("preconsulta:");
+			console.log(preconsulta);
+			console.log("infoTienda:");
 			console.log(infoTienda);
+			if(Pagina!='NULL'){
+				if (Registros != 'NULL') {
+					var nregis =parseInt(Registros.replace(/'/g, ""));
+				}else{
+					var nregis = 10;
+				}
+				var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+				console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+				consulta += " LIMIT "+nregis+" OFFSET "+pags;
+			}
+			consulta +=";";
+			console.log("consulta:");
 			console.log(consulta);
 			//Consulta multiple
-			connection.query(consulta+infoTienda, function(err, rows, fields){
+			connection.query(preconsulta+consulta+infoTienda, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
 					return res.status(400).json({ error: err });
@@ -34,8 +52,9 @@ router.get('/',comprobacionjwt,function(req,res){
 					console.log("Query OK");
 					if(rows.length != 0){
 						console.log("Devuelvo las facturas");
-						data["Factura"] = rows[1];
-						data["Lineas"] = rows[0];
+						data["Registros"]=rows[0].length;
+						data["Factura"] = rows[2];
+						data["Lineas"] = rows[1];
 						return res.status(200).json(data);
 					}else{
 						data["Factura"] = 'No hay facturas';
@@ -44,7 +63,6 @@ router.get('/',comprobacionjwt,function(req,res){
 					}
 				}
 			});
-
 		}else{ //Si no muestra todas las facturas
 			var consulta = "SELECT * FROM factura";
 			var i=0;
@@ -121,16 +139,26 @@ router.get('/',comprobacionjwt,function(req,res){
 					}
 				}
 			}
+			var preconsulta=consulta+";";
+			console.log("preconsulta:");
+			console.log(preconsulta);
 			if(Pagina!='NULL'){
-				var pags=parseInt(Pagina.replace(/'/g, ""))*10;
-				console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
-				consulta += " LIMIT 10 OFFSET "+pags;
+				if (Registros != 'NULL') {
+					var nregis =parseInt(Registros.replace(/'/g, ""));
+				}else{
+					var nregis = 10;
+				}
+				var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+				console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+				consulta += " LIMIT "+nregis+" OFFSET "+pags;
 			}
+			console.log("Consulta:");
 			console.log(consulta);
 			var data = {
-				"Facturas":""
+				"Facturas":"",
+				"Registros":""
 			};
-			connection.query(consulta, function(err, rows, fields){
+			connection.query(preconsulta+consulta, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
 					return res.status(400).json({ error: err });
@@ -138,7 +166,8 @@ router.get('/',comprobacionjwt,function(req,res){
 					console.log("Query OK");
 					if(rows.length != 0){
 						console.log("Devuelvo las facturas");
-						data["Facturas"] = rows;
+						data["Registros"] = rows[0].length;
+						data["Facturas"] = rows[1];
 						return res.status(200).json(data);
 					}else{
 						data["Facturas"] = 'No hay facturas';
@@ -158,6 +187,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
         if (err) throw err;
    		var data = {
 			"Factura":"",
+			"Registros":""
 		};
 	 	var Id = connection.escape(req.query.id);
 		var Nombretienda = connection.escape(req.query.nombretienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
@@ -170,116 +200,126 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 		var OrdeTotal = connection.escape(req.query.ordetotal); //Variable que indica sobre que parametro ordenar las facturas en la URI factura?ordetotal=true
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el nombre de la tienda de la que quiere mostrar las facturas de la URI factura?nombretienda={num}
-
-		 	var consulta="SELECT * FROM factura JOIN factura_usuario ON Id_factura = Id_factura_factura_usuario JOIN usuario_tienda ON Id_usuario_tienda = Id_usuario_tienda_factura_usuario JOIN usuario ON Id_usuario_usuario_tienda = Id_usuario JOIN tienda ON Id_tienda_usuario_tienda = Id_tienda WHERE Id_usuario = "+Id;
-			var i=1;
-			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL' || Id_tienda != 'NULL' ){
-				if(MaxTotal != 'NULL'){
-					if (i==1) {
-						consulta  += " AND ";
-						i--;	
-					}
-					consulta  += "Total_factura<="+MaxTotal;
-					i++;
+		var Registros = connection.escape(req.query.registros);
+		var consulta="SELECT * FROM factura JOIN factura_usuario ON Id_factura = Id_factura_factura_usuario JOIN usuario_tienda ON Id_usuario_tienda = Id_usuario_tienda_factura_usuario JOIN usuario ON Id_usuario_usuario_tienda = Id_usuario JOIN tienda ON Id_tienda_usuario_tienda = Id_tienda WHERE Id_usuario = "+Id;
+		var i=1;
+		if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Nombretienda != 'NULL' || Id_tienda != 'NULL' ){
+			if(MaxTotal != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
 				}
-				if(MinTotal != 'NULL'){
-					if (i==1) {
-						consulta  += " AND ";
-						i--;	
-					}
-					consulta  += "Total_factura>="+MinTotal;
-					i++;
-				}
-				if(FechaIni != 'NULL'){
-					if (i==1) {
-						consulta  += " AND ";
-						i--;	
-					}
-					consulta  += "Fecha_factura>="+FechaIni;
-					i++;
-				}
-				if(FechaFin != 'NULL'){
-					if (i==1) {
-						consulta  += " AND ";
-						i--;	
-					}
-					consulta  += "Fecha_factura<="+FechaFin;
-					i++;
-				}
-				if(Nombretienda != 'NULL'){
-					if (i==1) {
-						consulta  += " AND ";
-						i--;	
-					}
-					consulta  += "Nombre_tienda LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
-					i++;
-				}
-				if(Id_tienda != 'NULL'){
-					if (i==1) {
-						consulta  += " AND ";
-						i--;	
-					}
-					consulta  += "Id_tienda="+Id_tienda;
-					i++;
-				}
-				
+				consulta  += "Total_factura<="+MaxTotal;
+				i++;
 			}
-			if(OrdeFecha != 'NULL' || OrdeTotal != 'NULL' || OrdeNombre != 'NULL'){
-				var orden =0;
-				consulta  += " ORDER BY ";
-				if(OrdeFecha != 'NULL'){
-					if(orden!=0){
-						consulta  += " , ";
-						orden=orden-1;
-					}
-					orden=orden+1;
-					if (OrdeFecha=="'1'") {
-						consulta  += "Fecha_factura ASC";
-					}
-					if (OrdeFecha=="'0'") {
-						consulta  += "Fecha_factura DESC";	
-					}
+			if(MinTotal != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
 				}
-				if(OrdeTotal != 'NULL'){
-					if(orden!=0){
-						consulta  += " , ";
-						orden=orden-1;
-					}
-					orden=orden+1;
-					if (OrdeTotal=="'1'") {
-						consulta  += "Total_factura ASC";
-					}
-					if (OrdeTotal=="'0'") {
-						consulta  += "Total_factura DESC";	
-					}
+				consulta  += "Total_factura>="+MinTotal;
+				i++;
+			}
+			if(FechaIni != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
 				}
-				if(OrdeNombre != 'NULL'){
-					if(orden!=0){
-						consulta  += " , ";
-						orden=orden-1;
-					}
-					orden=orden+1;
-					if (OrdeNombre=="'1'") {
-						consulta  += "  Nombre_tienda ASC";
-					}
-					if (OrdeNombre=="'0'") {
-						consulta  += "  Nombre_tienda DESC";	
-					}
+				consulta  += "Fecha_factura>="+FechaIni;
+				i++;
+			}
+			if(FechaFin != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Fecha_factura<="+FechaFin;
+				i++;
+			}
+			if(Nombretienda != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Nombre_tienda LIKE '%"+Nombretienda.replace(/'/g, "")+"%'";
+				i++;
+			}
+			if(Id_tienda != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Id_tienda="+Id_tienda;
+				i++;
+			}
+			
+		}
+		if(OrdeFecha != 'NULL' || OrdeTotal != 'NULL' || OrdeNombre != 'NULL'){
+			var orden =0;
+			consulta  += " ORDER BY ";
+			if(OrdeFecha != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeFecha=="'1'") {
+					consulta  += "Fecha_factura ASC";
+				}
+				if (OrdeFecha=="'0'") {
+					consulta  += "Fecha_factura DESC";	
 				}
 			}
-			if(Pagina!='NULL'){
-				var pags=parseInt(Pagina.replace(/'/g, ""))*10;
-				console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
-				consulta += " LIMIT 10 OFFSET "+pags;
+			if(OrdeTotal != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeTotal=="'1'") {
+					consulta  += "Total_factura ASC";
+				}
+				if (OrdeTotal=="'0'") {
+					consulta  += "Total_factura DESC";	
+				}
 			}
-			console.log(consulta);
-		 	connection.query(consulta,function(err, rows, fields){
+			if(OrdeNombre != 'NULL'){
+				if(orden!=0){
+					consulta  += " , ";
+					orden=orden-1;
+				}
+				orden=orden+1;
+				if (OrdeNombre=="'1'") {
+					consulta  += "  Nombre_tienda ASC";
+				}
+				if (OrdeNombre=="'0'") {
+					consulta  += "  Nombre_tienda DESC";	
+				}
+			}
+		}
+		var preconsulta = consulta+";";
+		console.log("Preconsulta:");
+		console.log(preconsulta);
+		if(Pagina!='NULL'){
+			if (Registros != 'NULL') {
+				var nregis =parseInt(Registros.replace(/'/g, ""));
+			}else{
+				var nregis = 10;
+			}
+			var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT "+nregis+" OFFSET "+pags;
+		}		
+		console.log("Consulta:");
+		console.log(consulta);
+		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
 				if(rows.length != 0){
-					data["Factura"] = rows;
+					data["Registros"] = rows[0].length;
+					data["Factura"] = rows[1];
 					return res.status(200).json(data);
 				}else{
 					console.log('No hay facturas');
@@ -288,7 +328,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 				}
 			}
 		});	
-    connection.release();
+    	connection.release();
 	});
 });
 
