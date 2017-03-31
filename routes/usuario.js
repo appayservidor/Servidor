@@ -1283,23 +1283,20 @@ router.put('/updateState',comprobacionjwt,function(req,res){
 		if (err) throw err;	
 		var usuario = req.body.usuario;
 		console.log("Entra en el put de updateState");
-	error=false;
-	for(var i=0;i<usuario.length;i++){
-			var consulta = "UPDATE usuario SET Eliminado_usuario = '"+usuario[i].Eliminado_usuario+"' WHERE Id_usuario="+usuario[i].Id_usuario ;
-			console.log(consulta);
-			connection.query(consulta,function(err, rows, fields){
-				if(err){
-					error=true;
-					//return res.status(400).json({ error: err });
-					i=usuario.length;
-				}
-			});	
+		var consulta="";		
+		for(var i=0;i<usuario.length;i++){
+			consulta += "UPDATE usuario SET Eliminado_usuario = '"+usuario[i].Eliminado_usuario+"' WHERE Id_usuario="+usuario[i].Id_usuario+";";
 		}
-		connection.release();
-		if(error==false)
-			return res.status(200).json("Actualizado correctamente");
-		else
-			return res.status(400).json("Error en la peticion a la BD");	
+		console.log(consulta);
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+                console.log(err); 
+                return res.status(400).json({ error: err });
+            }else{
+				return res.status(200).json("Actualizado correctamente");
+            }	
+		});	
+		connection.release();	
 	});
 });
 
