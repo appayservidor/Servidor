@@ -374,7 +374,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			i++;
 		}
 		
-		consulta+=") VALUES (";
+		consulta=consulta+", Estado_factura , Eliminado_factura) VALUES (";
 		var i=0;
 		if(Id_tienda != 'NULL'){
 			consulta  += Id_tienda;
@@ -404,7 +404,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Pagada;
 			i++;
 		}
-		consulta+=")"
+		consulta+=",'1','0')";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
@@ -541,7 +541,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
             i++;
         }
 
-        consulta+=") VALUES (";
+		consulta=consulta+", Estado_linea_factura , Eliminado_linea_factura) VALUES (";
         var i=0;
 
         if(Id_factura != 'NULL'){
@@ -588,7 +588,7 @@ router.post('/lineafactura',comprobacionjwt,function(req,res){
             consulta  += Total_linea;
             i++;
         }
-        consulta+=")";
+		consulta+=",'1','0')";
         console.log(consulta);
             connection.query(consulta,function(err, rows, fields){
                     if(err){

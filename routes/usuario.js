@@ -880,7 +880,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Rol;
 			i++;
 		}
-		consulta+=",'0','0')";
+		consulta+=",'1','0')";
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
@@ -1103,7 +1103,7 @@ router.post('/usuarioTienda',function(req,res){
 		var data = {
 			"usuario":""
 		};
-		var consulta = "INSERT INTO usuario_tienda (Id_tienda_usuario_tienda, Id_usuario_usuario_tienda) VALUES("+Id_tienda+","+Id_usuario+")";
+		var consulta = "INSERT INTO usuario_tienda (Id_tienda_usuario_tienda, Id_usuario_usuario_tienda, Estado_usuario_tienda, Eliminado_usuario_tienda) VALUES("+Id_tienda+","+Id_usuario+", '1','0')";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				return res.status(400).json({ usuario: err });
@@ -1131,7 +1131,7 @@ router.post('/usuarioAdminTienda',function(req,res){
 		var data = {
 			"usuario":""
 		};
-		var consulta = "INSERT INTO usuario_admin_tienda (id_tienda_usuario_admin_tienda, id_usuario_usuario_admin_tienda) VALUES("+Id_tienda+","+Id_usuario+")";
+		var consulta = "INSERT INTO usuario_admin_tienda (id_tienda_usuario_admin_tienda, id_usuario_usuario_admin_tienda, Estado_usuario_admin_tienda, Eliminado_usuario_admin_tienda) VALUES("+Id_tienda+","+Id_usuario+",'1','0')";
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
 					return res.status(400).json({ usuario: err });

@@ -185,7 +185,7 @@ router.get('/ofertasUsuarioInfo',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
 		var aux=0;
-		var consulta="SELECT * FROM oferta_usuario JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
+		var consulta="SELECT * FROM oferta_usuario JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda JOIN producto ON Id_producto=id_producto_producto_tienda";
         if(Id_tienda != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_tienda != 'NULL'){
@@ -371,14 +371,14 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				var id = rows.insertId;
-				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados) VALUES ";
+				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuarios_ofertados, Eliminado_usuarios_ofertados) VALUES ";
 				for (var index = 0; index < Usuarios.length; index++) {
 					if (index==0) {
-						consulta2+= "("+Usuarios[index]+", "+id+")";	
+						consulta2+= "("+Usuarios[index]+", "+id+", '1', '0')";	
 					}else if(index==Usuarios.length-1){
-						consulta2+= ", ("+Usuarios[index]+", "+id+");";
+						consulta2+= ", ("+Usuarios[index]+", "+id+", '1', '0');";
 					}else{
-						consulta2+= ", ("+Usuarios[index]+", "+id+") ";
+						consulta2+= ", ("+Usuarios[index]+", "+id+", '1', '0') ";
 					}
 				}
 				console.log(consulta2);

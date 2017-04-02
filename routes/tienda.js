@@ -550,7 +550,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Twitter;
 			i++;
 		}
-		consulta+=",'0','0')";
+		consulta+=",'1','0')";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
@@ -788,7 +788,7 @@ router.post('/gransuperficie',comprobacionjwt,function(req,res){
 			"Tiendas":""
 		};
 		if (Nombre != 'NULL' && Imagen != 'NULL') {
-			var consulta = "INSERT INTO gran_superficie (Nombre_gran_superficie, Imagen_gran_superficie) VALUES ("+Nombre+","+Imagen+")";
+			var consulta = "INSERT INTO gran_superficie (Nombre_gran_superficie, Imagen_gran_superficie , Estado_gran_superficie, Eliminado_gran_superficie) VALUES ("+Nombre+","+Imagen+", '1', '0')";
 		}else{
 			return res.status(400).json({ error: "Debes pasarle el nombre y la imagen de la gran superficie" });
 		}

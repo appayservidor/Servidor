@@ -103,7 +103,7 @@ router.get('/products', function(request, response) {
                     //Esta linea abria que cambiar en caso de que la base de datos del cliente fuera de otra forma
                     var fecha = new Date().toLocaleString();
                     for(var i = 0; i<arg.length; i++){
-                            query2 = query2 + "INSERT INTO producto (Nombre, Codigo, Descripcion, Precio, Stock, Eliminado) VALUES ('"+arg[i].nombre+"', '"+arg[i].codigo+"', '"+arg[i].descripcion+"', '"+arg[i].precio+"', '"+arg[i].stock+"', "+arg[i].eliminado+");"
+                            query2 = query2 + "INSERT INTO producto (Nombre_producto, Codigo_producto, Descripcion_producto, Precio_producto, Stock_producto,Estado_producto, Eliminado_producto) VALUES ('"+arg[i].nombre+"', '"+arg[i].codigo+"', '"+arg[i].descripcion+"', '"+arg[i].precio+"', '"+arg[i].stock+"', '1','0');"
                         
                      }
                      console.log(query2);
@@ -118,10 +118,10 @@ router.get('/products', function(request, response) {
                                 var query3 = "";
                                 if(rows.length > 0){
                                     for(var i = 0; i < rows.length; i++){
-                                         query3+="INSERT INTO producto_tienda (Id_tienda, Id_producto) VALUES("+Id_tienda+","+rows[i].insertId+");";
+                                         query3+="INSERT INTO producto_tienda (Id_tienda_producto_tienda, Id_producto_producto_tienda, Estado_producto_tienda) VALUES("+Id_tienda+","+rows[i].insertId+", '1','0');";
                                     }
                                 }else{
-                                    query3+="INSERT INTO producto_tienda (Id_tienda, Id_producto) VALUES("+Id_tienda+","+rows.insertId+");";
+                                    query3+="INSERT INTO producto_tienda (Id_tienda_producto_tienda, Id_producto_producto_tienda, Estado_producto_tienda) VALUES("+Id_tienda+","+rows.insertId+", '1','0');";
                                 }
                                 //Añadimos la fecha de la ultima copia de la tienda
                                 query3 += "UPDATE tienda SET Ultima_copia_productos='"+fecha+"' WHERE Id_tienda="+request.query.id+"";
