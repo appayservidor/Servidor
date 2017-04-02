@@ -24,7 +24,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		var Registros = connection.escape(req.query.registros);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id y se muestran todos los detalles de la factura
 			var infoTienda = "SELECT * FROM factura JOIN factura_usuario ON Id_factura=Id_factura_factura_usuario JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_tienda_factura_usuario JOIN usuario ON Id_usuario= Id_usuario_usuario_tienda JOIN tienda ON Id_tienda = Id_tienda_factura WHERE Id_factura ="+id;
-			var consulta="SELECT * FROM linea_factura WHERE Id_factura_linea_factura="+id;
+			var consulta="SELECT * FROM linea_factura JOIN producto_tienda ON Id_producto_tienda = Id_producto_tienda_linea_factura JOIN producto ON Id_producto_producto_tienda=Id_producto WHERE Id_factura_linea_factura="+id;
 			var preconsulta = consulta+";";
 			console.log("preconsulta:");
 			console.log(preconsulta);
