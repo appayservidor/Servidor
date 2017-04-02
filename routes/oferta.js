@@ -68,7 +68,7 @@ router.get('/ofertasProducto',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
-				if(rows.length[1] != 0){
+				if(rows[1].length != 0){
 					console.log("Devuelvo las ofertas de producto");
 					data["Registros"]= rows[0].length;
 					data["Ofertas"] = rows[1];
@@ -156,7 +156,69 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
-				if(rows.length[1] != 0){
+				if(rows[1].length != 0){
+					console.log("Devuelvo las ofertas del usuario");
+					data["Registros"]= rows[0].length;
+					data["Ofertas"] = rows[1];
+					return res.status(200).json(data);
+				}else{
+					data["Ofertas"] = 'No hay Ofertas';
+					console.log("No hay Ofertas...");
+					return res.status(204).json(data);	
+				}
+			}
+		});
+    connection.release();
+	});
+});
+router.get('/ofertasUsuarioInfo',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+        if (err) throw err;
+		var data = {
+			"Ofertas":"",
+			"Registros":""
+		};
+		var Id_usuario = connection.escape(req.query.id_usuario); //Variable que recoje el id del usuario de la URI ofertas?idUsuario={num}
+		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
+		var Id_producto_tienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
+		var Id_oferta_usuario = connection.escape(req.query.id_oferta_usuario);
+		var Pagina = connection.escape(req.query.pagina);
+		var Registros = connection.escape(req.query.registros);
+		var aux=0;
+		var consulta="SELECT * FROM oferta_usuario JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
+        if(Id_tienda != 'NULL'){
+			consulta+= " WHERE ";
+			if(Id_tienda != 'NULL'){
+				if(aux==1){
+					consulta+=" AND ";
+					aux--;
+				}
+				consulta += "Id_tienda = "+Id_tienda;
+				aux++;
+			}
+		}
+		var preconsulta = consulta+";";
+		console.log("Preconsulta:");
+		console.log(preconsulta);
+		if(Pagina!='NULL'){
+			if (Registros != 'NULL') {
+				var nregis =parseInt(Registros.replace(/'/g, ""));
+			}else{
+				var nregis = 10;
+			}
+			var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT "+nregis+" OFFSET "+pags;
+		}
+		console.log("Consulta:");
+		console.log(consulta);
+		connection.query(preconsulta+consulta,function(err, rows, fields){
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Query OK");
+				if(rows[1].length != 0){
 					console.log("Devuelvo las ofertas del usuario");
 					data["Registros"]= rows[0].length;
 					data["Ofertas"] = rows[1];

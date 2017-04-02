@@ -270,7 +270,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length[1] != 0){
+				if(rows[1].length != 0){
 					console.log("Devuelvo las tiendas");
 					data["Registros"]=rows[0].length;
 					data["Tiendas"] = rows[1];
@@ -763,9 +763,9 @@ router.get('/gransuperficie',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length != 0)
-					data["Registros"]= rows.length;
-					data["GSuperficies"] = rows;
+				if(rows[1].length != 0){
+					data["Registros"]= rows[0].length;
+					data["GSuperficies"] = rows[1];
 					return res.status(200).json(data);
 				}else{
 					data["GSuperficies"] = 'No hay grandes superficies';

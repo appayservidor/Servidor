@@ -311,7 +311,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
-				if(rows.length[1] != 0){
+				if(rows[1].length != 0){
 					console.log("Devuelvo los usuario");
 					data["Registros"]=rows[0].length;
 					data["usuario"] = rows[1];
@@ -639,7 +639,7 @@ router.get('/tienda',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
-				if(rows.length[1] != 0){
+				if(rows[1].length != 0){
 					console.log("Devuelvo los usuario");
 					data["Registros"]=rows[0].length;
 					data["usuario"] = rows[1];
