@@ -161,7 +161,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length != 0){
+				if(rows.length[1] != 0){
 					console.log("Devuelvo los productos");
 					data["Registros"]=rows[0].length;
 					data["Productos"] = rows[1];

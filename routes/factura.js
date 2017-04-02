@@ -50,7 +50,7 @@ router.get('/',comprobacionjwt,function(req,res){
 					return res.status(400).json({ error: err });
 				}else{
 					console.log("Query OK");
-					if(rows.length != 0){
+					if(rows.length[2] != 0){
 						console.log("Devuelvo las facturas");
 						data["Registros"]=rows[0].length;
 						data["Factura"] = rows[2];
@@ -164,7 +164,7 @@ router.get('/',comprobacionjwt,function(req,res){
 					return res.status(400).json({ error: err });
 				}else{
 					console.log("Query OK");
-					if(rows.length != 0){
+					if(rows.length[1] != 0){
 						console.log("Devuelvo las facturas");
 						data["Registros"] = rows[0].length;
 						data["Facturas"] = rows[1];
@@ -317,7 +317,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length != 0){
+				if(rows.length[1] != 0){
 					data["Registros"] = rows[0].length;
 					data["Factura"] = rows[1];
 					return res.status(200).json(data);

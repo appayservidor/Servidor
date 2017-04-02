@@ -270,7 +270,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length != 0){
+				if(rows.length[1] != 0){
 					console.log("Devuelvo las tiendas");
 					data["Registros"]=rows[0].length;
 					data["Tiendas"] = rows[1];
@@ -749,7 +749,8 @@ router.get('/gransuperficie',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
  		var data = {
-			"GSuperficies":""
+			"GSuperficies":"",
+			"Registros":""
 		};
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
@@ -762,7 +763,8 @@ router.get('/gransuperficie',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length != 0){
+				if(rows.length != 0)
+					data["Registros"]= rows.length;
 					data["GSuperficies"] = rows;
 					return res.status(200).json(data);
 				}else{
