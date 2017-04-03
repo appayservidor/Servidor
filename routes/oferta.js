@@ -563,44 +563,59 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 			if (P_oferta != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "P_oferta_oferta_usuario="+P_oferta;
+				aux++;
+
 			}
 			if (Fechaini != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "Fecha_inicio_oferta_usuario="+Fechaini;
+				aux++;
 			}
 			if (Fechafin != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "Fecha_fin_oferta_usuario="+Fechafin;
+				aux++;
 			}
 			if (Id_producto != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "Id_producto_tienda_oferta_usuario="+Id_producto;
+				aux++;
 			}
 			if (Id_tienda != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "Id_tienda_oferta_usuario="+Id_tienda;
+				aux++;
 			}
 			if (Foto != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "Foto_oferta_usuario="+Foto;
+				aux++;
 			}
 			if (Descripcion != 'NULL') {
 				if (aux!=0) {
 					consulta += " , ";
+					aux--;
 				}
 				consulta += "Descripcion_oferta_usuario="+Descripcion;
+				aux++;
 			}
 			consulta += " WHERE id_oferta_usuario="+id+";";
 		}
