@@ -776,23 +776,44 @@ router.put('/',comprobacionjwt,function(req,res){
 });
 
 //Se añade un usuario a una tienda, cuando pase por el codigo QR
-router.post('/usuarioTienda',function(req,res){
+router.get('/entraTienda',function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;	
-		var Id_usuario = connection.escape(req.body.id_usuario);
-		var Id_tienda = connection.escape(req.body.id_tienda);
+		var Id_usuario = connection.escape(req.query.id_usuario);
+		var Id_tienda = connection.escape(req.query.id_tienda);
 		var data = {
 			"usuario":""
 		};
-		var consulta = "INSERT INTO usuario_tienda (Id_tienda_usuario_tienda, Id_usuario_usuario_tienda, Estado_usuario_tienda, Eliminado_usuario_tienda) VALUES("+Id_tienda+","+Id_usuario+", '1','0')";
-		connection.query(consulta,function(err, rows, fields){
+		var preconsulta = "SELECT * FROM tienda WHERE Id_Tienda="+Id_tienda+";SELECT * FROM usuario_tienda WHERE Id_usuario_usuario_tienda="+Id_usuario+" AND Id_tienda_usuario_tienda="+Id_tienda;
+		var consulta = "INSERT INTO usuario_tienda (Id_tienda_usuario_tienda, Id_usuario_usuario_tienda, Estado_usuario_tienda, Eliminado_usuario_tienda) VALUES("+Id_tienda+","+Id_usuario+", '1','0');";
+		console.log(preconsulta);
+		console.log(consulta);
+		connection.query(preconsulta,function(err, rows, fields){
 			if(err){
 				return res.status(400).json({ usuario: err });
 				console.log(err);
 			}else{
-				if(rows != 0){
-					data["usuario"] = "Usuario vinculado a la tienda";
-					return res.status(200).json(data);					
+				if(rows[0].length != 0){
+					data["usuario"] = "La tienda existe";
+					console.log("La tienda existe ")
+					if (rows[1].length == 0) {
+						connection.query(consulta+"UPDATE tienda SET Numero_usuarios_tienda = Numero_usuarios_tienda+1 WHERE Id_tienda="+Id_tienda+";",function(err, rows, fields){
+							if(err){
+								return res.status(400).json({ usuario: err });
+								console.log(err);
+							}else{
+								if(rows != 0){
+									data["usuario"] = "La tienda existe y añado al usuario a la tienda e incremento";
+									return res.status(200).json(data);					
+								}else{
+									data["usuario"] = "El usuario no existe o la tienda no existe";
+									return res.status(204).json(data);
+								}
+							}
+						});
+					}else{
+						return res.status(200).json(data);					
+					}
 				}else{
 					data["usuario"] = "El usuario no existe o la tienda no existe";
 					return res.status(204).json(data);
