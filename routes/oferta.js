@@ -371,7 +371,7 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				var id = rows.insertId;
-				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuarios_ofertados, Eliminado_usuarios_ofertados) VALUES ";
+				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuario_ofertados, Eliminado_usuario_ofertados) VALUES ";
 				for (var index = 0; index < Usuarios.length; index++) {
 					if (index==0) {
 						consulta2+= "('"+Usuarios[index]+"', '"+id+"', '1', '0')";	
