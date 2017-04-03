@@ -8,7 +8,8 @@ router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var data = {
-			"Productos":""
+			"Productos":"",
+			"Registros":""
 		};
 		var Id = connection.escape(req.query.id); //Variable que recoje el id de los productos de la URI productos?Id={num}
 		var Idtienda = connection.escape(req.query.idtienda); //Variable que recoje el id de los productos de la URI productos?Id={num}
@@ -23,6 +24,8 @@ router.get('/',comprobacionjwt,function(req,res){
 		var OrdeNombre = connection.escape(req.query.ordenombre); //Variable que indica sobre que parametro ordenar los usuario en la URI usuario?ordenombre={0 ó 1}
 		var OrdePrecio = connection.escape(req.query.ordeprecio);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprecio={0 ó 1}
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var Registros = connection.escape(req.query.registros); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+
 		var consulta="SELECT * FROM producto, tienda, producto_tienda WHERE Id_producto=Id_producto_producto_tienda AND Id_tienda=Id_tienda_producto_tienda";
 		if(Id != 'NULL' || Idtienda != 'NULL' || Codigo != 'NULL' || Nombre != 'NULL' || Preciomax != 'NULL' || Preciomin != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id tienda
 			var i=1;
@@ -138,25 +141,35 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 			}
 		}
+		var preconsulta=consulta+";";
+		console.log("preconsulta:");
+		console.log(preconsulta);
 		if(Pagina!='NULL'){
-			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
-			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
-			consulta += " LIMIT 10 OFFSET "+pags;
+			if (Registros != 'NULL') {
+				var nregis =parseInt(Registros.replace(/'/g, ""));
+			}else{
+				var nregis = 10;
+			}
+			var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT "+nregis+" OFFSET "+pags;
 		}
+		console.log("Consulta:");
 		console.log(consulta);
-		connection.query(consulta,function(err, rows, fields){
+		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				if(rows.length != 0){
+				if(rows[1].length != 0){
 					console.log("Devuelvo los productos");
-					data["Productos"] = rows;
+					data["Registros"]=rows[0].length;
+					data["Productos"] = rows[1];
 					return res.status(200).json(data);;	
 				}else{
 					console.log("no hay productos");
 					data["Productos"] = 'No hay productos';
-					return res.status(206).json(data);
+					return res.status(204).json(data);
 				}
 			}
 		});
@@ -265,6 +278,34 @@ router.put('/',comprobacionjwt,function(req,res){
 	connection.release();
 	});		
 });
+
+
+//Funcion que actuliza el estado de los productos
+router.put('/updateState',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		if (err) throw err;	
+		var usuario = req.body.usuario;
+		console.log("Entra en el put de updateState");
+	error=false;
+	for(var i=0;i<usuario.length;i++){
+			var consulta = "UPDATE producto SET Eliminado_producto = '"+usuario[i].Eliminado_producto+"' WHERE Id_producto="+usuario[i].Id_producto;
+			console.log(consulta);
+			connection.query(consulta,function(err, rows, fields){
+				if(err){
+					error=true;
+					//return res.status(400).json({ error: err });
+					i=usuario.length;
+				}
+			});	
+		}
+		connection.release();
+		if(error==false)
+			return res.status(200).json("Actualizado correctamente");
+		else
+			return res.status(400).json("Error en la peticion a la BD");	
+	});
+});
+
 
 
 

@@ -10,7 +10,10 @@ npm-debug.log
 # Docker
 Dockerfile
 docker-compose.yml
-helpers/database.js
 helpers/comprobacionjwt.js
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 helpers/database.js

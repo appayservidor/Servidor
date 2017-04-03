@@ -16,7 +16,8 @@ module.exports = function () {
         });
     }
     return db;
-};*/
+};
+*/
 var mysql = require('mysql');
 var db=null;
 
@@ -36,4 +37,3 @@ module.exports = function () {
     }
     return db;
 };
-

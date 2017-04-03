@@ -8,7 +8,8 @@ router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {
-			"Tiendas":""
+			"Tiendas":"",
+			"Registros":""
 		};
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
 		var Nombre = connection.escape(req.query.nombre);
@@ -37,6 +38,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		var OrdeProv = connection.escape(req.query.ordeprov); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprov={0 ó 1}
 		var OrdeLoc = connection.escape(req.query.ordeloc); //Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeloc={0 ó 1}
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var Registros = connection.escape(req.query.registros); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
         console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
 			var consulta="SELECT * FROM tienda WHERE Id_Tienda="+id;
@@ -248,18 +250,36 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 			}
 		}
+		var preconsulta=consulta+";";
+		console.log("preconsulta:");
+		console.log(preconsulta);
 		if(Pagina!='NULL'){
-			var pags=parseInt(Pagina.replace(/'/g, ""))*10;
-			console.log("Voy a mostrar solo las 10 siguientes filas empezando en la: "+pags);
-			consulta += " LIMIT 10 OFFSET "+pags;
-		}
-		console.log(consulta);
-		connection.query(consulta,function(err, rows, fields){
-			if(rows.length != 0){
-				data["Tiendas"] = rows;
-				res.status(200).json(data);
+			if (Registros != 'NULL') {
+				var nregis =parseInt(Registros.replace(/'/g, ""));
 			}else{
-				res.status(204).json("No hay tiendas");
+				var nregis = 10;
+			}
+			var pags=parseInt(Pagina.replace(/'/g, ""))*nregis;
+			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
+			consulta += " LIMIT "+nregis+" OFFSET "+pags;
+		}
+		console.log("Consulta:");
+		console.log(consulta);
+		connection.query(preconsulta+consulta,function(err, rows, fields){
+			if(err){
+				console.log(err);
+				return res.status(400).json({ error: err });
+			}else{
+				if(rows[1].length != 0){
+					console.log("Devuelvo las tiendas");
+					data["Registros"]=rows[0].length;
+					data["Tiendas"] = rows[1];
+					return res.status(200).json(data);;	
+				}else{
+					console.log("no hay tiendas");
+					data["Productos"] = 'No hay tiendas';
+					return res.status(204).json(data);
+				}
 			}
 		});
 	connection.release();
@@ -530,16 +550,15 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Twitter;
 			i++;
 		}
-		consulta+=",'0','0')";
+		consulta+=",'1','0')";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-				res.status(400).json({ error: err });
 				console.log(err);
+				return res.status(400).json({ error: err });
 			}else{
 				data["Tiendas"] = "Datos insertados correctamente!";
-				res.status(200);
+				return res.status(200).json(data);
 			}
-			res.json(data);
 		});
 	connection.release();
 	});
@@ -575,151 +594,150 @@ router.put('/',comprobacionjwt,function(req,res){
 		};
 		var consulta = "UPDATE tienda SET ";
 		var i = 0;
-			if(ID != 'NULL'){
-				if(Nombre != 'NULL'){
-					consulta  += "Nombre_tienda="+Nombre;
-					i++;
-				}
-				if(Direccion != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Direccion_tienda="+Direccion;
-					i++;
-				}
-				if(Provincia != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Provincia_tienda="+Provincia;
-					i++;
-				}
-				if(Localidad != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Localidad_tienda="+Localidad;
-					i++;
-				}
-				if(Comunidad != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Comunidad_tienda="+Comunidad;
-					i++;
-				}
-				if(Longitud != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Longitud_tienda="+Longitud;
-					i++;
-				}
-				if(Latitud != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Latitud_tienda="+Latitud;
-					i++;
-				}
-				if(ID_granSuperficie != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "id_gran_superficie_tienda="+ID_granSuperficie;
-					i++;
-				}
-				if(NIF != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "CIF_tienda="+NIF;
-					i++;
-				}
-				if(Estado != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Estado_tienda="+Estado;
-					i++;
-				}
-				if(Eliminado != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Eliminado_tienda="+Eliminado;
-					i++;
-				}
-				if(Foto != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Foto_tienda="+Foto;
-					i++;
-				}
-				if(Logo != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Logo_tienda="+Logo;
-					i++;
-				}
-				if(Descripcion != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Descripcion_tienda="+Descripcion;
-					i++;
-				}
-				if(Horario != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Horario_tienda="+Horario;
-					i++;
-				}
-				if(Facebook != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Facebook_tienda="+Facebook;
-					i++;
-				}
-				if(Twitter != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Twitter_tienda="+Twitter;
-					i++;
-				}
-				consulta = consulta + " WHERE Id_Tienda="+ID;
+		if(ID != 'NULL'){
+			if(Nombre != 'NULL'){
+				consulta  += "Nombre_tienda="+Nombre;
+				i++;
 			}
-			console.log(consulta);
+			if(Direccion != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Direccion_tienda="+Direccion;
+				i++;
+			}
+			if(Provincia != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Provincia_tienda="+Provincia;
+				i++;
+			}
+			if(Localidad != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Localidad_tienda="+Localidad;
+				i++;
+			}
+			if(Comunidad != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Comunidad_tienda="+Comunidad;
+				i++;
+			}
+			if(Longitud != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Longitud_tienda="+Longitud;
+				i++;
+			}
+			if(Latitud != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Latitud_tienda="+Latitud;
+				i++;
+			}
+			if(ID_granSuperficie != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "id_gran_superficie_tienda="+ID_granSuperficie;
+				i++;
+			}
+			if(NIF != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "CIF_tienda="+NIF;
+				i++;
+			}
+			if(Estado != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Estado_tienda="+Estado;
+				i++;
+			}
+			if(Eliminado != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Eliminado_tienda="+Eliminado;
+				i++;
+			}
+			if(Foto != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Foto_tienda="+Foto;
+				i++;
+			}
+			if(Logo != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Logo_tienda="+Logo;
+				i++;
+			}
+			if(Descripcion != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Descripcion_tienda="+Descripcion;
+				i++;
+			}
+			if(Horario != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Horario_tienda="+Horario;
+				i++;
+			}
+			if(Facebook != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Facebook_tienda="+Facebook;
+				i++;
+			}
+			if(Twitter != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
+				}
+				consulta  += "Twitter_tienda="+Twitter;
+				i++;
+			}
+			consulta = consulta + " WHERE Id_Tienda="+ID;
+		}
+		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 				if(err){
-					res.status(400).json({ error: err });
 					console.log(err);
+					return res.status(400).json({ error: err });
 				}else{
  					data["Tiendas"] = "Actualizado correctamente!";
-					res.status(200);
+					return res.status(200).json(data);
 				}
-				res.json(data);
 		});
 	connection.release();
 	});
@@ -731,29 +749,30 @@ router.get('/gransuperficie',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
  		var data = {
-			"Tiendas":""
+			"GSuperficies":"",
+			"Registros":""
 		};
-
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
-	
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
 			var consulta="SELECT * FROM gran_superficie WHERE Id_gran_superficie="+id;
 		}else{ //Si no muestra todos las grandes superficies
 			var consulta = "SELECT * FROM gran_superficie";
 		}
-		
 		connection.query(consulta,function(err, rows, fields){
-			if(rows.length != 0){
-				data["Tiendas"] = rows;
-				res.json(data);
-				res.status(200);
-				
+			if(err){
+				console.log(err);
+				return res.status(400).json({ error: err });
 			}else{
-				data["Tiendas"] = 'No hay grandes superficies';
-				res.json(data);
+				if(rows[1].length != 0){
+					data["Registros"]= rows[0].length;
+					data["GSuperficies"] = rows[1];
+					return res.status(200).json(data);
+				}else{
+					data["GSuperficies"] = 'No hay grandes superficies';
+					return res.status(204).json(data);
+				}
 			}
 		});   
-
 	connection.release();
 	});
 });
@@ -765,57 +784,23 @@ router.post('/gransuperficie',comprobacionjwt,function(req,res){
         if (err) throw err;
 		var Nombre = connection.escape(req.body.nombre);
 		var Imagen = connection.escape(req.body.imagen);
-		
 		var data = {
 			"Tiendas":""
 		};
-		if(Nombre && Imagen){
-			var consulta = "INSERT INTO gran_superficie (";
-				var i=0;
-				if(Nombre != 'NULL'){
-					consulta  += "Nombre_gran_superficie";
-					i++;
-				}
-				if(Imagen != 'NULL'){
-					if (i==1) {
-						consulta  += ", ";
-						i--;	
-					}
-					consulta  += "Imagen_gran_superficie";
-					i++;
-				}
-
-				consulta+=") VALUES (";
-				var i=0;
-				if(Nombre != 'NULL'){
-					consulta  += Nombre;
-					i++;
-				}
-				if(Imagen != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += Imagen;
-					i++;
-				}
-				consulta+=")";
-			
-			connection.query(consulta,function(err, rows, fields){
-				if(err){
-					res.status(400).json({ error: err });
-					console.log(err);
-				}else{
-					data["Tiendas"] = "Datos insertados correctamente!";
-					res.json(data);
-					res.status(200);
-				}
-			});
-
+		if (Nombre != 'NULL' && Imagen != 'NULL') {
+			var consulta = "INSERT INTO gran_superficie (Nombre_gran_superficie, Imagen_gran_superficie , Estado_gran_superficie, Eliminado_gran_superficie) VALUES ("+Nombre+","+Imagen+", '1', '0')";
 		}else{
-			data["Tiendas"] = "Porfavor introduce todos los campos";
-			res.json(data);
-		}        
+			return res.status(400).json({ error: "Debes pasarle el nombre y la imagen de la gran superficie" });
+		}
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				console.log(err);
+				return res.status(400).json({ error: err });
+			}else{
+				data["Tiendas"] = "Datos insertados correctamente!";
+				return res.status(200).json(data);
+			}
+		});
 	connection.release();
 	});
 });
@@ -830,37 +815,32 @@ router.put('/gransuperficie',comprobacionjwt,function(req,res){
 		var data = {
 			"Tiendas":""
 		};
-
 		var consulta = "UPDATE gran_superficie SET ";
-			if(ID != 'NULL'){
-				var i = 0;
-				if(Nombre != 'NULL'){
-					consulta  += "Nombre_gran_superficie="+Nombre;
-					i++;
-				}
-				if(Imagen != 'NULL'){
-					if (i==1) {
-						consulta  += " , ";
-						i--;	
-					}
-					consulta  += "Imagen_gran_superficie="+Imagen;
-					i++;
-				}
-				
-				consulta = consulta + " WHERE Id_gran_superficie="+ID;
+		if(ID != 'NULL'){
+			var i = 0;
+			if(Nombre != 'NULL'){
+				consulta  += "Nombre_gran_superficie="+Nombre;
+				i++;
 			}
-
-		connection.query(consulta,function(err, rows, fields){
-				if(err){
-					res.status(400).json({ error: err });
-					console.log(err);
-				}else{
-					data["Tiendas"] = "Actualizado correctamente!";
-					res.status(200);
+			if(Imagen != 'NULL'){
+				if (i==1) {
+					consulta  += " , ";
+					i--;	
 				}
-				res.json(data);
+				consulta  += "Imagen_gran_superficie="+Imagen;
+				i++;
+			}
+			consulta = consulta + " WHERE Id_gran_superficie="+ID;
+		}
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				console.log(err);
+				return res.status(400).json({ error: err });
+			}else{
+				data["Tiendas"] = "Actualizado correctamente!";
+				return res.status(200).json(data);
+			}
 		});        
-
 	connection.release();
 	});
 });
@@ -871,23 +851,28 @@ router.get('/coordenadas',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
 		var data = {
-			"Tiendas":""
+			"Coordenadas":""
 		};
 		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la URI tienda?id={num}
         console.log(id);
 		if(id != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT Latitud, Longitud FROM tienda WHERE Id_tienda="+id;
+			var consulta="SELECT Latitud_tienda, Longitud_tienda FROM tienda WHERE Id_tienda="+id;
 		}else{ //Si no muestra todas las tiendas
-			var consulta = "SELECT Latitud, Longitud FROM tienda";
+			var consulta = "SELECT Latitud_tienda, Longitud_tienda FROM tienda";
 		}
 		connection.query(consulta,function(err, rows, fields){
-			if(rows.length != 0){
-				data["Tiendas"] = rows;
-				res.status(200);	
+			if(err){
+				console.log(err);
+				return res.status(400).json({ error: err });
 			}else{
-				data["Tiendas"] = 'No hay tiendas';
+				if(rows.length != 0){
+					data["Coordenadas"] = rows;
+					return res.status(200).json(data);	
+				}else{
+					data["Coordenadas"] = 'No existe la tienda';
+					return res.status(204).json(data);	
+				}
 			}
-			res.json(data);	
 		});
 	connection.release();
 	});
