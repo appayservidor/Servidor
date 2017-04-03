@@ -546,12 +546,24 @@ router.post('/ofertaProducto',comprobacionjwt,function(req,res){
 router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;	
-		var usuario = req.body.usuario;
+		var altausuario = req.body.altausuario;
+		var bajausuario = req.body.bajausuario;
+		var id = req.body.id;
 		var consulta="";
-		for(var i=0;i<usuario.length;i++){
-			consulta += "UPDATE usuario_ofertados SET Eliminado_usuario_ofertados = '"+usuario[i].Eliminado_producto+"' WHERE Id_usuario_usuarios_ofertados="+usuario[i].Id_producto+";";
+		for(var i=0;i<bajausuario.length;i++){
+			consulta += "UPDATE usuario_ofertados SET Eliminado_usuario_ofertados = '1' WHERE Id_usuario_usuarios_ofertados="+bajausuario[i].Id_usuario_tienda+";";
 			console.log(consulta);				
 		}
+		var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuarios_ofertados, Eliminado_usuarios_ofertados) VALUES ";
+				for (var index = 0; index < altausuarios.length; index++) {
+					if (index==0) {
+						consulta2+= "("+altausuarios[index]+", "+id+", '1', '0')";	
+					}else if(index==Usuarios.length-1){
+						consulta2+= ", ("+altausuarios[index]+", "+id+", '1', '0');";
+					}else{
+						consulta2+= ", ("+altausuarios[index]+", "+id+", '1', '0') ";
+					}
+				}
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				if(error==false)
