@@ -26,10 +26,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		var Registros = connection.escape(req.query.registros); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		var Id_usuario = connection.escape(req.query.id_usuario); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
-		var Oferta = connection.escape(req.query.oferta); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
-		var consulta="SELECT * FROM producto JOIN producto_tienda ON Id_producto=Id_producto_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_producto_tienda";
-		if(Oferta != 'NULL')
-			consulta+= " LEFT JOIN oferta_producto ON Id_producto_tienda_oferta_producto=Id_producto_tienda ";
+		var consulta="SELECT * FROM producto JOIN producto_tienda ON Id_producto=Id_producto_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_producto_tienda LEFT JOIN oferta_producto ON Id_producto_tienda_oferta_producto=Id_producto_tienda ";
 		if (Id_usuario != 'NULL') {
 			consulta+= " LEFT JOIN oferta_usuario ON Id_producto_tienda_oferta_producto=Id_producto_tienda JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda";
 		}
