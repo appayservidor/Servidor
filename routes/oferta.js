@@ -542,4 +542,26 @@ router.post('/ofertaProducto',comprobacionjwt,function(req,res){
 	});
 });
 
+//Funcion que actuliza el estado de los productos
+router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		if (err) throw err;	
+		var usuario = req.body.usuario;
+		var consulta="";
+		for(var i=0;i<usuario.length;i++){
+			consulta += "UPDATE usuario_ofertados SET Eliminado_usuario_ofertados = '"+usuario[i].Eliminado_producto+"' WHERE Id_usuario_usuarios_ofertados="+usuario[i].Id_producto+";";
+			console.log(consulta);				
+		}
+		connection.query(consulta,function(err, rows, fields){
+			if(err){
+				if(error==false)
+					return res.status(200).json("Actualizado correctamente");
+				else
+					return res.status(400).json("Error en la peticion a la BD");
+			}
+		});	
+		connection.release();
+			
+	});
+});
 module.exports = router;

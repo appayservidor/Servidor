@@ -31,7 +31,7 @@ router.get('/',comprobacionjwt,function(req,res){
 			consulta+= "JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda";
 		}
 		if(Id != 'NULL' || Idtienda != 'NULL' || Id_usuario != 'NULL' || Codigo != 'NULL' || Nombre != 'NULL' || Preciomax != 'NULL' || Preciomin != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id tienda
-			var i=1;
+			var i=0;
 			consulta+= " WHERE ";
 			if(Nombre != 'NULL'){
 				console.log("Nombre:"+Nombre);
