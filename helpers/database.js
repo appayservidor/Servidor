@@ -26,7 +26,7 @@ module.exports = function () {
                  host     : 'localhost',
                  user     : 'root',
                  password : 'root',
-                 database : 'appay_heroku',
+                 database : 'appay_app',
                  port: '3306',
 		         socketPath: '/Applications/MAMP/tmp/mysql/mysql.sock',
                  connectionLimit: 10,
