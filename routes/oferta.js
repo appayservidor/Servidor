@@ -374,11 +374,11 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuarios_ofertados, Eliminado_usuarios_ofertados) VALUES ";
 				for (var index = 0; index < Usuarios.length; index++) {
 					if (index==0) {
-						consulta2+= "("+Usuarios[index]+", "+id+", '1', '0')";	
+						consulta2+= "('"+Usuarios[index]+"', '"+id+"', '1', '0')";	
 					}else if(index==Usuarios.length-1){
-						consulta2+= ", ("+Usuarios[index]+", "+id+", '1', '0');";
+						consulta2+= ", ('"+Usuarios[index]+"', '"+id+"', '1', '0');";
 					}else{
-						consulta2+= ", ("+Usuarios[index]+", "+id+", '1', '0') ";
+						consulta2+= ", ('"+Usuarios[index]+"', '"+id+"', '1', '0') ";
 					}
 				}
 				console.log(consulta2);
