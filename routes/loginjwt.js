@@ -46,7 +46,7 @@ router.post("/admin", function(req,res,next){
         console.log("username es "+username);
         console.log("password es "+password);
         //llamamos a la base de datos para ver si el usuario es correcto o no 
-        var consulta="SELECT * FROM usuario JOIN tienda ON Id_tienda_usuario_admin_tienda=Id_tienda JOIN usuario_admin_tienda ON Id_usuario_usuario_admin_tienda=Id_usuario WHERE Email_usuario="+username+" AND Contra_usuario=md5("+password+") AND Rol_usuario='1'";//Esto tienes que controlarlo con el md5
+        var consulta="SELECT * FROM usuario JOIN usuario_admin_tienda ON Id_usuario_usuario_admin_tienda=Id_usuario JOIN tienda ON Id_tienda_usuario_admin_tienda=Id_tienda  WHERE Email_usuario="+username+" AND Contra_usuario=md5("+password+") AND Rol_usuario='1'";//Esto tienes que controlarlo con el md5
         console.log(consulta);
         connection.query(consulta, function(err, rows, fields) {
             if(err){

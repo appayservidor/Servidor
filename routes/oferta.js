@@ -371,14 +371,14 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				var id = rows.insertId;
-				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuarios_ofertados, Eliminado_usuarios_ofertados) VALUES ";
+				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuario_ofertados, Eliminado_usuario_ofertados) VALUES ";
 				for (var index = 0; index < Usuarios.length; index++) {
 					if (index==0) {
-						consulta2+= "("+Usuarios[index]+", "+id+", '1', '0')";	
+						consulta2+= "('"+Usuarios[index]+"', '"+id+"', '1', '0')";	
 					}else if(index==Usuarios.length-1){
-						consulta2+= ", ("+Usuarios[index]+", "+id+", '1', '0');";
+						consulta2+= ", ('"+Usuarios[index]+"', '"+id+"', '1', '0');";
 					}else{
-						consulta2+= ", ("+Usuarios[index]+", "+id+", '1', '0') ";
+						consulta2+= ", ('"+Usuarios[index]+"', '"+id+"', '1', '0') ";
 					}
 				}
 				console.log(consulta2);
@@ -542,4 +542,109 @@ router.post('/ofertaProducto',comprobacionjwt,function(req,res){
 	});
 });
 
+//Funcion que actuliza el estado de los productos
+router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		if (err) throw err;	
+		var altausuario = req.body.altausuario;
+		var bajausuario = req.body.bajausuario;
+		var P_oferta = connection.escape(req.body.p_oferta);
+		var Fechaini = connection.escape(req.body.fechaini);
+		var Fechafin = connection.escape(req.body.fechafin);
+		var Id_producto = connection.escape(req.body.id_producto);
+		var Id_tienda = connection.escape(req.body.id_tienda);
+		var Foto = connection.escape(req.body.foto);
+		var Descripcion = connection.escape(req.body.descripcion);
+		var id = connection.escape(req.body.id);
+		var consulta="";
+		if (P_oferta != 'NULL' || Fechaini != 'NULL' || Fechafin != 'NULL' || Id_producto != 'NULL' || Id_tienda != 'NULL' || Foto != 'NULL' || Descripcion != 'NULL') {
+			consulta += "UPDATE oferta_usuario SET ";
+			var aux=0;
+			if (P_oferta != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "P_oferta_oferta_usuario="+P_oferta;
+				aux++;
+
+			}
+			if (Fechaini != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Fecha_inicio_oferta_usuario="+Fechaini;
+				aux++;
+			}
+			if (Fechafin != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Fecha_fin_oferta_usuario="+Fechafin;
+				aux++;
+			}
+			if (Id_producto != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Id_producto_tienda_oferta_usuario="+Id_producto;
+				aux++;
+			}
+			if (Id_tienda != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Id_tienda_oferta_usuario="+Id_tienda;
+				aux++;
+			}
+			if (Foto != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Foto_oferta_usuario="+Foto;
+				aux++;
+			}
+			if (Descripcion != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Descripcion_oferta_usuario="+Descripcion;
+				aux++;
+			}
+			consulta += " WHERE id_oferta_usuario="+id+";";
+		}
+		for(var i=0;i<bajausuario.length;i++){
+			consulta += "UPDATE usuario_ofertados SET Eliminado_usuario_ofertados = '1' WHERE Id_usuario_usuarios_ofertados="+bajausuario[i].Id_usuario_tienda+";";
+			console.log(consulta);				
+		}
+		var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuarios_ofertados, Eliminado_usuarios_ofertados) VALUES ";
+		for (var index = 0; index < altausuarios.length; index++) {
+			if (index==0) {
+				consulta2+= "('"+altausuarios[index]+"', "+id+", '1', '0')";	
+			}else if(index==Usuarios.length-1){
+				consulta2+= ", ('"+altausuarios[index]+"', "+id+", '1', '0');";
+			}else{
+				consulta2+= ", ('"+altausuarios[index]+"', "+id+", '1', '0') ";
+			}
+		}
+		connection.query(consulta+consulta2,function(err, rows, fields){
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Oferta actualizada correctamente");
+				data["Ofertas"] = "Ofertas actualizadas correctamente";
+				return res.status(200).json(data);  
+			}
+		});	
+		connection.release();
+			
+	});
+});
 module.exports = router;

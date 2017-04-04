@@ -25,10 +25,14 @@ router.get('/',comprobacionjwt,function(req,res){
 		var OrdePrecio = connection.escape(req.query.ordeprecio);//Variable que indica sobre que parametro ordenar las facturas en la URI usuario?ordeprecio={0 ó 1}
 		var Pagina = connection.escape(req.query.pagina); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
 		var Registros = connection.escape(req.query.registros); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
-
-		var consulta="SELECT * FROM producto, tienda, producto_tienda WHERE Id_producto=Id_producto_producto_tienda AND Id_tienda=Id_tienda_producto_tienda";
-		if(Id != 'NULL' || Idtienda != 'NULL' || Codigo != 'NULL' || Nombre != 'NULL' || Preciomax != 'NULL' || Preciomin != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id tienda
-			var i=1;
+		var Id_usuario = connection.escape(req.query.id_usuario); //Variable que indica que pagina de facturas estamos que se mostraran de 10 en 10
+		var consulta="SELECT * FROM producto JOIN producto_tienda ON Id_producto=Id_producto_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_producto_tienda LEFT JOIN oferta_producto ON Id_producto_tienda_oferta_producto=Id_producto_tienda ";
+		if (Id_usuario != 'NULL') {
+			consulta+= " LEFT JOIN oferta_usuario ON Id_producto_tienda_oferta_producto=Id_producto_tienda JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda";
+		}
+		if(Id != 'NULL' || Idtienda != 'NULL' || Id_usuario != 'NULL' || Codigo != 'NULL' || Nombre != 'NULL' || Preciomax != 'NULL' || Preciomin != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL'){ //Si en la URI existe se crea la consulta de busqueda por id tienda
+			var i=0;
+			consulta+= " WHERE ";
 			if(Nombre != 'NULL'){
 				console.log("Nombre:"+Nombre);
 				if (i==1) {
@@ -45,6 +49,15 @@ router.get('/',comprobacionjwt,function(req,res){
 					i--;	
 				}
 				consulta  += "Id_producto="+Id;
+				i++;
+			}
+			if(Id_usuario != 'NULL'){
+				console.log("Id_usuario:"+Id_usuario);
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Id_usuario="+ Id_usuario;
 				i++;
 			}
 			if(Codigo != 'NULL'){

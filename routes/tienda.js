@@ -652,7 +652,7 @@ router.put('/',comprobacionjwt,function(req,res){
 					consulta  += " , ";
 					i--;	
 				}
-				consulta  += "id_gran_superficie_tienda="+ID_granSuperficie;
+				consulta  += "Id_gran_superficie_tienda="+ID_granSuperficie;
 				i++;
 			}
 			if(NIF != 'NULL'){
