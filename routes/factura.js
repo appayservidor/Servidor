@@ -404,7 +404,7 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Pagada;
 			i++;
 		}
-		consulta+=",'1','0');UPDATE tienda SET Numero_facturas_tienda=Numero_facturas_tienda+1, Total_ventas_tienda=Total_ventas_tienda+"+Total_factura+" WHERE Id_tienda="+Id_tienda+";";
+		consulta+=",'1','0');UPDATE tienda SET Numero_facturas_tienda=Numero_facturas_tienda+1, Numero_facturas_hora_tienda=Numero_facturas_hora_tienda+1, Numero_facturas_dia_tienda=Numero_facturas_dia_tienda+1, Numero_facturas_semana_tienda=Numero_facturas_semana_tienda+1, Numero_facturas_mes_tienda=Numero_facturas_mes_tienda+1, Total_ventas_tienda=Total_ventas_tienda+"+Total_factura+", Total_ventas_hora_tienda=Total_ventas_hora_tienda+"+Total_factura+", Total_ventas_dia_tienda=Total_ventas_dia_tienda+"+Total_factura+", Total_ventas_semana_tienda=Total_ventas_semana_tienda+"+Total_factura+", Total_ventas_mes_tienda=Total_ventas_mes_tienda+"+Total_factura+", WHERE Id_tienda="+Id_tienda+";";
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){

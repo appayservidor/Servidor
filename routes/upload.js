@@ -9,6 +9,7 @@ router.get('/',function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
         var aux = req.query.aux;
+        console.log(aux);
         switch (aux) {
             case 1:
                 var consulta="UPDATE tienda SET Numero_usuarios_hora_tienda = 0;UPDATE tienda SET Total_ventas_hora_tienda = 0;UPDATE tienda SET Numero_facturas_hora_tienda = 0;UPDATE tienda SET Numero_usuarios_compran_hora_tienda = 0;";		
