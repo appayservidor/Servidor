@@ -14,13 +14,13 @@ router.get('/',function(req,res){
             case '1':
                 var consulta="UPDATE tienda SET Numero_usuarios_hora_tienda = 0;UPDATE tienda SET Total_ventas_hora_tienda = 0;UPDATE tienda SET Numero_facturas_hora_tienda = 0;UPDATE tienda SET Numero_usuarios_compran_hora_tienda = 0;";		
                 break;
-            case 2:
+            case '2':
                 var consulta="UPDATE tienda SET Numero_usuarios_dia_tienda = 0;UPDATE tienda SET Total_ventas_dia_tienda = 0;UPDATE tienda SET Numero_facturas_dia_tienda = 0;UPDATE tienda SET Numero_usuarios_compran_dia_tienda = 0;";	
                 break;
-            case 3:
+            case '3':
                 var consulta="UPDATE tienda SET Numero_usuarios_semana_tienda = 0;UPDATE tienda SET Total_ventas_semana_tienda = 0;UPDATE tienda SET Numero_facturas_semana_tienda = 0;UPDATE tienda SET Numero_usuarios_compran_semana_tienda = 0;";	
                 break;
-            case 4:
+            case '4':
                 var consulta="UPDATE tienda SET Numero_usuarios_mes_tienda = 0;UPDATE tienda SET Total_ventas_mes_tienda = 0;UPDATE tienda SET Numero_facturas_mes_tienda = 0;UPDATE tienda SET Numero_usuarios_compran_mes_tienda = 0;";	
                 break;
         }
