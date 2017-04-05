@@ -11,7 +11,7 @@ router.get('/',function(req,res){
 		var consulta="UPDATE tienda SET Numero_usuarios_dia_tienda = 0";		
 		console.log("Consulta:");
 		console.log(consulta);
-		connection.query(preconsulta+consulta,function(err, rows, fields){
+		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
 				return res.status(400).json({ error: err });
