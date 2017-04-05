@@ -26,6 +26,7 @@ var estadisticas=require('./routes/Estadisticas');
 var apiBackup=require('./routes/apiBackup');
 var controlventas=require('./routes/controlventas');
 var contacto=require('./routes/contacto');
+var upload=require('./routes/upload');
 
 //CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
 var whitelist = [
@@ -37,6 +38,7 @@ var whitelist = [
     'https://appay.es',
     'https://appay-aefd5.firebaseapp.com',
     'https://admin.appay.es',
+    'https://cron-job.org',
 ]; 
 var corsOptions = {
     origin: function(origin, callback){
@@ -74,6 +76,7 @@ app.use('/confirmaremail',confirmaremail);
 app.use('/store',apiBackup);
 app.use('/controlventas',controlventas);
 app.use('/contacto',contacto);
+app.use('/upload',upload);
 //Esto es para enviar
 app.get('/', function(req, res) {
     res.send("APPAY SERVIDOR FUNCIONANDO1");
