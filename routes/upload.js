@@ -18,8 +18,8 @@ router.get('/',function(req,res){
 			}else{
 				console.log("Query OK");
 				if(rows.length != 0){
-					data["Ofertas"] = "Ok";
-					return res.status(200).json(data);
+                    console.log("Acgtualizo las estadisticas");
+					return res.status(200).json("Ok");
 				}else{
 					console.log("No hay Ofertas...");
 					return res.status(204).json("No hace nada");	
