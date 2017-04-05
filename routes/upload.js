@@ -11,7 +11,7 @@ router.get('/',function(req,res){
         var aux = req.query.aux;
         console.log(aux);
         switch (aux) {
-            case 1:
+            case '1':
                 var consulta="UPDATE tienda SET Numero_usuarios_hora_tienda = 0;UPDATE tienda SET Total_ventas_hora_tienda = 0;UPDATE tienda SET Numero_facturas_hora_tienda = 0;UPDATE tienda SET Numero_usuarios_compran_hora_tienda = 0;";		
                 break;
             case 2:
