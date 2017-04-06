@@ -798,7 +798,7 @@ router.get('/entraTienda',function(req,res){
 					data["Tiendas"] = rows[0];
 					console.log("La tienda existe ")
 					if (rows[1].length == 0) {
-						connection.query(consulta+"UPDATE tienda SET Numero_usuarios_tienda = Numero_usuarios_tienda+1 WHERE Id_tienda="+Id_tienda+";",function(err, rows, fields){
+						connection.query(consulta+"UPDATE tienda SET Numero_usuarios_tienda = Numero_usuarios_tienda+1, Numero_usuarios_hora_tienda = Numero_usuarios_hora_tienda+1, Numero_usuarios_dia_tienda = Numero_usuarios_dia_tienda+1, Numero_usuarios_semana_tienda = Numero_usuarios_semana_tienda+1, Numero_usuarios_mes_tienda = Numero_usuarios_mes_tienda+1  WHERE Id_tienda="+Id_tienda+";",function(err, rows, fields){
 							if(err){
 								return res.status(400).json({ usuario: err });
 								console.log(err);

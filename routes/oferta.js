@@ -15,11 +15,15 @@ router.get('/ofertasProducto',comprobacionjwt,function(req,res){
 		};
 		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
 		var Id_producto_tienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
-		var Id_oferta_producto = connection.escape(req.query.id_oferta_usuario);
+		var Id_oferta_producto = connection.escape(req.query.id_oferta_producto);
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
 		var aux=0;
+<<<<<<< HEAD
 		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_oferta_usuario";
+=======
+		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_oferta_producto";
+>>>>>>> master
         if(Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_producto != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_tienda != 'NULL'){
@@ -99,7 +103,7 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
 		var aux=0;
-		var consulta="SELECT * FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
+		var consulta="SELECT * FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN producto ON Id_producto_tienda=Id_producto JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
         if(Id_usuario != 'NULL' || Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_usuario != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_usuario != 'NULL'){
@@ -617,7 +621,7 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 				consulta += "Descripcion_oferta_usuario="+Descripcion;
 				aux++;
 			}
-			consulta += " WHERE id_oferta_usuario="+id+";";
+			consulta += " WHERE Id_oferta_usuario="+id+";";
 		}
 		for(var i=0;i<bajausuario.length;i++){
 			consulta += "UPDATE usuario_ofertados SET Eliminado_usuario_ofertados = '1' WHERE Id_usuario_usuarios_ofertados="+bajausuario[i].Id_usuario_tienda+";";
@@ -632,6 +636,123 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 			}else{
 				consulta2+= ", ('"+altausuarios[index]+"', "+id+", '1', '0') ";
 			}
+		}
+		connection.query(consulta+consulta2,function(err, rows, fields){
+			if(err){
+				console.log("Error en la query...");
+				return res.status(400).json({ error: err });
+			}else{
+				console.log("Oferta actualizada correctamente");
+				data["Ofertas"] = "Ofertas actualizadas correctamente";
+				return res.status(200).json(data);  
+			}
+		});	
+		connection.release();
+			
+	});
+});
+//Funcion que actuliza el estado de los productos
+router.put('/ofertaProducto',comprobacionjwt,function(req,res){
+	db.getConnection(function(err, connection) {
+		if (err) throw err;	
+		var altausuario = req.body.altausuario;
+		var bajausuario = req.body.bajausuario;
+		var P_oferta = connection.escape(req.body.p_oferta);
+		var Fechaini = connection.escape(req.body.fechaini);
+		var Fechafin = connection.escape(req.body.fechafin);
+		var Id_producto = connection.escape(req.body.id_producto);
+		var Id_tienda = connection.escape(req.body.id_tienda);
+		var Foto = connection.escape(req.body.foto);
+		var Descripcion = connection.escape(req.body.descripcion);
+		var Estado = connection.escape(req.body.estado);
+		var Eliminado = connection.escape(req.body.eliminado);
+		var id = connection.escape(req.body.id);
+		var consulta="";
+		if (P_oferta != 'NULL' || Fechaini != 'NULL' || Fechafin != 'NULL' || Id_producto != 'NULL' || Id_tienda != 'NULL' || Foto != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || NumeroUsos != 'NULL') {
+			consulta += "UPDATE oferta_producto SET ";
+			var aux=0;
+			if (P_oferta != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "P_oferta_oferta_producto="+P_oferta;
+				aux++;
+
+			}
+			if (Fechaini != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Fecha_inicio_oferta_producto="+Fechaini;
+				aux++;
+			}
+			if (Fechafin != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Fecha_fin_oferta_producto="+Fechafin;
+				aux++;
+			}
+			if (Id_producto != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Id_producto_tienda_oferta_producto="+Id_producto;
+				aux++;
+			}
+			if (Id_tienda != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Id_tienda_oferta_producto="+Id_tienda;
+				aux++;
+			}
+			if (Foto != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Foto_oferta_producto="+Foto;
+				aux++;
+			}
+			if (Descripcion != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Descripcion_oferta_producto="+Descripcion;
+				aux++;
+			}
+			if (NumeroUsos != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Limite_uso_oferta_producto="+NumeroUsos;
+				aux++;
+			}
+			if (Estado != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Estado_oferta_producto="+Estado;
+				aux++;
+			}
+			if (Eliminado != 'NULL') {
+				if (aux!=0) {
+					consulta += " , ";
+					aux--;
+				}
+				consulta += "Eliminado_oferta_producto="+Eliminado;
+				aux++;
+			}
+			consulta += " WHERE Id_oferta_producto="+id+";";
 		}
 		connection.query(consulta+consulta2,function(err, rows, fields){
 			if(err){

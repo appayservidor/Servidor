@@ -584,6 +584,7 @@ router.put('/',comprobacionjwt,function(req,res){
 		var Copia = connection.escape(req.body.copia);
 		var Eliminado = connection.escape(req.body.eliminado);
 		var Foto = connection.escape(req.body.foto);
+		var Logo = connection.escape(req.body.logo);
 		var Telefono = connection.escape(req.body.telefono);
 		var Descripcion = connection.escape(req.body.descripcion);
 		var Horario = connection.escape(req.body.horario);
@@ -647,20 +648,20 @@ router.put('/',comprobacionjwt,function(req,res){
 				consulta  += "Latitud_tienda="+Latitud;
 				i++;
 			}
-			if(ID_granSuperficie != 'NULL'){
+			if(Id_Gran_Superficie != 'NULL'){
 				if (i==1) {
 					consulta  += " , ";
 					i--;	
 				}
-				consulta  += "Id_gran_superficie_tienda="+ID_granSuperficie;
+				consulta  += "Id_gran_superficie_tienda="+Id_Gran_Superficie;
 				i++;
 			}
-			if(NIF != 'NULL'){
+			if(CIF != 'NULL'){
 				if (i==1) {
 					consulta  += " , ";
 					i--;	
 				}
-				consulta  += "CIF_tienda="+NIF;
+				consulta  += "CIF_tienda="+CIF;
 				i++;
 			}
 			if(Estado != 'NULL'){

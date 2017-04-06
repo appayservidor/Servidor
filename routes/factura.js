@@ -64,7 +64,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 			});
 		}else{ //Si no muestra todas las facturas
-			var consulta = "SELECT * FROM factura";
+			var consulta = "SELECT * FROM factura JOIN factura_usuario ON Id_factura=Id_factura_factura_usuario JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_tienda_factura_usuario JOIN usuario ON Id_usuario= Id_usuario_usuario_tienda JOIN tienda ON Id_tienda = Id_tienda_factura";
 			var i=0;
 			if(MinTotal != 'NULL' || MaxTotal != 'NULL' || FechaIni != 'NULL' ||FechaFin != 'NULL' || Id_tienda != 'NULL'){
 				consulta += " WHERE ";
@@ -346,7 +346,7 @@ router.post('/',comprobacionjwt,function(req,res){
 		var consulta = "INSERT INTO factura (";
 		var i=0;
 		if(Id_tienda != 'NULL'){
-			consulta  += "Id_tienda";
+			consulta  += "Id_tienda_factura";
 			i++;
 		}
 		if(Fecha_factura != 'NULL'){
@@ -404,7 +404,8 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Pagada;
 			i++;
 		}
-		consulta+=",'1','0')";
+		consulta+=",'1','0');UPDATE tienda SET Numero_facturas_tienda=Numero_facturas_tienda+1, Numero_facturas_hora_tienda=Numero_facturas_hora_tienda+1, Numero_facturas_dia_tienda=Numero_facturas_dia_tienda+1, Numero_facturas_semana_tienda=Numero_facturas_semana_tienda+1, Numero_facturas_mes_tienda=Numero_facturas_mes_tienda+1, Total_ventas_tienda=Total_ventas_tienda+"+Total_factura+", Total_ventas_hora_tienda=Total_ventas_hora_tienda+"+Total_factura+", Total_ventas_dia_tienda=Total_ventas_dia_tienda+"+Total_factura+", Total_ventas_semana_tienda=Total_ventas_semana_tienda+"+Total_factura+", Total_ventas_mes_tienda=Total_ventas_mes_tienda+"+Total_factura+", WHERE Id_tienda="+Id_tienda+";";
+		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
@@ -676,7 +677,7 @@ router.put('/lineafactura',comprobacionjwt,function(req,res){
 						}else{
 							data["Facturas"] = "Datos actualizados correctamente!";
 							return res.status(200).json(data);
-						}
+					}
 				});   		
     connection.release();
 	});
