@@ -15,12 +15,12 @@ router.get('/ofertasProducto',comprobacionjwt,function(req,res){
 		};
 		var Id_tienda = connection.escape(req.query.id_tienda); //Variable que recoje el id de la tienda de la URI ofertas?idTienda={num}
 		var Id_producto_tienda = connection.escape(req.query.idProductoTienda); //Variable que recoje el id del producto de la URI ofertas?idProductoTienda={num}
-		var Id_oferta_producto = connection.escape(req.query.id_oferta_usuario);
+		var Id_oferta_producto = connection.escape(req.query.id_oferta_producto);
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
 		var aux=0;
-		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_oferta_usuario";
-        if(Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_usuario != 'NULL'){
+		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_oferta_producto";
+        if(Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_producto != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_tienda != 'NULL'){
 				if(aux==1){
