@@ -99,7 +99,7 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
 		var aux=0;
-		var consulta="SELECT * FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
+		var consulta="SELECT * FROM oferta_usuario JOIN usuario_ofertados ON Id_oferta_usuario=Id_oferta_usuario_usuarios_ofertados JOIN usuario_tienda ON Id_usuario_tienda=Id_usuario_usuarios_ofertados JOIN usuario ON Id_usuario=Id_usuario_usuario_tienda JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN producto ON Id_producto_tienda=Id_producto JOIN tienda ON Id_tienda = Id_tienda_producto_tienda";
         if(Id_usuario != 'NULL' || Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_usuario != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_usuario != 'NULL'){

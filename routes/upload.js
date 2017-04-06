@@ -4,7 +4,6 @@ var db = require('../helpers/database')();
 
 
 
-//DEVUELVE OFERTAS DE Producto
 router.get('/',function(req,res){
 	db.getConnection(function(err, connection) {
         if (err) throw err;
