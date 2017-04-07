@@ -19,7 +19,7 @@ router.get('/ofertasProducto',comprobacionjwt,function(req,res){
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
 		var aux=0;
-		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN tienda ON Id_tienda=Id_tienda_oferta_producto";
+		var consulta="SELECT * FROM oferta_producto JOIN producto_tienda ON Id_producto_tienda_oferta_producto = Id_producto_tienda JOIN producto ON Id_producto_tienda = Id_producto JOIN tienda ON Id_tienda=Id_tienda_oferta_producto";
         if(Id_tienda != 'NULL' || Id_producto_tienda != 'NULL' || Id_oferta_producto != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_tienda != 'NULL'){
