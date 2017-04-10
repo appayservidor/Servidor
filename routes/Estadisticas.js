@@ -21,8 +21,7 @@ router.get('/usuarioFacturaTienda',comprobacionjwt,function(req,res){
 			}else{
 				if(rows.length != 0){
 					data["usuarioQueCompran"] = rows;
-					return res.status(200).json(data);
-					
+					return res.status(200).json(data);			
 				}else{
 					data["usuarioQueCompran"] = 'No hay usuario';
 					return res.status(204).json(data);
