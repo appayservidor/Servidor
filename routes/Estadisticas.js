@@ -2,59 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
-//Esta funcion devuelve el numero de usuario por tienda o totales
-
-
-
-/* //NO BORRO ESTA MIERDA POR SI PABLO SE PICA, PABLO COMEME LOS 00
-router.get('/usuarioTienda',comprobacionjwt,function(req,res){
-	db.getConnection(function(err, connection) {
-		var data = {
-			"usuarioTotales":""
-		};
-		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la que quieres saber los usuario de la URI estadisticas?id={num}
-		if(id != "NULL"){ //Si en la URI existe se crea la consulta de busqueda por id
-			var consulta="SELECT COUNT(*) usuario FROM usuario_tienda WHERE Id_tienda_usuario_tienda="+id;
-		}else{ //Si no muestra todos los municipios
-			var consulta = "SELECT COUNT(*) usuario FROM usuario_tienda";
-		}
-		connection.query(consulta,function(err, rows, fields){
-			if(error){
-				console.log(error);
-				res.status(400).json(error);
-			}else{
-				if(rows.length != 0){
-					data["usuarioTotales"] = rows;
-					return res.status(200).json(data);
-					
-				}else{
-					data["usuarioTotales"] = 'No hay usuario';
-					return res.status(204).json(data);
-				}
-			}	
-		});
-    connection.release();
-	});
-});
-*/
-router.get('/usuarioTienda',comprobacionjwt,function(req,res){
-	db.getConnection(function(err, connection) {
-		var id = connection.escape(req.query.id); //Variable que recoje el id de la tienda de la que quieres saber los usuario de la URI estadisticas?id={num}
-		var consulta="SELECT COUNT(*) usuario FROM usuario_tienda WHERE Id_tienda_usuario_tienda="+id;
-		console.log(consulta);
-		connection.query(consulta,function(err, rows, fields){
-			if(err){
-				console.log(err);
-				res.status(400).json(err);
-			}else{
-				console.log(rows);
-				return res.status(200).json(rows);
-			}	
-		});
-    connection.release();
-	});
-}); 
-
 //Esta funcion devuelve el numero de usuario que han realizado una compra en un establecimiento
 router.get('/usuarioFacturaTienda',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {

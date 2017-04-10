@@ -48,7 +48,7 @@ router.get('/',comprobacionjwt,function(req,res){
 			var consulta="SELECT * FROM usuario LEFT JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda LEFT JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario WHERE Id_usuario="+Id;
 		}else{ //Si no muestra todos los usuario
 			console.log("Entro para mostrar los datos de todos los usuario");
-			var consulta="SELECT * FROM usuario LEFT JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda LEFT JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario"
+			var consulta="SELECT DIS * FROM usuario LEFT JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda LEFT JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario"
 			var i=0;
 			if(Nombre != 'NULL' || DNI != 'NULL' || Sexo != 'NULL' || Email != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Direccion != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Fechanac_min != 'NULL' || Fechanac_max != 'NULL' || Fecha_min != 'NULL' || Fecha_max != 'NULL' || CP != 'NULL' || Telefono != 'NULL' || Rol != 'NULL'|| Id_tienda != 'NULL' ){
 				console.log("Con el parametro:");
@@ -796,8 +796,9 @@ router.get('/entraTienda',function(req,res){
 			}else{
 				if(rows[0].length != 0){
 					data["Tiendas"] = rows[0];
-					console.log("La tienda existe ")
+					console.log("La tienda existe ");
 					if (rows[1].length == 0) {
+						console.log("La tienda existe ");	
 						connection.query(consulta+"UPDATE tienda SET Numero_usuarios_tienda = Numero_usuarios_tienda+1, Numero_usuarios_hora_tienda = Numero_usuarios_hora_tienda+1, Numero_usuarios_dia_tienda = Numero_usuarios_dia_tienda+1, Numero_usuarios_semana_tienda = Numero_usuarios_semana_tienda+1, Numero_usuarios_mes_tienda = Numero_usuarios_mes_tienda+1  WHERE Id_tienda="+Id_tienda+";",function(err, rows, fields){
 							if(err){
 								return res.status(400).json({ usuario: err });

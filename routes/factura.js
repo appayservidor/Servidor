@@ -340,6 +340,8 @@ router.post('/',comprobacionjwt,function(req,res){
 		var Fecha_factura = connection.escape(req.body.fecha);
 		var Total_factura = connection.escape(req.body.total);
 		var Pagada = connection.escape(req.body.pagada);
+		var Id_usuario_tienda = connection.escape(req.body.id_usuario_tienda);
+		var Linea = req.body.linea;
 		var data = {
 			"Facturas":""
 		};
@@ -404,15 +406,23 @@ router.post('/',comprobacionjwt,function(req,res){
 			consulta  += Pagada;
 			i++;
 		}
-		consulta+=",'1','0');UPDATE tienda SET Numero_facturas_tienda=Numero_facturas_tienda+1, Numero_facturas_hora_tienda=Numero_facturas_hora_tienda+1, Numero_facturas_dia_tienda=Numero_facturas_dia_tienda+1, Numero_facturas_semana_tienda=Numero_facturas_semana_tienda+1, Numero_facturas_mes_tienda=Numero_facturas_mes_tienda+1, Total_ventas_tienda=Total_ventas_tienda+"+Total_factura+", Total_ventas_hora_tienda=Total_ventas_hora_tienda+"+Total_factura+", Total_ventas_dia_tienda=Total_ventas_dia_tienda+"+Total_factura+", Total_ventas_semana_tienda=Total_ventas_semana_tienda+"+Total_factura+", Total_ventas_mes_tienda=Total_ventas_mes_tienda+"+Total_factura+", WHERE Id_tienda="+Id_tienda+";";
+		consulta+=",'1','0');UPDATE tienda SET Numero_facturas_tienda=Numero_facturas_tienda+1, Numero_facturas_hora_tienda=Numero_facturas_hora_tienda+1, Numero_facturas_dia_tienda=Numero_facturas_dia_tienda+1, Numero_facturas_semana_tienda=Numero_facturas_semana_tienda+1, Numero_facturas_mes_tienda=Numero_facturas_mes_tienda+1, Total_ventas_tienda=Total_ventas_tienda+"+Total_factura+", Total_ventas_hora_tienda=Total_ventas_hora_tienda+"+Total_factura+", Total_ventas_dia_tienda=Total_ventas_dia_tienda+"+Total_factura+", Total_ventas_semana_tienda=Total_ventas_semana_tienda+"+Total_factura+", Total_ventas_mes_tienda=Total_ventas_mes_tienda+"+Total_factura+" WHERE Id_tienda="+Id_tienda+";";
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
-				data["Facturas"] = "Datos insertados correctamente!";
-				return res.status(200).json(data);
+				if (Linea!= undefined) {
+					var consulta2="INSERT INTO factura_usuario (Id_factura_factura_usuario, Id_usuario_tienda_factura_usuario) VALUES ("+rows[0].insertId+", "+Id_usuario_tienda+");";
+					for (var index = 0; index < Linea.length; index++) {
+						consulta2 += "INSERT INTO linea_factura (Id_factura_linea_factura, Cantidad_linea_factura, Id_producto_tienda_linea_factura, Id_oferta_usuario_linea_factura, Id_oferta_producto_linea_factura, Total_linea_factura, Estado_linea_factura, Eliminado_linea_factura) VALUES('"+rows[0].insertId+"' , '"+Linea[index].Cantidad_linea_factura+"' , '"+Linea[index].Id_producto_tienda_linea_factura+"' , '"+Linea[index].Id_oferta_usuario_linea_factura+"' , '"+Linea[index].Id_oferta_producto_linea_factura+"' , '"+Linea[index].Total_linea_factura+"' , '"+Linea[index].Estado_linea_factura+"' , '"+Linea[index].Eliminado_linea_factura+");";
+					}
+					console.log(consulta2);
+				} else {
+					data["Facturas"] = "Datos insertados correctamente!";
+					return res.status(200).json(data);
+				}
 			}
 		});  		
     connection.release();
@@ -477,211 +487,4 @@ router.put('/',comprobacionjwt,function(req,res){
     connection.release();
 	});
 });
-
-
-//Funcion que genera el POST de Lineas de Factura
-router.post('/lineafactura',comprobacionjwt,function(req,res){
-	db.getConnection(function(err, connection) {
-        if (err) throw err;
- 		var Id_factura = connection.escape(req.body.id_factura);  
-		var Cantidad = connection.escape(req.body.cantidad);
-		var Id_producto_tienda = connection.escape(req.body.id_producto_tienda);
-		var Id_oferta_usuario = connection.escape(req.body.id_oferta_usuario);
-		var Id_oferta_producto = connection.escape(req.body.id_oferta_producto);
-		var Total_linea = connection.escape(req.body.total_linea);
-		var data = {
-			"Facturas":""
-		};
-	
-        //Buscamos el Id de producto tienda con el producto que pasamos por parametro	
-        var consulta = "INSERT INTO linea_factura (";
-        var i=0;
-        if(Id_factura != 'NULL'){
-                consulta  += "Id_factura_linea_factura";
-                i++;
-        }
-        if(Cantidad != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += "Cantidad_linea_factura";
-            i++;
-        }
-        if(Id_producto_tienda != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            
-            consulta  += "Id_producto_tienda_linea_factura";
-            i++;
-        }
-        if(Id_oferta_usuario != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += "Id_oferta_usuario_linea_factura";
-            i++;
-        }
-        if(Id_oferta_producto != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += "Id_oferta_producto_linea_factura";
-            i++;
-        }
-        if(Total_linea != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += "Total_linea_factura";
-            i++;
-        }
-
-		consulta=consulta+", Estado_linea_factura , Eliminado_linea_factura) VALUES (";
-        var i=0;
-
-        if(Id_factura != 'NULL'){
-            consulta  += Id_factura;
-            i++;
-        }
-        if(Cantidad != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";				
-                i--;	
-            }
-            consulta  += Cantidad;
-            i++;
-        }
-        if(Id_producto_tienda != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += Id_producto_tienda;
-            i++;
-        }
-        if(Id_oferta_usuario != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += Id_oferta_usuario;
-            i++;
-        }
-        if(Id_oferta_producto != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += Id_oferta_producto;
-            i++;
-        }
-        if(Total_linea != 'NULL'){
-            if (i==1) {
-                consulta  += ", ";
-                i--;	
-            }
-            consulta  += Total_linea;
-            i++;
-        }
-		consulta+=",'1','0')";
-        console.log(consulta);
-            connection.query(consulta,function(err, rows, fields){
-                    if(err){
-						console.log(err);
-                        return res.status(400).json({ error: err });
-                    }else{
-                        data["Facturas"] = "Datos insertados correctamente!";
-                        return res.status(200).json(data);
-                    }
-		});  		
-    connection.release();
-	});
-});
-
-//UPDATE LINEA DE FACTURA
-router.put('/lineafactura',comprobacionjwt,function(req,res){
-	db.getConnection(function(err, connection) {
-        if (err) throw err;
-		var ID = connection.escape(req.body.id_linea_factura);
-		var Id_factura = connection.escape(req.body.id_factura);  
-		var Cantidad = connection.escape(req.body.cantidad);
-		var Id_producto_tienda = connection.escape(req.body.id_producto_tienda);
-		var Id_oferta_usuario = connection.escape(req.body.id_oferta_usuario);
-		var Id_oferta_producto = connection.escape(req.body.id_oferta_producto);
-		var Total_linea = connection.escape(req.body.total_linea);
-		var data = {
-			"Facturas":""
-		};
-
-		if(ID != 'NULL'){
-			var consulta = "UPDATE linea_factura SET ";
-			var i=0;
-			if(Id_factura != 'NULL'){
-				consulta  += "Id_factura_linea_factura="+Id_factura;
-				i++;
-			}
-			if(Cantidad != 'NULL'){
-				if (i==1) {
-					consulta  += ", ";
-					i--;	
-				}
-				consulta  += "Cantidad_linea_factura="+Cantidad;
-				i++;
-			}
-			if(Id_producto_tienda != 'NULL'){
-				if (i==1) {
-					consulta  += ", ";
-					i--;	
-				}
-				consulta  += "Id_producto_tienda_linea_factura="+Id_producto_tienda;
-				i++;
-			}
-			if(Id_oferta_usuario != 'NULL'){
-				if (i==1) {
-					consulta  += ", ";
-					i--;	
-				}
-				consulta  += "Id_oferta_usuario_linea_factura="+Id_oferta_usuario;
-				i++;
-			}
-			if(Id_oferta_producto != 'NULL'){
-				if (i==1) {
-					consulta  += ", ";
-					i--;	
-				}
-				consulta  += "Id_oferta_producto_linea_factura="+Id_oferta_producto;
-				i++;
-			}
-			if(Total_linea != 'NULL'){
-				if (i==1) {
-					consulta  += ", ";
-					i--;	
-				}
-				consulta  += "Total_linea_factura="+Total_linea;
-				i++;
-			}
-			consulta = consulta + " WHERE Id_linea_factura="+ID;
-
-		}
-
-		connection.query(consulta,function(err, rows, fields){
-						if(err){
-							console.log(err);
-							return res.status(400).json({ error: err });
-						}else{
-							data["Facturas"] = "Datos actualizados correctamente!";
-							return res.status(200).json(data);
-					}
-				});   		
-    connection.release();
-	});
-});
-
-
 module.exports = router;
