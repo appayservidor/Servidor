@@ -217,6 +217,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 			}
 		}
+		consulta += " GROUP BY Id_usuario";
 		if(OrdeFecha != 'NULL' || OrdeFechaNac != 'NULL' || OrdeNombre != 'NULL' || OrdeCom != 'NULL' || OrdeProv != 'NULL' || OrdeLoc != 'NULL'){
 			var orden =0;
 			consulta  += " ORDER BY ";
@@ -312,7 +313,6 @@ router.get('/',comprobacionjwt,function(req,res){
 			console.log("Voy a mostrar solo las "+nregis+" siguientes filas empezando en la: "+pags);
 			consulta += " LIMIT "+nregis+" OFFSET "+pags;
 		}
-		consulta += "GROUP BY Id_usuario";
 		console.log("Consulta:");
 		console.log(consulta);
 		connection.query(preconsulta+consulta,function(err, rows, fields){
