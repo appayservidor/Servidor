@@ -413,14 +413,24 @@ router.post('/',comprobacionjwt,function(req,res){
 				console.log(err);
 				return res.status(400).json({ error: err });
 			}else{
+				console.log(Linea);
 				if (Linea!= undefined) {
 					var consulta2="INSERT INTO factura_usuario (Id_factura_factura_usuario, Id_usuario_tienda_factura_usuario) VALUES ("+rows[0].insertId+", "+Id_usuario_tienda+");";
 					for (var index = 0; index < Linea.length; index++) {
-						consulta2 += "INSERT INTO linea_factura (Id_factura_linea_factura, Cantidad_linea_factura, Id_producto_tienda_linea_factura, Id_oferta_usuario_linea_factura, Id_oferta_producto_linea_factura, Total_linea_factura, Estado_linea_factura, Eliminado_linea_factura) VALUES('"+rows[0].insertId+"' , '"+Linea[index].Cantidad_linea_factura+"' , '"+Linea[index].Id_producto_tienda_linea_factura+"' , '"+Linea[index].Id_oferta_usuario_linea_factura+"' , '"+Linea[index].Id_oferta_producto_linea_factura+"' , '"+Linea[index].Total_linea_factura+"' , '"+Linea[index].Estado_linea_factura+"' , '"+Linea[index].Eliminado_linea_factura+");";
+						consulta2 += "INSERT INTO linea_factura (Id_factura_linea_factura, Cantidad_linea_factura, Id_producto_tienda_linea_factura, Id_oferta_usuario_linea_factura, Id_oferta_producto_linea_factura, Total_linea_factura, Estado_linea_factura, Eliminado_linea_factura) VALUES('"+rows[0].insertId+"' , '"+Linea[index].Cantidad_linea_factura+"' , '"+Linea[index].Id_producto_tienda_linea_factura+"' , "+Linea[index].Id_oferta_usuario_linea_factura+" , "+Linea[index].Id_oferta_producto_linea_factura+" , '"+Linea[index].Total_linea_factura+"' , '"+Linea[index].Estado_linea_factura+"' , '"+Linea[index].Eliminado_linea_factura+");";
 					}
 					console.log(consulta2);
+					connection.query(consulta2,function(err, rows2, fields){
+						if(err){
+							console.log(err);
+							return res.status(400).json({ error: err });
+						}else{
+							data["Facturas"] = "Datos de factura y lineas insertados correctamente!";
+							return res.status(200).json(data);
+						}
+					});
 				} else {
-					data["Facturas"] = "Datos insertados correctamente!";
+					data["Facturas"] = "Datos de factura insertados correctamente!";
 					return res.status(200).json(data);
 				}
 			}

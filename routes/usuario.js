@@ -48,7 +48,7 @@ router.get('/',comprobacionjwt,function(req,res){
 			var consulta="SELECT * FROM usuario LEFT JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda LEFT JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario WHERE Id_usuario="+Id;
 		}else{ //Si no muestra todos los usuario
 			console.log("Entro para mostrar los datos de todos los usuario");
-			var consulta="SELECT DIS * FROM usuario LEFT JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda LEFT JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario"
+			var consulta="SELECT * FROM usuario LEFT JOIN usuario_tienda ON Id_usuario = Id_usuario_usuario_tienda LEFT JOIN tienda ON Id_tienda=Id_tienda_usuario_tienda JOIN tipo_usuario ON Rol_usuario = Id_tipo_usuario"
 			var i=0;
 			if(Nombre != 'NULL' || DNI != 'NULL' || Sexo != 'NULL' || Email != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || Direccion != 'NULL' || Comunidad != 'NULL' || Provincia != 'NULL' || Localidad != 'NULL' || Fechanac_min != 'NULL' || Fechanac_max != 'NULL' || Fecha_min != 'NULL' || Fecha_max != 'NULL' || CP != 'NULL' || Telefono != 'NULL' || Rol != 'NULL'|| Id_tienda != 'NULL' ){
 				console.log("Con el parametro:");
@@ -217,6 +217,7 @@ router.get('/',comprobacionjwt,function(req,res){
 				}
 			}
 		}
+		consulta += " GROUP BY Id_usuario";
 		if(OrdeFecha != 'NULL' || OrdeFechaNac != 'NULL' || OrdeNombre != 'NULL' || OrdeCom != 'NULL' || OrdeProv != 'NULL' || OrdeLoc != 'NULL'){
 			var orden =0;
 			consulta  += " ORDER BY ";
