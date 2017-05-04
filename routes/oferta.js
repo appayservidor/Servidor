@@ -649,8 +649,13 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 });
 //Funcion que actuliza el estado de los productos
 router.put('/ofertaProducto',comprobacionjwt,function(req,res){
+
 	db.getConnection(function(err, connection) {
-		if (err) throw err;	
+		if (err) throw err;
+		var data = {
+			"Ofertas":"",
+			"Registros":""
+		};	
 		var altausuario = req.body.altausuario;
 		var bajausuario = req.body.bajausuario;
 		var P_oferta = connection.escape(req.body.p_oferta);
@@ -663,6 +668,7 @@ router.put('/ofertaProducto',comprobacionjwt,function(req,res){
 		var Estado = connection.escape(req.body.estado);
 		var Eliminado = connection.escape(req.body.eliminado);
 		var id = connection.escape(req.body.id);
+		var NumeroUsos = connection.escape(req.body.numero_usos);
 		var consulta="";
 		if (P_oferta != 'NULL' || Fechaini != 'NULL' || Fechafin != 'NULL' || Id_producto != 'NULL' || Id_tienda != 'NULL' || Foto != 'NULL' || Descripcion != 'NULL' || Estado != 'NULL' || Eliminado != 'NULL' || NumeroUsos != 'NULL') {
 			consulta += "UPDATE oferta_producto SET ";
@@ -750,7 +756,8 @@ router.put('/ofertaProducto',comprobacionjwt,function(req,res){
 			}
 			consulta += " WHERE Id_oferta_producto="+id+";";
 		}
-		connection.query(consulta+consulta2,function(err, rows, fields){
+		console.log(consulta);
+		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
 				return res.status(400).json({ error: err });

@@ -38,6 +38,7 @@ var whitelist = [
     'https://appay.es',
     'https://appay-aefd5.firebaseapp.com',
     'https://admin.appay.es',
+    'https://appayadmin.com',
     'https://cron-job.org',
 ]; 
 var corsOptions = {
