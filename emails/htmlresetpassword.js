@@ -14,8 +14,7 @@ var html=`
                 <img align="center" alt="APPAY" border="0" height="80" width="400" src="http://www.appay.es/imagenes/logo_web_blanco_negro.png" style="font-family:-apple-system,Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#003a6b;line-height:1.5;max-width:100%;margin:0;padding:0">
             </p>
         </td>
-    </tr>    
-
+    </tr>
     <tr style="font-family:-apple-system,Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#003a6b;line-height:1.5;margin:0;padding:0">   
         <td bgcolor="#FFFFFF" style="font-family:-apple-system,Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#003a6b;line-height:1.5;display:block!important;max-width:600px!important;clear:both!important;margin:0 auto;padding:20px;border:1px solid #eee">
   
@@ -46,4 +45,3 @@ var html=`
 
 return html;
 };
-
