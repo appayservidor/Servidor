@@ -206,9 +206,11 @@ router.get('/ofertasUsuarioInfo',comprobacionjwt,function(req,res){
 		var Id_oferta_usuario = connection.escape(req.query.id_oferta_usuario);
 		var Pagina = connection.escape(req.query.pagina);
 		var Registros = connection.escape(req.query.registros);
+		var FechaIni = connection.escape(req.query.fechaIni);
+		var FechaFin = connection.escape(req.query.fechaFin);
 		var aux=0;
 		var consulta="SELECT * FROM oferta_usuario JOIN producto_tienda ON Id_producto_tienda=Id_producto_tienda_oferta_usuario JOIN tienda ON Id_tienda = Id_tienda_producto_tienda JOIN producto ON Id_producto=id_producto_producto_tienda";
-        if(Id_tienda != 'NULL'){
+        if(Id_tienda != 'NULL' || FechaIni!= 'NULL' || FechaFin != 'NULL'){
 			consulta+= " WHERE ";
 			if(Id_tienda != 'NULL'){
 				if(aux==1){
@@ -218,6 +220,23 @@ router.get('/ofertasUsuarioInfo',comprobacionjwt,function(req,res){
 				consulta += "Id_tienda = "+Id_tienda;
 				aux++;
 			}
+			if(FechaIni != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Fecha_inicio_oferta_usuario>="+FechaIni;
+				i++;
+			}
+			if(FechaFin != 'NULL'){
+				if (i==1) {
+					consulta  += " AND ";
+					i--;	
+				}
+				consulta  += "Fecha_fin_oferta_usuario<="+FechaFin;
+				i++;
+			}
+			
 		}
 		consulta+="AND Eliminado_oferta_usuario='0'";
 		var preconsulta = consulta+";";
