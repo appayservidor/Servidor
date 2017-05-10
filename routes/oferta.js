@@ -221,20 +221,20 @@ router.get('/ofertasUsuarioInfo',comprobacionjwt,function(req,res){
 				aux++;
 			}
 			if(FechaIni != 'NULL'){
-				if (i==1) {
+				if (aux==1) {
 					consulta  += " AND ";
-					i--;	
+					aux--;	
 				}
 				consulta  += "Fecha_inicio_oferta_usuario>="+FechaIni;
-				i++;
+				aux++;
 			}
 			if(FechaFin != 'NULL'){
-				if (i==1) {
+				if (aux==1) {
 					consulta  += " AND ";
-					i--;	
+					aux--;	
 				}
 				consulta  += "Fecha_fin_oferta_usuario<="+FechaFin;
-				i++;
+				aux++;
 			}
 			
 		}
