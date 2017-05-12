@@ -659,6 +659,10 @@ router.post('/ofertaProducto',comprobacionjwt,function(req,res){
 //Funcion que actuliza el estado de los productos
 router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
+		var data = {
+			"Ofertas":"",
+			"Registros":""
+		};	
 		if (err) throw err;	
 		var altausuario = req.body.altausuario;
 		var bajausuario = req.body.bajausuario;
@@ -733,6 +737,7 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 			}
 			consulta += " WHERE Id_oferta_usuario="+id+";";
 		}
+		/*
 		for(var i=0;i<bajausuario.length;i++){
 			consulta += "UPDATE usuario_ofertados SET Eliminado_usuario_ofertados = '1' WHERE Id_usuario_usuarios_ofertados="+bajausuario[i].Id_usuario_tienda+";";
 			console.log(consulta);				
@@ -747,7 +752,8 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 				consulta2+= ", ('"+altausuarios[index]+"', "+id+", '1', '0') ";
 			}
 		}
-		connection.query(consulta+consulta2,function(err, rows, fields){
+		*/
+		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
 				return res.status(400).json({ error: err });
