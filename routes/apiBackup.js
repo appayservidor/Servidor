@@ -44,7 +44,7 @@ router.get('/products', function(request, response) {
                 if(arg.length > 0 && Id_tienda != "NULL"){
                     var comprobarProducto = "";
                     for(var i = 0; i<arg.length; i++){
-                        omprobarProducto += "SELECT * FROM producto JOIN producto_tienda ON Id_producto=Id_producto_producto_tienda WHERE Id_tienda_producto_tienda = "+Id_tienda+" AND Codigo_producto = "+arg[i].codigo+";";
+                        comprobarProducto += "SELECT * FROM producto JOIN producto_tienda ON Id_producto=Id_producto_producto_tienda WHERE Id_tienda_producto_tienda = "+Id_tienda+" AND Codigo_producto = "+arg[i].codigo+";";
                     }
                     console.log(comprobarProducto);
                     connection.query(comprobarProducto, function(err, rows, fields) {

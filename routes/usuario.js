@@ -337,7 +337,7 @@ router.get('/',comprobacionjwt,function(req,res){
 	});
 });
 //Funcion que genera el POST de usuario
-router.post('/',comprobacionjwt,function(req,res){
+router.post('/',function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;
 		var DNI = connection.escape(req.body.dni);
@@ -570,9 +570,9 @@ router.post('/',comprobacionjwt,function(req,res){
 				return res.status(400).json({ error: err });
 			}else{
 				data["usuario"] = "Datos insertados correctamente!";
-				enviarContrasenya(req.body.email);
-				console.log("Todo ok?");                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-				return res.status(200).jsaon(data);
+				//enviarContrasenya(req.body.email);
+				console.log("Todo ok");                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+				return res.status(200).json(data);
 			}
 		});
 	connection.release();
