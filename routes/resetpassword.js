@@ -5,7 +5,7 @@ var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 var jwt =require("jsonwebtoken");
 var emailhtml= require ('../emails/htmlresetpassword');
-
+var emailhtmlmovil= require ('../emails/htmlresetpasswordmovil');
 var nodemailer = require('nodemailer');
 const nodemailerDkim = require('nodemailer-dkim');
 
@@ -41,14 +41,24 @@ router.post('/',function(req,res){
                             pass: process.env.GMAIL_PASS
                         }
                     });
-                    var htmlcorreo=emailhtml(token, rows[0].Nombre_usuario); 
-                    
-                    var mailOptions = {
-                        from: "<appayoficial@gmail.com>", // sender address
-                        to: req.body.email, //
-                        subject: "Restablecer contraseña Appay", // Subject line
-                        html: htmlcorreo
-                        
+                    if(req.body.aplicacion==null){
+                        console.log("Email admin");
+                        var htmlcorreo=emailhtml(token, rows[0].Nombre_usuario); 
+                        var mailOptions = {
+                            from: "<appayoficial@gmail.com>", // sender address
+                            to: req.body.email, //
+                            subject: "Restablecer contraseña Appay", // Subject line
+                            html: htmlcorreo
+                        }
+                    }
+                    else{
+                        var htmlcorreo=emailhtmlmovil(token, rows[0].Nombre_usuario); 
+                        var mailOptions = {
+                            from: "<appayoficial@gmail.com>", // sender address
+                            to: req.body.email, //
+                            subject: "Restablecer contraseña Appay", // Subject line
+                            html: htmlcorreo
+                        }
                     }		
                     smtpTransport.sendMail(mailOptions, function(error, response){
                         if(error){
