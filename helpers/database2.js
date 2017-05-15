@@ -1,19 +1,17 @@
 var mysql = require('mysql');
-var db2=null;
+var db=null;
 
 module.exports = function () {
-    if(!db2) {        
-        db2 = mysql.createPool({
-                 host     : 'localhost',
-                 user     : 'root',
-                 password : 'root',
-                 database : 'appay_bbdd',
-                 port: '3306',
-		         socketPath: '/Applications/MAMP/tmp/mysql/mysql.sock',
-                 connectionLimit: 10,
-                 supportBigNumbers: true,
-                 multipleStatements: true
-        });   
-    }
-    return db2;
+   if(!db) {    
+        db = mysql.createPool({
+                host     : "us-cdbr-iron-east-04.cleardb.net",
+                user     : "b3f3fb41577c3b",
+                password : "8d4e1afd",
+                database : "heroku_3ac2f6300e00435",
+                connectionLimit: 10,
+                supportBigNumbers: true,
+                multipleStatements: true
+       });  
+   }
+   return db;
 };
