@@ -50,7 +50,8 @@ router.get('/',comprobacionjwt,function(req,res){
 			connection.query(preconsulta+consulta+infoTienda, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
-					htmlerror(err);.json({ error: err });
+					htmlerror(err);
+					return res.status(400).json({ error: err });
 				}else{
 					console.log("Query OK");
 					if(rows[2].length != 0){
