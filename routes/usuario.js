@@ -7,6 +7,9 @@ const nodemailerDkim = require('nodemailer-dkim');
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 var emailhtml= require ('../emails/htmlconfirmaremail');
 var mySecretKey=process.env.JWT_SECRETKEY;
+var htmlerror= require ('../emails/htmlerror');
+
+
 /*DEVUELVE usuario si no le pasas parametro te los devuelve todos si le pasas id te devuelve los datos de ese usuario,
  y si le pasas otros parametros te devuelve todos los que tengan ese parametro filtrado*/
 router.get('/',comprobacionjwt,function(req,res){
@@ -318,7 +321,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(error); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows[1].length != 0){
@@ -567,7 +570,7 @@ router.post('/',function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				return res.status(400).json({ error: err });
+				htmlerror(error); 					return res.status(400).json({ error: err });
 			}else{
 				data["usuario"] = "Datos insertados correctamente!";
 				//enviarContrasenya(req.body.email);
@@ -766,7 +769,7 @@ router.put('/',comprobacionjwt,function(req,res){
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-				return res.status(400).json({ error: err });
+				htmlerror(error); 					return res.status(400).json({ error: err });
 			}else{
 				data["usuario"] = "Actualizado correctamente!";
 				return res.status(200).json(data);
@@ -792,7 +795,7 @@ router.get('/entraTienda',function(req,res){
 		console.log(consulta);
 		connection.query(preconsulta,function(err, rows, fields){
 			if(err){
-				return res.status(400).json({ usuario: err });
+				htmlerror(error); 					return res.status(400).json({ usuario: err });
 				console.log(err);
 			}else{
 				if(rows[0].length != 0){
@@ -802,7 +805,7 @@ router.get('/entraTienda',function(req,res){
 						console.log("La tienda existe ");	
 						connection.query(consulta+"UPDATE tienda SET Numero_usuarios_tienda = Numero_usuarios_tienda+1, Numero_usuarios_hora_tienda = Numero_usuarios_hora_tienda+1, Numero_usuarios_dia_tienda = Numero_usuarios_dia_tienda+1, Numero_usuarios_semana_tienda = Numero_usuarios_semana_tienda+1, Numero_usuarios_mes_tienda = Numero_usuarios_mes_tienda+1  WHERE Id_tienda="+Id_tienda+";",function(err, rows, fields){
 							if(err){
-								return res.status(400).json({ usuario: err });
+								htmlerror(error); 					return res.status(400).json({ usuario: err });
 								console.log(err);
 							}else{
 								if(rows != 0){
@@ -839,7 +842,7 @@ router.post('/usuarioAdminTienda',function(req,res){
 		var consulta = "INSERT INTO usuario_admin_tienda (id_tienda_usuario_admin_tienda, id_usuario_usuario_admin_tienda, Estado_usuario_admin_tienda, Eliminado_usuario_admin_tienda) VALUES("+Id_tienda+","+Id_usuario+",'1','0')";
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
-					return res.status(400).json({ usuario: err });
+					htmlerror(error); 					return res.status(400).json({ usuario: err });
 					console.log(err);
 				}else{
 					if(rows != 0){
@@ -865,7 +868,7 @@ router.get('/adminTienda',comprobacionjwt,function(req,res){
 		var consulta = "SELECT Id_usuario, DNI_usuario, Nombre_usuario, Email_usuario, Direccion_usuario, Comunidad_usuario, Provincia_usuario, Localidad_usuario, CP_usuario, Telefono_usuario, Foto_usuario, Nombre_rol, Estado_usuario, Eliminado_usuario, Fecha_usuario  FROM usuario_admin_tienda TA JOIN usuario u ON Id_usuario = TA.id_usuario_usuario_admin_tienda JOIN tipo_usuario t ON Rol_usuario = Id_tipo_usuario;";
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-				return res.status(400).json({ usuario: err });
+				htmlerror(error); 					return res.status(400).json({ usuario: err });
 				console.log(err);
 			}else{
 				if(rows != 0){
@@ -896,7 +899,7 @@ router.post("/admin", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];
@@ -932,7 +935,7 @@ router.post("/checkPassword", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(error); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows.length != 0){
@@ -963,7 +966,7 @@ router.post("/updateToken", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];
@@ -996,7 +999,7 @@ router.put('/updateState',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
                 console.log(err); 
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
 				return res.status(200).json("Actualizado correctamente");
             }	

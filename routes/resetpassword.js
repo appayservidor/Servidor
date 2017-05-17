@@ -8,7 +8,7 @@ var emailhtml= require ('../emails/htmlresetpassword');
 var emailhtmlmovil= require ('../emails/htmlresetpasswordmovil');
 var nodemailer = require('nodemailer');
 const nodemailerDkim = require('nodemailer-dkim');
-
+var htmlerror= require ('../emails/htmlerror');
 var mySecretKey=process.env.JWT_SECRETKEY;
 
 
@@ -25,7 +25,7 @@ router.post('/',function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
                 console.log(err); 
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 if(rows != 0){ // Si que lo ha encontrado
                     console.log("Usuario encontrado");
@@ -63,7 +63,7 @@ router.post('/',function(req,res){
                     smtpTransport.sendMail(mailOptions, function(error, response){
                         if(error){
                             console.log(error);
-                            return res.status(400).json(error);
+                            htmlerror(error); 					return res.status(400).json(error);
                         }else{
                             console.log("Correo enviado");
                             return res.status(200).json("Todo bien todo correcto");
@@ -119,7 +119,7 @@ router.put('/',comprobacionjwt,function(req,res){
         console.log(consulta);
         connection.query(consulta,function(err, rows, fields){
             if(err){
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 data["Usuario"] = "Actualizado correctamente!";
                 return res.status(200).json(data["Usuario"]);

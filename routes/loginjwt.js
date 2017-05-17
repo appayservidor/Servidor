@@ -4,7 +4,9 @@ var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 var jwt =require("jsonwebtoken");
 var mySecretKey=process.env.JWT_SECRETKEY;
-
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 //Metodo login 
 router.post("/", function(req,res,next){
     db.getConnection(function(err, connection) {    
@@ -19,7 +21,7 @@ router.post("/", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];
@@ -51,7 +53,7 @@ router.post("/admin", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];

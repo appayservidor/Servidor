@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
-
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
 		if (err) throw err;	
@@ -59,7 +61,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-                return res.status(400).json({ error: err });
+                htmlerror(error); 					return res.status(400).json({ error: err });
             }else{
                 if(rows.length != 0){
                     data["Errores"] = 0;

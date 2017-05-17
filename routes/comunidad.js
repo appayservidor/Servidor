@@ -2,7 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
-
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 router.get('/',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
         var data = {

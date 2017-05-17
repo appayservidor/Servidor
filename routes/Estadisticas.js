@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 //Esta funcion devuelve el total de ingresos en facturas que se realizan con appay en un establecimiento
 router.get('/beneficiosTienda',comprobacionjwt,function(req,res){
 	db.getConnection(function(err, connection) {
@@ -42,7 +45,7 @@ router.get('/beneficiosTienda',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(error); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				data["BeneficiosAppay"] = rows;
@@ -166,7 +169,7 @@ router.get('/OfertasMasUsadas',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(error); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				data["OfertasMasUsadas"] = rows;
