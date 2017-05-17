@@ -174,7 +174,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				if(rows[1].length != 0){
 					console.log("Devuelvo los productos");
@@ -362,7 +362,7 @@ router.get('/escanear',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta+update,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				if(rows[1].length != 0){
 					console.log("Devuelvo los productos");
@@ -472,7 +472,7 @@ router.put('/',comprobacionjwt,function(req,res){
 			connection.query(consulta,function(err, rows, fields){
 					if(err){
 						console.log(err);
-						htmlerror(error); 					return res.status(400).json({ error: err });
+						htmlerror(err); 					return res.status(400).json({ error: err });
 					}else{
 						data["Productos"] = "Actualizado correctamente!";
 						return res.status(200).json(data);
@@ -496,7 +496,7 @@ router.put('/updateState',comprobacionjwt,function(req,res){
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
 					error=true;
-					//htmlerror(error); 					return res.status(400).json({ error: err });
+					//htmlerror(err); 					return res.status(400).json({ error: err });
 					i=usuario.length;
 				}
 			});	
@@ -505,7 +505,7 @@ router.put('/updateState',comprobacionjwt,function(req,res){
 		if(error==false)
 			return res.status(200).json("Actualizado correctamente");
 		else
-			htmlerror(error); 					return res.status(400).json("Error en la peticion a la BD");	
+			htmlerror(err); 					return res.status(400).json("Error en la peticion a la BD");	
 	});
 });
 

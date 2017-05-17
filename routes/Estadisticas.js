@@ -45,7 +45,7 @@ router.get('/beneficiosTienda',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				data["BeneficiosAppay"] = rows;
@@ -169,7 +169,7 @@ router.get('/OfertasMasUsadas',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				data["OfertasMasUsadas"] = rows;

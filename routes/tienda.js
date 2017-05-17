@@ -270,7 +270,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				if(rows[1].length != 0){
 					console.log("Devuelvo las tiendas");
@@ -556,7 +556,7 @@ router.post('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				data["Tiendas"] = "Datos insertados correctamente!";
 				return res.status(200).json(data);
@@ -736,7 +736,7 @@ router.put('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 				if(err){
 					console.log(err);
-					htmlerror(error); 					return res.status(400).json({ error: err });
+					htmlerror(err); 					return res.status(400).json({ error: err });
 				}else{
  					data["Tiendas"] = "Actualizado correctamente!";
 					return res.status(200).json(data);
@@ -764,7 +764,7 @@ router.get('/gransuperficie',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				if(rows[1].length != 0){
 					data["Registros"]= rows[0].length;
@@ -793,12 +793,12 @@ router.post('/gransuperficie',comprobacionjwt,function(req,res){
 		if (Nombre != 'NULL' && Imagen != 'NULL') {
 			var consulta = "INSERT INTO gran_superficie (Nombre_gran_superficie, Imagen_gran_superficie , Estado_gran_superficie, Eliminado_gran_superficie) VALUES ("+Nombre+","+Imagen+", '1', '0')";
 		}else{
-			htmlerror(error); 					return res.status(400).json({ error: "Debes pasarle el nombre y la imagen de la gran superficie" });
+			htmlerror(err); 					return res.status(400).json({ error: "Debes pasarle el nombre y la imagen de la gran superficie" });
 		}
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				data["Tiendas"] = "Datos insertados correctamente!";
 				return res.status(200).json(data);
@@ -838,7 +838,7 @@ router.put('/gransuperficie',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				data["Tiendas"] = "Actualizado correctamente!";
 				return res.status(200).json(data);
@@ -866,7 +866,7 @@ router.get('/coordenadas',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				if(rows.length != 0){
 					data["Coordenadas"] = rows;

@@ -61,7 +61,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		console.log(consulta);
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
-                htmlerror(error); 					return res.status(400).json({ error: err });
+                htmlerror(err); 					return res.status(400).json({ error: err });
             }else{
                 if(rows.length != 0){
                     data["Errores"] = 0;

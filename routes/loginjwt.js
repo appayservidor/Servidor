@@ -21,7 +21,7 @@ router.post("/", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
-                htmlerror(error); 					return res.status(400).json({ error: err });
+                htmlerror(err); 					return res.status(400).json({ error: err });
             }else{
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];
@@ -53,7 +53,7 @@ router.post("/admin", function(req,res,next){
         connection.query(consulta, function(err, rows, fields) {
             if(err){
                 console.log(err); 
-                htmlerror(error); 					return res.status(400).json({ error: err });
+                htmlerror(err); 					return res.status(400).json({ error: err });
             }else{
                 if(rows!=null && rows.length != 0){ //si es correcto
                     var user=rows[0];

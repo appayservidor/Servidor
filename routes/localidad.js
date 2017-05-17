@@ -81,7 +81,7 @@ router.get('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
                 console.log(err);
-                htmlerror(error); 					return res.status(400).json({ error: err });
+                htmlerror(err); 					return res.status(400).json({ error: err });
             }else{
                 if(rows.length != 0){
                     data["Localidad"] = rows;
@@ -89,7 +89,7 @@ router.get('/',comprobacionjwt,function(req,res){
                 }else{
                     console.log("Error al insertar la localidad...");
                     data["Localidad"] = 'Localidad no insertada';
-                    htmlerror(error); 					return res.status(400).json(data);
+                    htmlerror(err); 					return res.status(400).json(data);
                 }
             }
 		});
@@ -115,7 +115,7 @@ router.post('/',comprobacionjwt,function(req,res){
         connection.query(consulta,function(err, rows, fields){
 			if(err){
                 console.log(err);
-				htmlerror(error); 					return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
                 if(rows.length != 0){
 					console.log("Devuelvo el id de la comunidad");
@@ -125,7 +125,7 @@ router.post('/',comprobacionjwt,function(req,res){
                     connection.query(consulta,function(err, rows1, fields){
                         if(err){
                             console.log(err);
-                            htmlerror(error); 					return res.status(400).json({ error: err });
+                            htmlerror(err); 					return res.status(400).json({ error: err });
                         }else{
                             if(rows1.length != 0){
                                 console.log("Devuelvo el id de la provincia");
@@ -135,7 +135,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                 connection.query(consulta,function(err, rows2, fields){
                                     if(err){
                                         console.log(err);
-                                        htmlerror(error); 					return res.status(400).json({ error: err });
+                                        htmlerror(err); 					return res.status(400).json({ error: err });
                                     }else{
                                         if(rows2.length != 0){
                                             console.log("Devuelvo el id de la localidad");
@@ -147,7 +147,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                             connection.query(consulta,function(err, rows3, fields){
                                                 if(err){
                                                     console.log(err);
-                                                    htmlerror(error); 					return res.status(400).json({ error: err });
+                                                    htmlerror(err); 					return res.status(400).json({ error: err });
                                                 }else{
                                                     if(rows3.length != 0){
                                                         console.log("Devuelvo el id de la localidad");
@@ -160,7 +160,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                                     }else{
                                                         console.log("Error al insertar la localidad...");
                                                         data["Localidad"] = 'Localidad no insertada';
-                                                        htmlerror(error); 					return res.status(400).json(data);
+                                                        htmlerror(err); 					return res.status(400).json(data);
                                                     }
                                                 }
                                             });
@@ -173,7 +173,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                 connection.query(consulta,function(err, rows4, fields){
                                     if(err){
                                         console.log(err);
-                                        htmlerror(error); 					return res.status(400).json({ error: err });
+                                        htmlerror(err); 					return res.status(400).json({ error: err });
                                     }else{
                                         if(rows4.length != 0){
                                             console.log("Devuelvo el id de la provincia");
@@ -184,7 +184,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                             connection.query(consulta,function(err, rows5, fields){
                                                 if(err){
                                                     console.log(err); 
-                                                    htmlerror(error); 					return res.status(400).json({ error: err });
+                                                    htmlerror(err); 					return res.status(400).json({ error: err });
                                                 }else{
                                                     if(rows5.length != 0){
                                                         console.log("Devuelvo el id de la localidad");
@@ -195,14 +195,14 @@ router.post('/',comprobacionjwt,function(req,res){
                                                     }else{
                                                         console.log("Error al insertar la localidad...");
                                                         data["Localidad"] = 'Localidad no insertada';
-                                                        htmlerror(error); 					return res.status(400).json(data);
+                                                        htmlerror(err); 					return res.status(400).json(data);
                                                     }
                                                 }
                                             });
                                         }else{
                                             console.log("Error al insertar la provinvia...");
                                             data["Provincia"] = 'Provincia no insertada';
-                                            htmlerror(error); 					return res.status(400).json(data);
+                                            htmlerror(err); 					return res.status(400).json(data);
                                         }
                                     }
                                 });
@@ -216,7 +216,7 @@ router.post('/',comprobacionjwt,function(req,res){
                     connection.query(consulta,function(err, rows6, fields){
                         if(err){
                             console.log(err);
-                            htmlerror(error); 					return res.status(400).json({ error: err });
+                            htmlerror(err); 					return res.status(400).json({ error: err });
                         }else{
                             if(rows6.length != 0){
                                 console.log("Devuelvo el id de la comunidad");
@@ -227,7 +227,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                 connection.query(consulta,function(err, rows7, fields){
                                     if(err){
                                         console.log(err);
-                                        htmlerror(error); 					return res.status(400).json({ error: err });
+                                        htmlerror(err); 					return res.status(400).json({ error: err });
                                     }else{
                                         if(rows7.length != 0){
                                             console.log("Devuelvo el id de la provincia");
@@ -238,7 +238,7 @@ router.post('/',comprobacionjwt,function(req,res){
                                             connection.query(consulta,function(err, rows8, fields){
                                                 if(err){
                                                     console.log(err);
-                                                    htmlerror(error); 					return res.status(400).json({ error: err });
+                                                    htmlerror(err); 					return res.status(400).json({ error: err });
                                                 }else{
                                                     if(rows8.length != 0){
                                                         console.log("Devuelvo el id de la localidad");
@@ -250,21 +250,21 @@ router.post('/',comprobacionjwt,function(req,res){
                                                     }else{
                                                         console.log("Error al insertar la localidad...");
                                                         data["Localidad"] = 'Localidad no insertada';
-                                                        htmlerror(error); 					return res.status(400).json(data);
+                                                        htmlerror(err); 					return res.status(400).json(data);
                                                     }
                                                 }
                                             });
                                         }else{
                                             console.log("Error al insertar la provinvia...");
                                             data["Provincia"] = 'Provincia no insertada';
-                                            htmlerror(error); 					return res.status(400).json(data);
+                                            htmlerror(err); 					return res.status(400).json(data);
                                         }
                                     }
                                 });
                             }else{
                                 console.log("Error al insertar la comunidad...");
                                 data["Comunidad"] = 'Comunidad no insertada';
-                                htmlerror(error); 					return res.status(400).json(data);
+                                htmlerror(err); 					return res.status(400).json(data);
                             }
                         }
                     });

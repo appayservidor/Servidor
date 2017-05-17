@@ -50,7 +50,7 @@ router.get('/',comprobacionjwt,function(req,res){
 			connection.query(preconsulta+consulta+infoTienda, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
-					htmlerror(error);.json({ error: err });
+					htmlerror(err);.json({ error: err });
 				}else{
 					console.log("Query OK");
 					if(rows[2].length != 0){
@@ -165,7 +165,7 @@ router.get('/',comprobacionjwt,function(req,res){
 			connection.query(preconsulta+consulta, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
-					htmlerror(error);
+					htmlerror(err);
 					return res.status(400).json({ error: err });
 				}else{
 					console.log("Query OK");
@@ -230,7 +230,7 @@ router.get('/debug',comprobacionjwt,function(req,res){
 			connection.query(preconsulta+consulta+infoTienda, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
-					htmlerror(error);
+					htmlerror(err);
 					return res.status(400).json({ error: err });
 				}else{
 					console.log("Query OK");
@@ -345,7 +345,7 @@ router.get('/debug',comprobacionjwt,function(req,res){
 			connection.query(preconsulta+consulta, function(err, rows, fields){
 				if(err){
 					console.log("Error en la query...");
-					htmlerror(error);
+					htmlerror(err);
 					return res.status(400).json({ error: err });
 				}else{
 					console.log("Query OK");
@@ -501,7 +501,7 @@ router.get('/usuario',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error);
+				htmlerror(err);
 				return res.status(400).json({ error: err });
 			}else{
 				if(rows[1].length != 0){
@@ -598,7 +598,7 @@ router.post('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error);
+				htmlerror(err);
 				return res.status(400).json({ error: err });
 			}else{
 				console.log(Linea);
@@ -611,7 +611,7 @@ router.post('/',comprobacionjwt,function(req,res){
 					connection.query(consulta2,function(err, rows2, fields){
 						if(err){
 							console.log(err);
-							htmlerror(error);
+							htmlerror(err);
 							return res.status(400).json({ error: err });
 						}else{
 							data["Facturas"] = "Datos de factura y lineas insertados correctamente!";
@@ -677,7 +677,7 @@ router.put('/',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log(err);
-				htmlerror(error);
+				htmlerror(err);
 				return res.status(400).json({ error: err });
 			}else{
 				data["Facturas"] = "Actualizado correctamente!";
@@ -702,7 +702,7 @@ router.put('/deleteFacturas',comprobacionjwt,function(req,res){
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
 					error=true;
-					//htmlerror(error);return res.status(400).json({ error: err });
+					//htmlerror(err);return res.status(400).json({ error: err });
 					i=facturas.length;
 				}
 			});	
@@ -711,7 +711,7 @@ router.put('/deleteFacturas',comprobacionjwt,function(req,res){
 		if(error==false)
 			return res.status(200).json("Actualizado correctamente");
 		else
-			htmlerror(error);
+			htmlerror(err);
 			return res.status(400).json("Error en la peticion a la BD");	
 	});
 });
