@@ -339,6 +339,11 @@ router.get('/',comprobacionjwt,function(req,res){
 //Funcion que genera el POST de usuario
 router.post('/',function(req,res){
 	db.getConnection(function(err, connection) {
+
+
+//var consulta = "SELECT Email_usuario, Nombre_usuario FROM usuario WHERE Email_usuario="+Email;
+
+
 		if (err) throw err;
 		var DNI = connection.escape(req.body.dni);
 		var Nombre = connection.escape(req.body.nombre);
@@ -564,18 +569,34 @@ router.post('/',function(req,res){
 		}
 		consulta+=",'1','0')";
 		console.log(consulta);
-		connection.query(consulta,function(err, rows, fields){
+		var consulta2= "SELECT Email_usuario, Nombre_usuario FROM usuario WHERE Email_usuario="+Email;
+		connection.query(consulta2,function(err, rows, fields){
 			if(err){
-				console.log(err);
-				return res.status(400).json({ error: err });
-			}else{
-				data["usuario"] = "Datos insertados correctamente!";
-				//enviarContrasenya(req.body.email);
-				console.log("Todo ok");                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-				return res.status(200).json(data);
-			}
+                console.log(err); 
+                return res.status(400).json({ error: err });
+            }else{
+                if(rows == 0){ // Usuario NO encontrado
+					connection.query(consulta,function(err, rows, fields){
+						if(err){
+							console.log(err);
+							return res.status(400).json({ error: err });
+						}else{
+							data["usuario"] = "Datos insertados correctamente!";
+							//enviarContrasenya(req.body.email);
+							console.log("Todo ok");                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+							return res.status(200).json(data);
+						}
+					});
+					//connection.release();
+                }else{ //usuario encontrado
+                    console.log("Usuario encontrado"); 
+                    return res.status(401).json("El usuario YA existe");   
+                }
+            }
 		});
 	connection.release();
+
+
 	});
 });
 
