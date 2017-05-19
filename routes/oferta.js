@@ -3,7 +3,9 @@ var router = express.Router();
 var db = require('../helpers/database')();
 var comprobacionjwt= require ('../helpers/comprobacionjwt');
 
-
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 
 //DEVUELVE OFERTAS DE Producto
 router.get('/ofertasProducto',comprobacionjwt,function(req,res){
@@ -75,7 +77,7 @@ router.get('/ofertasProducto',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta+update,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows[1].length != 0){
@@ -174,7 +176,7 @@ router.get('/ofertasUsuario',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows[1].length != 0){
@@ -265,7 +267,7 @@ router.get('/ofertasUsuarioInfo',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows[1].length != 0){
@@ -329,7 +331,7 @@ router.get('/ofertasUsuarioInfoDebug',comprobacionjwt,function(req,res){
 		connection.query(preconsulta+consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows[1].length != 0){
@@ -482,7 +484,7 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
         connection.query(consulta,function(err, rows, fields){
             if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				var id = rows.insertId;
 				var consulta2 = "INSERT INTO usuario_ofertados (Id_usuario_usuarios_ofertados, Id_oferta_usuario_usuarios_ofertados, Estado_usuario_ofertados, Eliminado_usuario_ofertados) VALUES ";
@@ -499,7 +501,7 @@ router.post('/ofertasUsuario',comprobacionjwt,function(req,res){
 				connection.query(consulta2,function(err, rows, fields){
 					if(err){
 						console.log("Error en la query...");
-						return res.status(400).json({ error: err });
+						htmlerror(err); 					return res.status(400).json({ error: err });
 					}else{
 						console.log("Usuarios ofertados insertados correctamente");
 						data["Ofertas"] = "Usuarios ofertados insertados correctamente";
@@ -645,7 +647,7 @@ router.post('/ofertaProducto',comprobacionjwt,function(req,res){
         connection.query(consulta,function(err, rows, fields){
             if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Oferta insertada correctamente");
 				data["Ofertas"] = "Oferta insertada correctamente";
@@ -756,7 +758,7 @@ router.put('/ofertaUsuario',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Oferta actualizada correctamente");
 				data["Ofertas"] = "Ofertas actualizadas correctamente";
@@ -880,7 +882,7 @@ router.put('/ofertaProducto',comprobacionjwt,function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Oferta actualizada correctamente");
 				data["Ofertas"] = "Ofertas actualizadas correctamente";
@@ -907,7 +909,7 @@ router.put('/deleteOfertasUsuario',comprobacionjwt,function(req,res){
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
 					error=true;
-					//return res.status(400).json({ error: err });
+					//htmlerror(err); 					return res.status(400).json({ error: err });
 					i=ofertas.length;
 				}
 			});	
@@ -916,7 +918,7 @@ router.put('/deleteOfertasUsuario',comprobacionjwt,function(req,res){
 		if(error==false)
 			return res.status(200).json("Actualizado correctamente");
 		else
-			return res.status(400).json("Error en la peticion a la BD");	
+			htmlerror(err); 					return res.status(400).json("Error en la peticion a la BD");	
 	});
 });
 
@@ -934,7 +936,7 @@ router.put('/recuperarOfertasUsuario',comprobacionjwt,function(req,res){
 			connection.query(consulta,function(err, rows, fields){
 				if(err){
 					error=true;
-					//return res.status(400).json({ error: err });
+					//htmlerror(err); 					return res.status(400).json({ error: err });
 					i=ofertas.length;
 				}
 			});	
@@ -943,7 +945,7 @@ router.put('/recuperarOfertasUsuario',comprobacionjwt,function(req,res){
 		if(error==false)
 			return res.status(200).json("Actualizado correctamente");
 		else
-			return res.status(400).json("Error en la peticion a la BD");	
+			htmlerror(err); 					return res.status(400).json("Error en la peticion a la BD");	
 	});
 });
 

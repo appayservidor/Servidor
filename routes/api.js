@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database');
 var db = db();
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 
 //CANTIDAD DE usuario POR LOCALIZACION
 //IDEA, MEDIA DE EDAD DE LOS usuario

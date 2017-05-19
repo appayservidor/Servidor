@@ -1,7 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../helpers/database')();
-
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 
 
 router.get('/',function(req,res){
@@ -28,7 +30,7 @@ router.get('/',function(req,res){
 		connection.query(consulta,function(err, rows, fields){
 			if(err){
 				console.log("Error en la query...");
-				return res.status(400).json({ error: err });
+				htmlerror(err); 					return res.status(400).json({ error: err });
 			}else{
 				console.log("Query OK");
 				if(rows.length != 0){

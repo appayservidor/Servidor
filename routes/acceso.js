@@ -2,6 +2,9 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt-nodejs');
 var passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+var htmlerror= require ('../emails/htmlerror');
+var nodemailer = require('nodemailer');
+const nodemailerDkim = require('nodemailer-dkim');
 
 passport.serializeUser(function(user, done)
 {

@@ -10,7 +10,7 @@ var nodemailer = require('nodemailer');
 const nodemailerDkim = require('nodemailer-dkim');
 
 var mySecretKey=process.env.JWT_SECRETKEY;
-
+var htmlerror= require ('../emails/htmlerror');
 
 //Peticion de cambio de contraseña. Se llamará cuando alguien no recuerde su contraseña
 router.post('/',function(req,res){
