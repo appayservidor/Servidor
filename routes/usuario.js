@@ -359,6 +359,9 @@ router.post('/',function(req,res){
 		var Foto = connection.escape(req.body.foto);
 		var Contra = connection.escape(req.body.contra);
 		var Rol = connection.escape(req.body.rol);
+
+		//PARA PRUEBAS DE DNI
+		var DNI =  Math.random();
 		var data = {
 			"usuario":""
 		};
