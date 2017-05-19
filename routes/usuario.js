@@ -362,6 +362,7 @@ router.post('/',function(req,res){
 
 		//PARA PRUEBAS DE DNI
 		var DNI =  Math.random();
+		console.log("QUE TE ACTUALICES COÑO");
 		var data = {
 			"usuario":""
 		};
