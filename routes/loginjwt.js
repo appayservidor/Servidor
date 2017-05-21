@@ -30,7 +30,7 @@ router.post("/", function(req,res,next){
                         data: user
                     }, mySecretKey, { expiresIn: '168h' });
 
-                    return res.status(200).json(token);  //lo enviamos
+                    return res.status(200).json({token,user});  //lo enviamos
                 }else{
                     return res.status(401).json("El usuario no existe");
                 }
@@ -63,7 +63,7 @@ router.post("/facebook", function(req,res,next){
                         data: user
                     }, mySecretKey, { expiresIn: '168h' });
 
-                    return res.status(200).json(token);  //lo enviamos
+                    return res.status(200).json({token,user});  //lo enviamos
                 }else{
                     return res.status(401).json("El usuario no existe");
                 }
@@ -72,6 +72,8 @@ router.post("/facebook", function(req,res,next){
     connection.release();
     });
 });  
+
+
 //Metodo login para admin
 router.post("/admin", function(req,res,next){
     db.getConnection(function(err, connection) {    

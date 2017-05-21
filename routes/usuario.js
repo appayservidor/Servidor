@@ -719,7 +719,7 @@ router.put('/',comprobacionjwt,function(req,res){
 					consulta  += " , ";
 					i--;	
 				}
-				consulta  += "CP="+CP;
+				consulta  += "CP_usuario="+CP;
 				i++;
 			}
 			if(Telefono != 'NULL'){
