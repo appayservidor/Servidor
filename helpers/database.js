@@ -1,4 +1,4 @@
-/*var mysql = require('mysql');
+var mysql = require('mysql');
 var db=null;
 
 module.exports = function () {
@@ -17,7 +17,7 @@ module.exports = function () {
     }
     return db;
 };
-*/
+/*
 var mysql = require('mysql');
 var db=null;
 
@@ -34,4 +34,4 @@ module.exports = function () {
        });  
    }
    return db;
-};
+};*/
