@@ -28,7 +28,7 @@ var controlventas=require('./routes/controlventas');
 var contacto=require('./routes/contacto');
 var upload=require('./routes/upload');
 
-/*//CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
+//CORS, PERMITIMOS  ACCESO A LA API SOLO EN ESTAS RUTAS
 var whitelist = [
     'http://localhost:3000',
     'http://localhost:4200',
@@ -49,7 +49,7 @@ var corsOptions = {
     credentials: true
 };
 app.use(cors(corsOptions));
-*/
+
 //PASSPORT
 app.use(session({ secret: 'emiliomola' }));
 app.use(passport.initialize());
